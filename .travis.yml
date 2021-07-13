@@ -1,0 +1,22 @@
+language: python
+dist: bionic
+cache:
+  - pip
+
+jobs:
+  fast_finish: true
+  include:
+    - name: linting
+      python: 3.9
+      install:
+        - pip install tox-travis
+      script:
+        - tox -e lint
+    - name: test
+      python:
+        - 3.8
+        - 3.9
+      install:
+        - pip install tox-travis
+      script:
+        - tox

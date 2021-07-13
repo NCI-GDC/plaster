@@ -1,0 +1,5 @@
+title = "Data Model code generator configuration"
+
+[logging]
+level = "INFO"
+log_file = "plaster.log"

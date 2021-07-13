@@ -1,0 +1,77 @@
+import uuid
+from logging.config import dictConfig
+from typing import Final, TypedDict, cast
+
+import toml
+import yaml
+
+DEFAULT_SETTINGS_FILE: Final[str] = "plaster.toml"
+
+
+class LoggingConfig(TypedDict):
+    level: str
+    log_file: str
+
+
+class Config(TypedDict):
+    title: str
+    logging: LoggingConfig
+
+
+class PlasterConfig:
+    def __init__(self, cfg: Config) -> None:
+        self.load_id = str(uuid.uuid4())
+        self.cfg = cfg
+
+    @property
+    def title(self) -> str:
+        return self.cfg["title"]
+
+    @property
+    def logging(self) -> LoggingConfig:
+        return self.cfg["logging"]
+
+    def configure_logger(self) -> None:
+        cfg = self.logging
+
+        level = cfg["level"]
+        log_file = cfg["log_file"]
+        lcfg = yaml.safe_load(
+            f"""
+            version: 1
+            formatters:
+              simple:
+                format: '%(asctime)s %(levelname)s [%(name)s:%(lineno)d] %(message)s'
+            handlers:
+              console:
+                class: logging.StreamHandler
+                level: {level}
+                formatter: simple
+                stream: ext://sys.stdout
+              file:
+                class: logging.handlers.RotatingFileHandler
+                level: {level}
+                formatter: simple
+                filename: {log_file}
+                maxBytes: 4096
+                backupCount: 10
+            loggers:
+              plaster:
+                level: {level}
+                handlers: [console, file]
+                propagate: no
+            root:
+              level: {level}
+              handlers: [console, file]
+        """
+        )
+
+        dictConfig(lcfg)
+
+
+def load_config(file_name: str = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
+    with open(file_name, "r") as f:
+        raw_cfg = toml.load(f)
+        cfg = PlasterConfig(cfg=cast(Config, raw_cfg))
+
+        return cfg
