@@ -32,7 +32,9 @@ setup(
     ],
     install_requires=[
         "click~=8.0",
+        "dulwich",
         "Jinja2~=3.0",
+        "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
     ],

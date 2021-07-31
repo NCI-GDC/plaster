@@ -4,13 +4,30 @@
 #
 #    pip-compile
 #
+attrs==21.2.0
+    # via jsonschema
+certifi==2021.5.30
+    # via dulwich
 click==8.0.1
+    # via plaster (setup.py)
+dulwich==0.20.24
     # via plaster (setup.py)
 jinja2==3.0.1
     # via plaster (setup.py)
+jsonschema==3.2.0
+    # via plaster (setup.py)
 markupsafe==2.0.1
     # via jinja2
+pyrsistent==0.18.0
+    # via jsonschema
 pyyaml==5.4.1
     # via plaster (setup.py)
+six==1.16.0
+    # via jsonschema
 toml==0.10.2
     # via plaster (setup.py)
+urllib3==1.26.6
+    # via dulwich
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
