@@ -1,3 +1,4 @@
+import os
 import uuid
 from logging.config import dictConfig
 from typing import Final, TypedDict, cast
@@ -13,8 +14,13 @@ class LoggingConfig(TypedDict):
     log_file: str
 
 
+class EnvironmentVars(TypedDict, total=False):
+    git_home: str
+
+
 class Config(TypedDict):
     title: str
+    environment: EnvironmentVars
     logging: LoggingConfig
 
 
@@ -28,10 +34,14 @@ class PlasterConfig:
         return self.cfg["title"]
 
     @property
+    def environment(self) -> EnvironmentVars:
+        return self.cfg.get("environment", {})
+
+    @property
     def logging(self) -> LoggingConfig:
         return self.cfg["logging"]
 
-    def configure_logger(self) -> None:
+    def _configure_logger(self) -> None:
         cfg = self.logging
 
         level = cfg["level"]
@@ -68,10 +78,20 @@ class PlasterConfig:
 
         dictConfig(lcfg)
 
+    def _configure_env(self) -> None:
+        for key, val in self.environment.items():
+            os.environ[f"PLASTER_{key.upper()}"] = str(val)
+
+    def configure(self) -> None:
+        self._configure_env()
+        self._configure_logger()
+
 
 def load_config(file_name: str = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
+
     with open(file_name, "r") as f:
         raw_cfg = toml.load(f)
         cfg = PlasterConfig(cfg=cast(Config, raw_cfg))
+        cfg.configure()
 
         return cfg

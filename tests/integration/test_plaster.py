@@ -11,6 +11,6 @@ def test_version(cli_runner: CliRunner):
 
 
 def test_echo(cli_runner: CliRunner, app_settings: str):
-    result = cli_runner.invoke(cli.app, ["--config", app_settings, "echo"])
+    result = cli_runner.invoke(cli.app, ["--config-file", app_settings, "echo"])
     print(result.exception)
     assert result.exit_code == 0

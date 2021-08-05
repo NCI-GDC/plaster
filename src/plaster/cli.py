@@ -2,21 +2,19 @@ import logging
 
 import click
 
-import plaster
+from plaster import VERSION, config
 
 logger: logging.Logger
 
 
 @click.group()
-@click.version_option(plaster.VERSION)
-@click.option("-c", "--config", type=click.Path(exists=True), help="Path to config file")
-def app(config: str) -> None:
+@click.version_option(VERSION)
+@click.option("-c", "--config-file", type=click.Path(exists=True), help="Path to config file")
+def app(config_file: str) -> None:
     """Entry script"""
     global logger
 
-    cfg = plaster.load_config(config)
-    cfg.configure_logger()
-
+    config.load_config(config_file)
     logger = logging.getLogger(__name__)
 
 
