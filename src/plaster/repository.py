@@ -3,7 +3,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from dulwich import objects, porcelain
+from dulwich import client, objects, porcelain
 
 logger = logging.getLogger(__name__)
 

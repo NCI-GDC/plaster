@@ -140,10 +140,6 @@ class Resolver:
     schema: Dict[str, Any]
 
     @property
-    def local(self) -> RefResolver:
-        return RefResolver("#", self.schema)
-
-    @property
     def ref(self) -> RefResolver:
         return RefResolver(f"{self.name}#", self.schema)
 
