@@ -9,10 +9,8 @@ from typing import (
     List,
     Literal,
     Optional,
-    Sequence,
     TypedDict,
     TypeVar,
-    Union,
     cast,
 )
 
@@ -20,6 +18,7 @@ import yaml
 from jsonschema import RefResolver
 
 logger = logging.getLogger(__name__)
+
 DEFAULT_META_SCHEMA: Final[str] = "metaschema.yaml"
 DEFAULT_DEFINITIONS: FrozenSet[str] = frozenset(
     [
@@ -29,6 +28,7 @@ DEFAULT_DEFINITIONS: FrozenSet[str] = frozenset(
     ]
 )
 
+T = TypeVar("T")
 Category = Literal[
     "administrative",
     "analysis",
@@ -75,9 +75,6 @@ class SchemaDict(TypedDict):
     systemProperties: List[str]
     tagProperties: List[str]
     uniqueKeys: List[List[str]]
-
-
-T = TypeVar("T")
 
 
 @dataclass()
@@ -157,6 +154,9 @@ class Resolver:
         _, resolution = ref.resolve(reference)
         return resolve_schema(resolution, resolver)
 
+    def __repr__(self):
+        return f"{self.__class__.name}<{self.name}>"
+
 
 @dataclass(frozen=True)
 class Dictionary:
@@ -213,6 +213,8 @@ def resolve_schema(entry: T, resolver: Optional[Resolver] = None) -> T:
 
 
 def resolve_ref(reference: str, resolver: Optional[Resolver] = None) -> Any:
+    logger.debug(f"Resolving reference: {reference} with resolver: {resolver}")
+
     base, _ = reference.split("#", 1)
     if not resolver or (base and resolver.name != base):
         resolver = RESOLVERS[base]
@@ -222,8 +224,12 @@ def resolve_ref(reference: str, resolver: Optional[Resolver] = None) -> Any:
 def _load_schema(schemas: List[SchemaDict]) -> Dictionary:
     loaded: Dict[str, Schema] = {}
     for schema in schemas:
+        logger.debug(f"Resolving dictionary schema with id: {schema['id']}")
+
         raw: SchemaDict = resolve_schema(schema)
         loaded[schema["id"]] = Schema(raw=raw)
+
+        logger.debug(f"Schema resolution complete for schema id: {schema['id']}")
     return Dictionary(schema=loaded)
 
 
@@ -232,5 +238,6 @@ def load(
     meta_schema: str = DEFAULT_META_SCHEMA,
     definitions: Optional[FrozenSet[str]] = None,
 ) -> Dictionary:
+    logger.info(f"loading dictionary from {schema_dir}")
     definitions = definitions or DEFAULT_DEFINITIONS
     return load_schemas(schema_dir, meta_schema, definitions)

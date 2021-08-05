@@ -60,6 +60,10 @@ def get_commit_id(repo: porcelain.Repo, commit_ref: str) -> bytes:
 
 def clone(repo_meta: RepoMeta) -> porcelain.Repo:
     if not repo_meta.is_cloned:
+        logger.debug(
+            f"cloning new repository {repo_meta.remote_git_url} into {repo_meta.git_dir}"
+        )
+
         porcelain.clone(
             repo_meta.remote_git_url,
             target=repo_meta.git_dir,
@@ -91,6 +95,7 @@ def checkout(repo_meta: RepoMeta, command: RepoCheckout) -> str:
 
         # skip sub folders
         if not isinstance(blob, objects.Blob):
+            logger.debug(f"Skipping extra folders in schema directory {file_name}")
             continue
 
         with open(f"{chk_dir}/{file_name}", "wb") as f:
