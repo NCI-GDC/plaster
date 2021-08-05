@@ -1,154 +1,236 @@
-import glob
 import logging
-import os
-from collections import namedtuple
-from contextlib import contextmanager
-from copy import deepcopy
+from dataclasses import dataclass
+from pathlib import Path
+from typing import (
+    Any,
+    Dict,
+    Final,
+    FrozenSet,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    TypedDict,
+    TypeVar,
+    Union,
+    cast,
+)
 
 import yaml
 from jsonschema import RefResolver
 
-MOD_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-
-ResolverPair = namedtuple("ResolverPair", ["resolver", "source"])
-
-
-@contextmanager
-def visit_directory(path):
-    """Perform contained actions with current working directory at
-    :param:``path``.  Always return to previous directory when done.
-    """
-
-    cdir = os.getcwd()
-    try:
-        os.chdir(path)
-        yield os.getcwd()
-    finally:
-        os.chdir(cdir)
-
-
-class GDCDictionary(object):
-
-    _metaschema_path = "metaschema.yaml"
-    _definitions_paths = [
+logger = logging.getLogger(__name__)
+DEFAULT_META_SCHEMA: Final[str] = "metaschema.yaml"
+DEFAULT_DEFINITIONS: FrozenSet[str] = frozenset(
+    [
         "_definitions.yaml",
         "_terms.yaml",
         "_terms_enum.yaml",
     ]
+)
 
-    logger = logging.getLogger("GDCDictionary")
+Category = Literal[
+    "administrative",
+    "analysis",
+    "biospecimen",
+    "clinical",
+    "data",
+    "data_bundle",
+    "data_file",
+    "index_file",
+    "metadata_file",
+    "notation",
+    "qc_bundle",
+    "TBD",
+]
+RESOLVERS: Dict[str, "Resolver"] = {}
 
-    def __init__(self, lazy=False, root_dir=None, definitions_paths=None, metaschema_path=None):
-        """Creates a new dictionary instance.
-        :param root_dir: The directory to find schemas
-        :param metaschema_path: The metaschema to validate schemas with
-        :param definitions_paths: Paths to resolve $ref to
-        :param lazy: If true, wait to load dictionary
-        """
 
-        self.metaschema = None
+class Link(TypedDict):
+    exclusive: bool
+    required: bool
+    name: str
+    label: str
+    target_type: str
+    backref: str
+    multiplicity: str
 
-        self.root_dir = root_dir or os.path.join(MOD_DIR, "schemas")
-        self.metaschema_path = metaschema_path or self._metaschema_path
-        self.definitions_paths = definitions_paths or self._definitions_paths
-        self.exclude = [self.metaschema_path] + self.definitions_paths
-        self.schema = dict()
-        self.resolvers = dict()
-        if not lazy:
-            self.load_directory(self.root_dir)
 
-    def load_yaml(self, name):
-        """Return contents of yaml file as dict"""
-        # For DAT-1064 Bomb out hard if unicode is in a schema file
-        # But allow unicode through the terms and definitions
-        with open(name, "r") as f:
-            if name not in self.exclude:
-                try:
-                    f.read().encode("ascii")
-                    f.seek(0)
-                except Exception as e:
-                    self.logger.error("Error in file: {}".format(name))
-                    raise e
-            return yaml.safe_load(f)
+class SubGroupedLink(Link, total=False):
+    subgroup: List[Link]
 
-    def load_schemas_from_dir(self, directory):
-        """Returns all yamls and resolvers of those yamls from dir"""
 
-        schemas, resolvers = {}, {}
+class SchemaDict(TypedDict):
+    id: str
+    title: str
+    namespace: str
+    category: Category
+    submittable: bool
+    downloadable: bool
+    previous_version_downloadable: bool
+    description: str
+    links: List[SubGroupedLink]
+    properties: Dict[str, Any]
+    required: List[str]
+    systemProperties: List[str]
+    tagProperties: List[str]
+    uniqueKeys: List[List[str]]
 
-        with visit_directory(directory):
-            for path in glob.glob("*.yaml"):
-                schema = self.load_yaml(path)
-                schemas[path] = schema
-                resolver = RefResolver("{}#".format(path), schema)
-                resolvers[path] = ResolverPair(resolver, schema)
 
-        return schemas, resolvers
+T = TypeVar("T")
 
-    def load_directory(self, directory):
-        """Load and reslove all schemas from directory"""
 
-        yamls, resolvers = self.load_schemas_from_dir(directory)
+@dataclass()
+class Schema:
+    raw: SchemaDict
 
-        self.metaschema = yamls[self.metaschema_path]
-        self.resolvers.update(resolvers)
+    @property
+    def id(self) -> str:
+        return self.raw["id"]
 
-        schemas = {
-            schema["id"]: self.resolve_schema(schema, deepcopy(schema))
-            for path, schema in yamls.items()
-            if path not in self.exclude
-        }
-        self.schema.update(schemas)
+    @property
+    def title(self) -> str:
+        return self.raw["title"]
 
-    def resolve_reference(self, value, root):
-        """Resolves a reference.
-        :param value: The actual reference, e.g. ``_yaml.yaml#/def``
-        :param root:
-            The containing root of :param:`value`. This needs to be
-            passed in order to resolve self-referential $refs,
-            e.g. ``#/def``.
-        :returns: JSON Schema pointed to by :param:`value`
-        """
-        base, ref = value.split("#", 1)
+    @property
+    def namespace(self) -> str:
+        return self.raw["namespace"]
 
-        if base:
-            resolver, new_root = self.resolvers[base]
-            referrer, resolution = resolver.resolve(value)
-            self.resolve_schema(resolution, new_root)
+    @property
+    def category(self) -> Category:
+        return self.raw["category"]
+
+    @property
+    def submittable(self) -> bool:
+        return self.raw["submittable"]
+
+    @property
+    def downloadable(self) -> bool:
+        return self.raw["downloadable"]
+
+    @property
+    def previous_version_downloadable(self) -> bool:
+        return self.raw["previous_version_downloadable"]
+
+    @property
+    def description(self) -> str:
+        return self.raw["description"]
+
+    @property
+    def system_properties(self) -> List[str]:
+        return self.raw["systemProperties"]
+
+    @property
+    def links(self) -> List[SubGroupedLink]:
+        return self.raw["links"]
+
+    @property
+    def required(self) -> List[str]:
+        return self.raw["required"]
+
+    @property
+    def unique_keys(self) -> List[List[str]]:
+        return self.raw["uniqueKeys"]
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return self.raw["properties"]
+
+
+@dataclass()
+class Resolver:
+    name: str
+    schema: Dict[str, Any]
+
+    @property
+    def local(self) -> RefResolver:
+        return RefResolver("#", self.schema)
+
+    @property
+    def ref(self) -> RefResolver:
+        return RefResolver(f"{self.name}#", self.schema)
+
+    def resolve(self, reference: str) -> Any:
+        base, _ = reference.split("#", 1)
+        resolver = RESOLVERS[base] if base else self
+        ref = resolver.ref
+        _, resolution = ref.resolve(reference)
+        return resolve_schema(resolution, resolver)
+
+
+@dataclass(frozen=True)
+class Dictionary:
+    schema: Dict[str, Schema]
+
+
+def load_yaml(path: Path) -> Dict[str, Any]:
+    with path.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def load_schemas(directory: str, meta_schema: str, definitions: FrozenSet[str]) -> Dictionary:
+
+    excludes: FrozenSet[str] = frozenset([meta_schema] + list(definitions))
+    raw_schemas: List[SchemaDict] = []
+
+    definitions_paths = Path(directory)
+    for definition in definitions_paths.iterdir():
+        if definition.is_dir() or definition.name == "README.md":
+            continue
+
+        path = definition.name
+        schema = load_yaml(definition)
+        RESOLVERS[path] = Resolver(name=path, schema=schema)
+        if path not in excludes:
+            raw_schemas.append(cast(SchemaDict, schema))
+
+    return _load_schema(raw_schemas)
+
+
+def resolve_schema(entry: T, resolver: Optional[Resolver] = None) -> T:
+
+    # unit entries
+    if not isinstance(entry, (list, dict)):
+        return entry
+
+    # handle list
+    if isinstance(entry, list):
+        return cast(T, [resolve_schema(e, resolver) for e in entry])
+
+    resolved: Dict[str, Any] = {}
+    for k, v in entry.items():
+        if k == "$ref":
+            refs = v
+            if not isinstance(refs, list):
+                refs = [v]
+
+            for ref in refs:
+                resolution = resolve_ref(ref, resolver)
+                resolved.update(resolution)
         else:
-            resolver = RefResolver("#", root)
-            referrer, resolution = resolver.resolve(value)
-
-        return resolution
-
-    def resolve_schema(self, obj, root):
-        """Recursively resolves all references in a schema against
-        ``self.resolvers``.
-        :param obj: The object to recursively resolve.
-        :param root:
-            The containing root of :param:`value`. This needs to be
-            passed in order to resolve self-referential $refs,
-            e.g. ``#/def``.
-        :returns: A denormalized/resolved version of :param:`obj`.
-        """
-
-        if isinstance(obj, dict):
-            for key in obj.copy().keys():
-                if key == "$ref":
-                    refs = obj.pop(key)
-                    self.resolve_local_refs(refs, obj, root)
-            return {k: self.resolve_schema(v, root) for k, v in obj.items()}
-        elif isinstance(obj, list):
-            return [self.resolve_schema(item, root) for item in obj]
-        else:
-            return obj
-
-    def resolve_local_refs(self, refs, obj, root):
-        """Converts a string ref to list of refs & resolves the references"""
-        if not isinstance(refs, list):
-            refs = [refs]
-        for ref in refs:
-            obj.update(self.resolve_reference(ref, root))
+            resolved[k] = resolve_schema(v, resolver)
+    return cast(T, resolved)
 
 
-gdcdictionary = GDCDictionary()
+def resolve_ref(reference: str, resolver: Optional[Resolver] = None) -> Any:
+    base, _ = reference.split("#", 1)
+    if not resolver or (base and resolver.name != base):
+        resolver = RESOLVERS[base]
+    return resolver.resolve(reference)
+
+
+def _load_schema(schemas: List[SchemaDict]) -> Dictionary:
+    loaded: Dict[str, Schema] = {}
+    for schema in schemas:
+        raw: SchemaDict = resolve_schema(schema)
+        loaded[schema["id"]] = Schema(raw=raw)
+    return Dictionary(schema=loaded)
+
+
+def load(
+    schema_dir: str,
+    meta_schema: str = DEFAULT_META_SCHEMA,
+    definitions: Optional[FrozenSet[str]] = None,
+) -> Dictionary:
+    definitions = definitions or DEFAULT_DEFINITIONS
+    return load_schemas(schema_dir, meta_schema, definitions)

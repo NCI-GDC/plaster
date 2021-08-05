@@ -80,7 +80,7 @@ class PlasterConfig:
 
     def _configure_env(self) -> None:
         for key, val in self.environment.items():
-            os.environ[f"PLASTER_{key.upper()}"] = val
+            os.environ[f"PLASTER_{key.upper()}"] = str(val)
 
     def configure(self) -> None:
         self._configure_env()

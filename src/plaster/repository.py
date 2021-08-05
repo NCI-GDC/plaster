@@ -15,7 +15,7 @@ class RepoMeta:
     origin: bytes = b"origin"
 
     @property
-    def git_dir(self):
+    def git_dir(self) -> str:
         git_home = os.getenv("PLASTER_GIT_HOME", f"{Path.home()}/.plaster/git")
         dir_home = f"{git_home}/{self.name}"
         os.makedirs(dir_home, exist_ok=True)
@@ -50,7 +50,7 @@ def get_checkout_dir(commit_sha: bytes) -> str:
 
 
 def get_commit_id(repo: porcelain.Repo, commit_ref: str) -> bytes:
-    obj = porcelain.parse_object(repo, commit_ref)
+    obj: objects.ShaFile = porcelain.parse_object(repo, commit_ref)
     if isinstance(obj, objects.Commit):
         return obj.id
     if isinstance(obj, objects.Tag):
@@ -79,13 +79,20 @@ def checkout(repo_meta: RepoMeta, command: RepoCheckout) -> str:
         return chk_dir
 
     os.makedirs(chk_dir)
-    commit_tree = porcelain.get_object_by_path(repo, command.path, committish=commit_id)
+    commit_tree: objects.Tree = porcelain.get_object_by_path(
+        repo, command.path, committish=commit_id
+    )
 
     # dump schema files to dump location
     for entry in commit_tree.items():
+
         file_name = entry.path.decode()
         blob = repo.get_object(entry.sha)
+
+        # skip sub folders
+        if not isinstance(blob, objects.Blob):
+            continue
+
         with open(f"{chk_dir}/{file_name}", "wb") as f:
-            print(file_name)
             f.write(blob.as_raw_string())
     return chk_dir
