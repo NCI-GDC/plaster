@@ -22,7 +22,6 @@ setup(
     zip_safe=True,
     include_package_data=True,
     python_requires=">=3.8",
-    setup_requires=["setuptools_scm"],
     classifiers=[
         "Development Status :: 2 - Alpha",
         "Intended Audience :: PSQLGrpah Developers",
@@ -37,12 +36,12 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
+        "psqlgml @ git+ssh://git@github.com/NCI-GDC/psqlgml.git@0.1.0-rc.5#egg=psqlgml",
+        "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={
         "dev": [
-            "black==21.6b0",
             "coverage[toml]~=5.5",
-            "flake8~=3.9",
             "mypy==0.910",
             "pre-commit~=2.13",
             "pytest~=6.2",
