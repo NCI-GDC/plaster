@@ -36,14 +36,12 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
-        "psqlgml @ git+ssh://git@github.com/NCI-GDC/psqlgml@0.1.0-rc.5#egg=psqlgml",
-        "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph@3.4.0#egg=psqlgraph",
+        "psqlgml @ git+ssh://git@github.com/NCI-GDC/psqlgml.git@0.1.0-rc.5#egg=psqlgml",
+        "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={
         "dev": [
-            "black==21.6b0",
             "coverage[toml]~=5.5",
-            "flake8~=3.9",
             "mypy==0.910",
             "pre-commit~=2.13",
             "pytest~=6.2",
