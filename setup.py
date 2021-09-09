@@ -30,6 +30,7 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     install_requires=[
+        "black",
         "click~=8.0",
         "dulwich",
         "Jinja2~=3.0",
