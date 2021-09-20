@@ -1,0 +1,29 @@
+from typing import Dict, List, Union
+
+import psqlgraph
+
+
+class {{ meta.class_name }}(psqlgraph.Node):
+    __tablename__: str = "{{ meta.table_name }}"
+
+    _pg_backrefs: Dict[str, str] = {}
+    _pg_edges: Dict[str, str] = {}
+    _pg_links: Dict[str, str] = {}
+
+    _dictionary: Dict[bool, str, List[str]] = {{ meta.dictionary }}
+
+    @property
+    def _default(self) -> Dict[str, Union[bool, float, int, str]]:
+        return {{ meta.defaults }}
+
+    @property
+    def label(self):
+        return "{{ meta.label }}"
+
+    {% for prop in meta.properties %}
+
+    @psqlgraph.pg_property(*({% for p in prop.types[0] %}{{ p }}, {% endfor %}), enum={{ prop.types[1] }})
+    def {{ prop.name }}(self, value):
+        self._set_property("{{ prop.name }}", value)
+
+    {% endfor %}
