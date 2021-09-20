@@ -1,7 +1,6 @@
-import functools
 import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple, Union
 
 import attr
 import black
@@ -15,8 +14,7 @@ env = j.Environment(
     lstrip_blocks=True,
 )
 
-OUTPUT_LOCATION = "build"
-DICTIONARY_KEYS = [
+DICTIONARY_KEY_LITERAL = Literal[
     "title",
     "namespace",
     "category",
@@ -26,7 +24,20 @@ DICTIONARY_KEYS = [
     "required",
     "project",
     "program",
-    "validators",
+    "previous_version_downloadable",
+]
+
+OUTPUT_LOCATION = "build"
+DICTIONARY_KEYS: List[DICTIONARY_KEY_LITERAL] = [
+    "title",
+    "namespace",
+    "category",
+    "submittable",
+    "downloadable",
+    "description",
+    "required",
+    "project",
+    "program",
     "previous_version_downloadable",
 ]
 TYPE_MAPPING = {
@@ -49,13 +60,13 @@ class PropertyTypeMeta:
         return self.schema.get("enum")
 
     @property
-    def type(self) -> List[Type]:
+    def type(self) -> List[str]:
 
         if "enum" in self.schema and "type" not in self.schema:
-            return TYPE_MAPPING.get("string")
+            return TYPE_MAPPING["string"]
 
         json_schema_type = self.schema["type"]
-        return TYPE_MAPPING.get(json_schema_type)
+        return TYPE_MAPPING[json_schema_type]
 
 
 @attr.s(auto_attribs=True)
@@ -72,9 +83,9 @@ class PropertyMeta:
         return ty
 
     @property
-    def types(self) -> Tuple[str, Optional[List[str]]]:
-        f_types: List[Type] = []
-        f_enums: Optional[List[str]] = None
+    def types(self) -> Tuple[List[str], List[str]]:
+        f_types: List[str] = []
+        f_enums: List[str] = []
         for meta in self.type_metas():
             f_types += meta.type
             if meta.enums:
@@ -104,7 +115,7 @@ class ModelMeta:
         }
 
     @property
-    def dictionary(self):
+    def dictionary(self) -> Dict[str, Any]:
         return {key: self.schema[key] for key in DICTIONARY_KEYS if key in self.schema}
 
     @property
