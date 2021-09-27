@@ -5,7 +5,7 @@ from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple, Union
 import attr
 import black
 import jinja2 as j
-from psqlgml import dictionary, types
+import psqlgml
 
 env = j.Environment(
     loader=j.PackageLoader("plaster"),
@@ -96,7 +96,7 @@ class PropertyMeta:
 @attr.s(auto_attribs=True)
 class ModelMeta:
     label: str
-    schema: types.DictionarySchemaDict
+    schema: psqlgml.DictionarySchemaDict
 
     @property
     def class_name(self) -> str:
@@ -124,7 +124,7 @@ class ModelMeta:
             yield PropertyMeta(key, schema)
 
 
-def generate(dic: dictionary.Dictionary) -> None:
+def generate(dic: psqlgml.Dictionary) -> None:
     template = env.get_template("model.jinja2")
 
     os.makedirs(OUTPUT_LOCATION)

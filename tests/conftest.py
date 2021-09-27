@@ -1,6 +1,6 @@
 import pkg_resources
+import psqlgml
 import pytest
-from psqlgml import dictionary
 
 from plaster import config
 
@@ -16,6 +16,6 @@ def plaster_config(app_settings) -> config.PlasterConfig:
 
 
 @pytest.fixture()
-def test_dictionary(plaster_config) -> dictionary.Dictionary:
+def test_dictionary(plaster_config) -> psqlgml.Dictionary:
     dict_dir = pkg_resources.resource_filename("tests", "data")
-    return dictionary.load_local(version="0.1.0", name="dictionary", dictionary_location=dict_dir)
+    return psqlgml.load_local(version="0.1.0", name="dictionary", dictionary_location=dict_dir)

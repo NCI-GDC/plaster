@@ -1,7 +1,7 @@
-from psqlgml import dictionary
+import psqlgml
 
 
-def test_dictionary_loading(test_dictionary: dictionary.Dictionary) -> None:
+def test_dictionary_loading(test_dictionary: psqlgml.Dictionary) -> None:
     assert test_dictionary.schema
     assert len(test_dictionary.schema) == 3
     program = test_dictionary.schema["program"]
