@@ -127,7 +127,7 @@ class ModelMeta:
 def generate(dic: psqlgml.Dictionary) -> None:
     template = env.get_template("model.jinja2")
 
-    os.makedirs(OUTPUT_LOCATION)
+    os.makedirs(OUTPUT_LOCATION, exist_ok=True)
 
     for label, schema in dic.schema.items():
         meta_data = ModelMeta(label, schema.raw)

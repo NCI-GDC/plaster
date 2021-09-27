@@ -24,10 +24,11 @@ setup(
     python_requires=">=3.8",
     classifiers=[
         "Development Status :: 2 - Alpha",
-        "Intended Audience :: PSQLGrpah Developers",
+        "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     install_requires=[
         "black",
