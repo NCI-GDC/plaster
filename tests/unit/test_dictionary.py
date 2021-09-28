@@ -12,7 +12,7 @@ def test_dictionary_loading(test_dictionary: psqlgml.Dictionary) -> None:
     assert program.required
 
 
-def test_case_loading(test_dictionary: dictionary.Dictionary) -> None:
+def test_case_loading(test_dictionary: psqlgml.Dictionary) -> None:
     case = test_dictionary.schema["case"]
 
     assert case.id == "case"
@@ -21,7 +21,7 @@ def test_case_loading(test_dictionary: dictionary.Dictionary) -> None:
     assert case.required
 
 
-def test_project_loading(test_dictionary: dictionary.Dictionary) -> None:
+def test_project_loading(test_dictionary: psqlgml.Dictionary) -> None:
     project = test_dictionary.schema["project"]
 
     assert project.id == "project"
