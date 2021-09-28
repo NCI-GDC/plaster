@@ -3,7 +3,7 @@ from psqlgml import dictionary
 
 def test_dictionary_loading(test_dictionary: dictionary.Dictionary) -> None:
     assert test_dictionary.schema
-    assert len(test_dictionary.schema) == 81
+    assert len(test_dictionary.schema) == 3
     program = test_dictionary.schema["program"]
 
     assert program.id == "program"
