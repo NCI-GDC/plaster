@@ -24,10 +24,11 @@ setup(
     python_requires=">=3.8",
     classifiers=[
         "Development Status :: 2 - Alpha",
-        "Intended Audience :: PSQLGrpah Developers",
+        "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     install_requires=[
         "black",
@@ -37,7 +38,7 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
-        "psqlgml @ git+ssh://git@github.com/NCI-GDC/psqlgml.git@0.1.0-rc.6#egg=psqlgml",
+        "psqlgml",
         "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={

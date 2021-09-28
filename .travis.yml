@@ -6,7 +6,7 @@ cache:
 jobs:
   fast_finish: true
   include:
-    - name: linting
+    - name: lint
       python: 3.9
       install:
         - pip install tox-travis
