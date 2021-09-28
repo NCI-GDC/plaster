@@ -3,7 +3,7 @@ from psqlgml import dictionary
 
 def test_dictionary_loading(test_dictionary: dictionary.Dictionary) -> None:
     assert test_dictionary.schema
-    assert len(test_dictionary.schema) == 3
+    assert len(test_dictionary.schema) == 81
     program = test_dictionary.schema["program"]
 
     assert program.id == "program"
@@ -27,10 +27,3 @@ def test_project_loading(test_dictionary: dictionary.Dictionary) -> None:
     assert project.id == "project"
     assert project.category == "administrative"
     assert project.downloadable is False
-
-
-if __name__ == "__main__":
-    test_dictionary_loading(dictionary.Dictionary)
-    test_case_loading(dictionary.Dictionary)
-    test_project_loading(dictionary.Dictionary)
-    print("Everything passed")
