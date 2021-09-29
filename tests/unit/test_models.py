@@ -7,7 +7,7 @@ from _pytest.monkeypatch import MonkeyPatch
 from plaster import models
 
 
-def test_generate(
+def test_source_file_generation(
     test_dictionary: psqlgml.Dictionary, tmpdir: PathLike, monkeypatch: MonkeyPatch
 ) -> None:
 

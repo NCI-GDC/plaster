@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 import attr
 import black
@@ -49,6 +49,7 @@ TYPE_MAPPING = {
     "null": ["None"],
     "number": ["float", "int"],
 }
+EXCLUDED_PROPS = ["id", "type"]
 
 
 @attr.s(auto_attribs=True)
@@ -96,6 +97,7 @@ class PropertyMeta:
 @attr.s(auto_attribs=True)
 class ModelMeta:
     label: str
+    associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
 
     @property
@@ -121,6 +123,8 @@ class ModelMeta:
     @property
     def properties(self) -> Iterable[PropertyMeta]:
         for key, schema in self.schema["properties"].items():
+            if key in EXCLUDED_PROPS or key in self.associations:
+                continue
             yield PropertyMeta(key, schema)
 
 
@@ -130,7 +134,9 @@ def generate(dic: psqlgml.Dictionary) -> None:
     os.makedirs(OUTPUT_LOCATION, exist_ok=True)
 
     for label, schema in dic.schema.items():
-        meta_data = ModelMeta(label, schema.raw)
+        assoc = dic.associations(label)
+        associations = set([a.label for a in assoc])
+        meta_data = ModelMeta(label, associations, schema.raw)
         rendered = template.render(meta=meta_data)
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{OUTPUT_LOCATION}/{label}.py")
