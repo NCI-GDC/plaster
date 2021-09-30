@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 import attr
 import psqlgml
@@ -37,6 +37,7 @@ TYPE_MAPPING = {
     "null": ["None"],
     "number": ["float", "int"],
 }
+EXCLUDED_PROPS = ["id", "type"]
 
 
 @attr.s(auto_attribs=True)
@@ -84,6 +85,7 @@ class PropertyMeta:
 @attr.s(auto_attribs=True)
 class NodeMeta:
     label: str
+    associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
 
     @property
@@ -109,4 +111,6 @@ class NodeMeta:
     @property
     def properties(self) -> Iterable[PropertyMeta]:
         for key, schema in self.schema["properties"].items():
+            if key in EXCLUDED_PROPS or key in self.associations:
+                continue
             yield PropertyMeta(key, schema)

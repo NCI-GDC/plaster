@@ -10,20 +10,20 @@ class {{ meta.class_name }}(psqlgraph.Node):
     _pg_edges: Dict[str, str] = {}
     _pg_links: Dict[str, str] = {}
 
-    _dictionary: Dict[bool, str, List[str]] = {{ meta.dictionary }}
+    _dictionary: Dict[bool, Union[bool, str, List[str]]] = {{ meta.dictionary }}
 
     @property
     def _default(self) -> Dict[str, Union[bool, float, int, str]]:
         return {{ meta.defaults }}
 
     @property
-    def label(self):
+    def label(self) -> str:
         return "{{ meta.label }}"
 
     {% for prop in meta.properties %}
 
-    @psqlgraph.pg_property(*({% for p in prop.types[0] %}{{ p }}, {% endfor %}), enum={{ prop.types[1] }})
+    @psqlgraph.pg_property({% for p in prop.types[0] %}{{ p }}{% if not loop.last %},{% endif %} {% endfor %}{% if prop.types[1] %}, enum={{ prop.types[1] }}{% endif %})
     def {{ prop.name }}(self, value):
-        self._set_property("{{ prop.name }}", value)
+        self._set_property("{{ prop.name }}", value)  # type: ignore  # inherited from CommonBase
 
     {% endfor %}
