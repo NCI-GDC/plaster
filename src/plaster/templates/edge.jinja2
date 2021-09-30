@@ -1,0 +1,14 @@
+import psqlgraph
+
+
+class {{ meta.class_name }}(psqlgraph.Edge):
+    __tablename__: str = "{{ meta.table_name }}"
+
+    __label__: str = "{{ meta.label }}"
+    __dst_class__ = "{{ meta.dst_class }}"
+    __dst_table__ = "{{ meta.dst_table }}"
+    __src_class__ = "{{ meta.src_class }}"
+    __src_table__ = "{{ meta.src_table }}"
+
+    __dst_src_assoc__ = "{{ meta.dst_src_assoc }}"
+    __src_dst_assoc__ = "{{ meta.src_dst_assoc }}"
