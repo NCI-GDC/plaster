@@ -1,4 +1,7 @@
 import psqlgml
+import pytest
+
+pytestmark = pytest.mark.slow
 
 
 def test_dictionary_loading(test_dict: psqlgml.Dictionary) -> None:
