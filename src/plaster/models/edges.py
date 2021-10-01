@@ -101,25 +101,3 @@ class EdgeMeta:
         return generate_table_name(
             self.association.src, self.association.label, self.association.dst
         )
-
-
-def generate(
-    associations: Set[psqlgml.Association],
-    nodes: Dict[str, NodeMeta],
-    template: Template,
-    output_location: str,
-) -> None:
-
-    for assoc in associations:
-        if assoc.is_reference:
-            continue
-
-        src = nodes[assoc.src]
-        dst = nodes[assoc.dst]
-        meta = EdgeMeta(assoc, src, dst)
-        rendered = template.render(meta=meta)
-        rendered = black.format_str(rendered, mode=black.FileMode())
-        loc = Path(f"{output_location}/{meta.class_name.lower()}.py")
-
-        with loc.open("w") as f:
-            f.write(rendered)

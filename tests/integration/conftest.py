@@ -10,4 +10,4 @@ def cli_runner() -> CliRunner:
 
 @pytest.fixture(scope="session")
 def test_dict() -> psqlgml.Dictionary:
-    return psqlgml.load(version="2.4.1")
+    return psqlgml.load(version="2.4.0")
