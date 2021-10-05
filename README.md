@@ -1,4 +1,4 @@
-https://travis-ci.org/NCI-GDC/gdcdatamodel.svg?branch=master
+[![Build Status](https://app.travis-ci.com/NCI-GDC/plaster.svg?token=5s3bZRahNJnkspYEMwZC&branch=master)](https://app.travis-ci.com/NCI-GDC/plaster)
 # The Data Commons Model Source Generator Project (Plaster)
 GDC internship project for generating data model source code.
 
