@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Dict, Set
+from typing import Dict, List, NamedTuple, Set
 
 import black
 import jinja2 as j
@@ -14,7 +14,13 @@ env = j.Environment(
     trim_blocks=True,
     lstrip_blocks=True,
 )
-OUTPUT_LOCATION = "build"
+OUTPUT_LOCATION = "examples/models"
+import_metas: Set["ImportMeta"] = set()
+
+
+class ImportMeta(NamedTuple):
+    package: str
+    class_name: str
 
 
 def generate_edges(
@@ -35,6 +41,7 @@ def generate_edges(
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{output_location}/{meta.class_name.lower()}.py")
 
+        import_metas.add(ImportMeta(package=meta.class_name.lower(), class_name=meta.class_name))
         with loc.open("w") as f:
             f.write(rendered)
 
@@ -54,6 +61,7 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{OUTPUT_LOCATION}/{label}.py")
 
+        import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
         with loc.open("w") as f:
             f.write(rendered)
         node_metas[label] = meta
@@ -63,3 +71,10 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
 def generate(dictionary: psqlgml.Dictionary) -> None:
     node_metas = generate_nodes(dictionary)
     generate_edges(dictionary.all_associations(), node_metas, OUTPUT_LOCATION)
+
+    template = env.get_template("init.jinja2")
+    rendered = template.render(imports=import_metas)
+    rendered = black.format_str(rendered, mode=black.FileMode())
+    loc = Path(f"{OUTPUT_LOCATION}/__init__.py")
+    with loc.open("w") as f:
+        f.write(rendered)

@@ -48,6 +48,7 @@ setup(
             "pre-commit~=2.13",
             "pytest~=6.2",
             "pytest-cov~=2.12",
+            "pytest-psqlgraph>=0.1.0",
             "sphinx~=4.1",
             "sphinx_rtd_theme~=0.5",
             "sphinxcontrib-napoleon~=0.7",
