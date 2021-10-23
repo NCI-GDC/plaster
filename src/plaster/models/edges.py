@@ -1,12 +1,8 @@
 import hashlib
 import logging
-from pathlib import Path
-from typing import Dict, Set
 
 import attr
-import black
 import psqlgml
-from jinja2 import Template
 
 from plaster.models.nodes import NodeMeta
 

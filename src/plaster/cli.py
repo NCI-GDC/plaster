@@ -1,23 +1,59 @@
 import logging
 
 import click
+import psqlgml
 
-from plaster import VERSION, config
+from plaster import VERSION, config, generator
 
 logger: logging.Logger
 
 
 @click.group()
+@click.pass_context
 @click.version_option(VERSION)
-@click.option("-c", "--config-file", type=click.Path(exists=True), help="Path to config file")
-def app(config_file: str) -> None:
+@click.option(
+    "-c",
+    "--config-file",
+    type=click.Path(exists=True),
+    default="plaster.toml",
+    help="Path to config file",
+)
+def app(ctx: click.Context, config_file: str) -> None:
     """Entry script"""
     global logger
 
-    config.load_config(config_file)
+    # pass context
+    ctx.obj = config.load_config(config_file)
     logger = logging.getLogger(__name__)
 
 
 @app.command(name="echo", help="Simple ping functionality")
 def echo() -> None:
     logger.info("Echo requested")
+
+
+@app.command(name="generate", help="Generate source code")
+@click.option("-p", "--profile", type=str, help="Name of the profile to generate")
+@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.pass_obj
+def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
+    profile_cfg = cfg.get_profile(profile)
+    if not profile_cfg:
+        raise ValueError(f"Unrecognized profile {profile} entered")
+
+    if profile_cfg.get("type", "local"):
+        dictionary = psqlgml.load_local(
+            name=profile,
+            version=profile_cfg.get("version", "master"),
+            dictionary_location=profile_cfg["local_directory"],
+        )
+    else:
+        dictionary = psqlgml.load(
+            name=profile,
+            git_url=profile_cfg.get("url"),
+            overwrite=profile_cfg.get("overwrite", False),
+            schema_path=profile_cfg.get("path", f"{profile}/schemas"),
+            version=profile_cfg.get("version", "master"),
+        )
+
+    generator.generate(dictionary, output_dir)

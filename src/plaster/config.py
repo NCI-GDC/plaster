@@ -1,8 +1,9 @@
 import os
 import uuid
 from logging.config import dictConfig
-from typing import Final, TypedDict, cast
+from typing import Dict, Final, List, Literal, Optional, TypedDict, cast
 
+import attr
 import toml
 import yaml
 
@@ -18,8 +19,18 @@ class EnvironmentVars(TypedDict, total=False):
     git_home: str
 
 
+class Profile(TypedDict):
+    url: str
+    path: str
+    type: Literal["local", "remote"]
+    version: str
+    overwrite: bool
+    local_directory: str
+
+
 class Config(TypedDict):
     title: str
+    profiles: Dict[str, Profile]
     environment: EnvironmentVars
     logging: LoggingConfig
 
@@ -85,6 +96,9 @@ class PlasterConfig:
     def configure(self) -> None:
         self._configure_env()
         self._configure_logger()
+
+    def get_profile(self, name: str) -> Optional[Profile]:
+        return self.cfg.get("profiles", {}).get(name)
 
 
 def load_config(file_name: str = DEFAULT_SETTINGS_FILE) -> PlasterConfig:

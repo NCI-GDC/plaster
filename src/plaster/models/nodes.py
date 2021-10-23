@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 import attr
@@ -40,6 +41,9 @@ TYPE_MAPPING = {
 EXCLUDED_PROPS = ["id", "type"]
 
 
+logger = logging.getLogger(__name__)
+
+
 @attr.s(auto_attribs=True)
 class PropertyTypeMeta:
     schema: Dict[str, Any]
@@ -55,7 +59,8 @@ class PropertyTypeMeta:
             return TYPE_MAPPING["string"]
 
         json_schema_type = self.schema["type"]
-        return TYPE_MAPPING[json_schema_type]
+        _type = json_schema_type[0] if isinstance(json_schema_type, list) else json_schema_type
+        return TYPE_MAPPING[_type]
 
 
 @attr.s(auto_attribs=True)
@@ -110,6 +115,7 @@ class NodeMeta:
 
     @property
     def properties(self) -> Iterable[PropertyMeta]:
+        logger.info(f"Reading schema for node: {self.class_name}")
         for key, schema in self.schema["properties"].items():
             if key in EXCLUDED_PROPS or key in self.associations:
                 continue

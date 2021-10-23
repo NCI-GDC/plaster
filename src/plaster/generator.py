@@ -1,6 +1,7 @@
+import logging
 import os
 from pathlib import Path
-from typing import Dict, List, NamedTuple, Set
+from typing import Dict, NamedTuple, Set
 
 import black
 import jinja2 as j
@@ -16,6 +17,7 @@ env = j.Environment(
 )
 OUTPUT_LOCATION = "examples/models"
 import_metas: Set["ImportMeta"] = set()
+logger = logging.getLogger(__name__)
 
 
 class ImportMeta(NamedTuple):
@@ -37,6 +39,7 @@ def generate_edges(
         src = node_metas[assoc.src]
         dst = node_metas[assoc.dst]
         meta = edges.EdgeMeta(assoc, src, dst)
+        logger.info(f"Reading edge: {meta.class_name}")
         rendered = template.render(meta=meta)
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{output_location}/{meta.class_name.lower()}.py")
@@ -46,11 +49,13 @@ def generate_edges(
             f.write(rendered)
 
 
-def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+def generate_nodes(
+    dic: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION
+) -> Dict[str, nodes.NodeMeta]:
     template = env.get_template("node.jinja2")
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
-    os.makedirs(OUTPUT_LOCATION, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
     for label, schema in dic.schema.items():
 
@@ -59,7 +64,7 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
         meta = nodes.NodeMeta(label, associations, schema.raw)
         rendered = template.render(meta=meta)
         rendered = black.format_str(rendered, mode=black.FileMode())
-        loc = Path(f"{OUTPUT_LOCATION}/{label}.py")
+        loc = Path(f"{output_dir}/{label}.py")
 
         import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
         with loc.open("w") as f:
@@ -68,13 +73,13 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
     return node_metas
 
 
-def generate(dictionary: psqlgml.Dictionary) -> None:
-    node_metas = generate_nodes(dictionary)
-    generate_edges(dictionary.all_associations(), node_metas, OUTPUT_LOCATION)
+def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) -> None:
+    node_metas = generate_nodes(dictionary, output_dir)
+    generate_edges(dictionary.all_associations(), node_metas, output_dir)
 
     template = env.get_template("init.jinja2")
     rendered = template.render(imports=import_metas)
     rendered = black.format_str(rendered, mode=black.FileMode())
-    loc = Path(f"{OUTPUT_LOCATION}/__init__.py")
+    loc = Path(f"{output_dir}/__init__.py")
     with loc.open("w") as f:
         f.write(rendered)
