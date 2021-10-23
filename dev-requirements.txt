@@ -4,18 +4,13 @@
 #
 #    pip-compile --extra=dev --output-file=dev-requirements.txt
 #
-alabaster==0.7.12
-    # via sphinx
 attrs==21.2.0
     # via
     #   jsonschema
     #   psqlgml
     #   pytest
-    #   pytest-psqlgraph
 avro==1.10.2
     # via psqlgraph
-babel==2.9.1
-    # via sphinx
 backports.entry-points-selectable==1.1.0
     # via virtualenv
 black==21.9b0
@@ -41,10 +36,6 @@ coverage[toml]==5.5
     #   pytest-cov
 distlib==0.3.2
     # via virtualenv
-docutils==0.16
-    # via
-    #   sphinx
-    #   sphinx-rtd-theme
 dulwich==0.20.25
     # via
     #   plaster (setup.py)
@@ -57,15 +48,12 @@ identify==2.2.11
     # via pre-commit
 idna==3.2
     # via requests
-imagesize==1.2.0
-    # via sphinx
 iniconfig==1.1.1
     # via pytest
 jinja2==3.0.1
     # via
     #   plaster (setup.py)
     #   psqlgml
-    #   sphinx
 jsonschema==3.2.0
     # via
     #   plaster (setup.py)
@@ -81,9 +69,7 @@ mypy-extensions==0.4.3
 nodeenv==1.6.0
     # via pre-commit
 packaging==21.0
-    # via
-    #   pytest
-    #   sphinx
+    # via pytest
 pathspec==0.9.0
     # via black
 platformdirs==2.0.0
@@ -92,26 +78,18 @@ platformdirs==2.0.0
     #   virtualenv
 pluggy==0.13.1
     # via pytest
-pockets==0.9.1
-    # via sphinxcontrib-napoleon
 pre-commit==2.13.0
     # via plaster (setup.py)
 progressbar==2.5
     # via psqlgraph
 psqlgml==0.1.3
-    # via
-    #   plaster (setup.py)
-    #   pytest-psqlgraph
+    # via plaster (setup.py)
 psqlgraph==3.0.1
-    # via
-    #   plaster (setup.py)
-    #   pytest-psqlgraph
+    # via plaster (setup.py)
 psycopg2-binary==2.9.1
     # via psqlgraph
 py==1.10.0
     # via pytest
-pygments==2.9.0
-    # via sphinx
 pyparsing==2.4.7
     # via packaging
 pyrsistent==0.18.0
@@ -120,60 +98,24 @@ pytest==6.2.4
     # via
     #   plaster (setup.py)
     #   pytest-cov
-    #   pytest-psqlgraph
 pytest-cov==2.12.1
     # via plaster (setup.py)
-pytest-psqlgraph==0.1.1
-    # via plaster (setup.py)
-pytz==2021.1
-    # via babel
 pyyaml==5.4.1
     # via
     #   plaster (setup.py)
     #   pre-commit
     #   psqlgml
-    #   pytest-psqlgraph
 regex==2021.9.24
     # via black
 requests==2.26.0
-    # via
-    #   psqlgraph
-    #   sphinx
-rstr==2.2.6
-    # via pytest-psqlgraph
+    # via psqlgraph
 six==1.15.0
     # via
     #   jsonschema
-    #   pockets
     #   psqlgraph
-    #   sphinxcontrib-napoleon
     #   virtualenv
-snowballstemmer==2.1.0
-    # via sphinx
-sphinx==4.1.0
-    # via
-    #   plaster (setup.py)
-    #   sphinx-rtd-theme
-sphinx-rtd-theme==0.5.2
-    # via plaster (setup.py)
-sphinxcontrib-applehelp==1.0.2
-    # via sphinx
-sphinxcontrib-devhelp==1.0.2
-    # via sphinx
-sphinxcontrib-htmlhelp==2.0.0
-    # via sphinx
-sphinxcontrib-jsmath==1.0.1
-    # via sphinx
-sphinxcontrib-napoleon==0.7
-    # via plaster (setup.py)
-sphinxcontrib-qthelp==1.0.3
-    # via sphinx
-sphinxcontrib-serializinghtml==1.1.5
-    # via sphinx
 sqlalchemy==1.3.24
-    # via
-    #   psqlgraph
-    #   pytest-psqlgraph
+    # via psqlgraph
 toml==0.10.2
     # via
     #   coverage
