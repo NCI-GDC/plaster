@@ -38,7 +38,7 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
-        "psqlgml>=0.1.2",
+        "psqlgml>=0.1.3",
         "psqlgraph",
     ],
     extras_require={

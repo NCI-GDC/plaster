@@ -11,6 +11,9 @@ attrs==21.2.0
     #   jsonschema
     #   psqlgml
     #   pytest
+    #   pytest-psqlgraph
+avro==1.10.2
+    # via psqlgraph
 babel==2.9.1
     # via sphinx
 backports.entry-points-selectable==1.1.0
@@ -93,11 +96,17 @@ pockets==0.9.1
     # via sphinxcontrib-napoleon
 pre-commit==2.13.0
     # via plaster (setup.py)
-psqlgml==0.1.1
-    # via plaster (setup.py)
-psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0
-    # via plaster (setup.py)
-psycopg2==2.8.6
+progressbar==2.5
+    # via psqlgraph
+psqlgml==0.1.3
+    # via
+    #   plaster (setup.py)
+    #   pytest-psqlgraph
+psqlgraph==3.0.1
+    # via
+    #   plaster (setup.py)
+    #   pytest-psqlgraph
+psycopg2-binary==2.9.1
     # via psqlgraph
 py==1.10.0
     # via pytest
@@ -111,7 +120,10 @@ pytest==6.2.4
     # via
     #   plaster (setup.py)
     #   pytest-cov
+    #   pytest-psqlgraph
 pytest-cov==2.12.1
+    # via plaster (setup.py)
+pytest-psqlgraph==0.1.1
     # via plaster (setup.py)
 pytz==2021.1
     # via babel
@@ -120,12 +132,15 @@ pyyaml==5.4.1
     #   plaster (setup.py)
     #   pre-commit
     #   psqlgml
+    #   pytest-psqlgraph
 regex==2021.9.24
     # via black
 requests==2.26.0
-    # via sphinx
+    # via
+    #   psqlgraph
+    #   sphinx
 rstr==2.2.6
-    # via psqlgraph
+    # via pytest-psqlgraph
 six==1.15.0
     # via
     #   jsonschema
@@ -156,7 +171,9 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.3.24
-    # via psqlgraph
+    # via
+    #   psqlgraph
+    #   pytest-psqlgraph
 toml==0.10.2
     # via
     #   coverage
