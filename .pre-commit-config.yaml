@@ -31,11 +31,13 @@ repos:
     rev: 0.7.14
     hooks:
       - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
         name: mdformat
         entry: mdformat
         types: [ markdown ]
         args: [--wrap, '88']
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.2
-    hooks:
-      - id: markdown-toc
+# - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+#   rev: v1.1.2
+#   hooks:
+#     - id: markdown-toc

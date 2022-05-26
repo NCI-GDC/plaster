@@ -6,6 +6,23 @@ GDC internship project for generating data model source code.
 
 <!-- toc -->
 
+- [Purpose](#purpose)
+- [Goal](#goal)
+- [Data Commons Models](#data-commons-models)
+  - [Problems:](#problems)
+- [Project Details](#project-details)
+  - [Requirements](#requirements)
+  - [Features](#features)
+  - [Dictionary selection and loading](#dictionary-selection-and-loading)
+  - [Template Management](#template-management)
+- [How to use](#how-to-use)
+  - [Install plaster](#install-plaster)
+  - [Generate gdcdictionary](#generate-gdcdictionary)
+  - [Generate biodictionary](#generate-biodictionary)
+- [Associated Projects](#associated-projects)
+
+<!-- tocstop -->
+
 # Purpose
 
 This project is a drop-in replacement to the project
