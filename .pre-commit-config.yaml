@@ -42,4 +42,4 @@ repos:
     rev: v1.1.2
     hooks:
       - id: markdown-toc
-        args: [--bullets, "-"]
+        args: [--bullets, "-"]    # mdformat use dash for bullets
