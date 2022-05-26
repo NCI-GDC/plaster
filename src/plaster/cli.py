@@ -41,7 +41,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
     if not profile_cfg:
         raise ValueError(f"Unrecognized profile {profile} entered")
 
-    if profile_cfg.get("type", "local"):
+    if profile_cfg.get("type", "local") == "local":
         dictionary = psqlgml.load_local(
             name=profile,
             version=profile_cfg.get("version", "master"),
