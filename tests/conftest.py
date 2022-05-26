@@ -7,15 +7,15 @@ from plaster import config
 
 @pytest.fixture(scope="session")
 def app_settings() -> str:
-    return pkg_resources.resource_filename("tests", "data/plaster.toml")
+    return pkg_resources.resource_filename("tests", "../plaster.toml")
 
 
 @pytest.fixture()
-def plaster_config(app_settings) -> config.PlasterConfig:
+def plaster_config(app_settings: str) -> config.PlasterConfig:
     yield config.load_config(app_settings)
 
 
 @pytest.fixture()
-def test_dictionary(plaster_config) -> psqlgml.Dictionary:
+def test_dictionary(plaster_config: config.PlasterConfig) -> psqlgml.Dictionary:
     dict_dir = pkg_resources.resource_filename("tests", "data")
     return psqlgml.load_local(version="0.1.0", name="dictionary", dictionary_location=dict_dir)

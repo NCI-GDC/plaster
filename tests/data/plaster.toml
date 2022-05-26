@@ -1,8 +1,0 @@
-title = "Data Model code generator configuration"
-
-[environment]
-# git_home  = "/tmp/.plaster/git"
-
-[logging]
-level = "INFO"
-log_file = "plaster.log"
