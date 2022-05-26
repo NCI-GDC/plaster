@@ -34,3 +34,4 @@ repos:
         name: mdformat
         entry: mdformat
         types: [ markdown ]
+        args: [--wrap, '88']

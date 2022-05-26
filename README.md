@@ -7,10 +7,9 @@ GDC internship project for generating data model source code.
 # Purpose
 
 This project is a drop-in replacement to the project
-https://github.com/NCI-GDC/gdcdatamodel,
-without challenges and obscurity associated with using gdcdatamodel. The resulting code
-will be readable, pass static and linting checks, completely remove delays from
-dictionary load times.
+https://github.com/NCI-GDC/gdcdatamodel, without challenges and obscurity associated
+with using gdcdatamodel. The resulting code will be readable, pass static and linting
+checks, completely remove delays from dictionary load times.
 
 # Goal
 
@@ -20,7 +19,38 @@ gdcdatamodel runtime generated code.
 # Data Commons Models
 
 The data commons are a collection of data structures representing concepts within a
-subject area. These data structures usually form a graph with edges as relationships to one another. The data structures and relationships are defined as JSON schema in yaml files that are distributed via a git repository. These definitions are called Dictionaries for short. The gdcdictionary is one example of a data commons with a primarily focus on cancer. Dictionaries are updated and released frequently, with each release adding or removing nodes, edges, or properties.
+subject area. These data structures usually form a graph with edges as relationships to
+one another. The data structures and relationships are defined as JSON schema in yaml
+files that are distributed via a git repository. These definitions are called
+Dictionaries for short. The gdcdictionary is one example of a data commons with a
+primarily focus on cancer. Dictionaries are updated and released frequently, with each
+release adding or removing nodes, edges, or properties.
+
+These data structures are converted to Python source code at runtime by the gdcdatamodel
+project. For example, the case yaml file will autogenerate the models.Case Python class
+with properties and methods matching those defined in the yaml file. The generated
+source codes are sqlalchemy database entities that map to tables in the database.
+
+The psqlgraph project makes querying using these entities more uniform across different
+use cases, by exposing common modules, classes and functions that are useful for
+manipulating data stored using sqlalchemy.
+
+## Problems:
+
+- Runtime generated code cannot be peer reviewed or inspected. This forces developers to
+  switch between dictionary definitions and code to understand what a particular piece
+  of code is doing. Most projects within the center have this problem since they all
+  rely on gdcdatamodel for the database entities.
+- Runtime generated code also means no type checking, linting and little chance of
+  running static analysis tools like flake8
+- Runtime model code generation takes a few seconds (might be a few minutes - Qiao) to
+  complete. This means that any project that makes use of gdcdatamodel must pay for this
+  in one way or another. The most common is usually start up time.
+
+In summary, most projects within the center suffer just because they rely on
+gdcdatamodel for database entities. The major goal of this project is to eliminate the
+runtime code generation feature on gdcdatamodel, thereby eliminating the above-mentioned
+problems.
 
 # Associated Projects
 
