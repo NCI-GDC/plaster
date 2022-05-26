@@ -4,6 +4,8 @@
 
 GDC internship project for generating data model source code.
 
+<!-- toc -->
+
 # Purpose
 
 This project is a drop-in replacement to the project
@@ -52,6 +54,56 @@ gdcdatamodel for database entities. The major goal of this project is to elimina
 runtime code generation feature on gdcdatamodel, thereby eliminating the above-mentioned
 problems.
 
+# Project Details
+
+## Requirements
+
+- Python >= 3.8
+- No direct dependency on any dictionary versions
+- Must expose scripts that can be invoked to generate source code
+- Must include unit and integration tests with over 80% code coverage
+- Must provide typings and pass mypy checks
+
+## Features
+
+- Dictionary selection and loading
+- Template management
+- Code generation
+- Scripts
+
+## Dictionary selection and loading
+
+This module will be responsible for loading a dictionary given necessary parameters.
+These parameters will include:
+
+- A git URL
+- A target version, tag, commit or branch name
+- A label used for referencing the dictionary later
+
+## Template Management
+
+This module will be responsible for the templates used to generate the final source code
+
+# How to use
+
+## Install plaster
+
+```bash
+pip install .
+```
+
+## Generate gdcdictionary
+
+```bash
+plaster generate -p gdcdictionary -o "example/gdcdictionary"
+```
+
+## Generate biodictionary
+
+```bash
+plaster generate -p biodictionary -o "example/biodictionary"
+```
+
 # Associated Projects
 
 - biodictionary: https://github.com/NCI-GDC/biodictionary
@@ -59,11 +111,3 @@ problems.
 - gdcdictionary: https://github.com/NCI-GDC/gdcdictionary
 - psqlgml: https://github.com/NCI-GDC/psqlgml
 - psqlgraph: https://github.com/NCI-GDC/psqlgraph
-
-# Requirements
-
-- Python >= 3.8
-- No direct dependency on any dictionary versions
-- Must expose scripts that can be invoked to generate source code
-- Must include unit and integration tests with over 80% code coverage
-- Must provide typings and pass mypy checks
