@@ -10,6 +10,7 @@ jobs:
       python: 3.9
       install:
         - pip install tox-travis
+        - pip install nodejs
       script:
         - tox -e lint
     - name: test
@@ -18,5 +19,6 @@ jobs:
         - 3.9
       install:
         - pip install tox-travis
+        - pip install nodejs
       script:
         - tox
