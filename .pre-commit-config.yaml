@@ -38,7 +38,7 @@ repos:
     rev: v1.1.0
     hooks:
       - id: detect-secrets
-        args: [ '--baseline', '.secrets.baseline' ]
+        args: [--baseline, .secrets.baseline]
   - repo: https://github.com/pycqa/isort
     rev: 5.9.3
     hooks:
@@ -46,10 +46,10 @@ repos:
         name: isort (python)
       - id: isort
         name: isort (cython)
-        types: [ cython ]
+        types: [cython]
       - id: isort
         name: isort (pyi)
-        types: [ pyi ]
+        types: [pyi]
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.14
     hooks:
@@ -59,16 +59,21 @@ repos:
           - mdformat-black
         name: mdformat
         entry: mdformat
-        types: [ markdown ]
+        types: [markdown]
         args: [--wrap, '88']
   - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
     rev: v1.1.2
     hooks:
       - id: markdown-toc
-        args: [--bullets, "-"]    # mdformat use dash for bullets
+        args: [--bullets, '-']    # mdformat use dash for bullets
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.1.1
     hooks:
       - id: pydocstyle
         args: [convention=google, --add-ignore, 'D100,D101,D102,D103,D104,D105,D106,D107']
         exclude: ^(tests|unit_tests)/
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.1
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '80']
