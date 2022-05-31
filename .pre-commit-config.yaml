@@ -34,6 +34,11 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.1.0
+    hooks:
+      - id: detect-secrets
+        args: [ '--baseline', '.secrets.baseline' ]
   - repo: https://github.com/pycqa/isort
     rev: 5.9.3
     hooks:
@@ -45,11 +50,6 @@ repos:
       - id: isort
         name: isort (pyi)
         types: [ pyi ]
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.1.0
-    hooks:
-      - id: detect-secrets
-        args: [ '--baseline', '.secrets.baseline' ]
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.14
     hooks:
@@ -66,3 +66,9 @@ repos:
     hooks:
       - id: markdown-toc
         args: [--bullets, "-"]    # mdformat use dash for bullets
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.1.1
+    hooks:
+      - id: pydocstyle
+        args: [convention=google, --add-ignore, 'D100,D101,D102,D103,D104,D105,D106,D107']
+        exclude: ^(tests|unit_tests)/

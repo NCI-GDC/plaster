@@ -19,7 +19,7 @@ logger: logging.Logger
     help="Path to config file",
 )
 def app(ctx: click.Context, config_file: str) -> None:
-    """Entry script"""
+    """Entry script."""
     global logger
 
     # pass context
