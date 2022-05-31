@@ -50,10 +50,14 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
     else:
         dictionary = psqlgml.load(
             name=profile,
-            git_url=profile_cfg.get("url"),
+            git_url=profile_cfg.get("url"),  # type: ignore
             overwrite=profile_cfg.get("overwrite", False),
             schema_path=profile_cfg.get("path", f"{profile}/schemas"),
             version=profile_cfg.get("version", "master"),
         )
+
+    if dictionary is None:
+        logger.error(f"Could not load dictionary for {profile_cfg}")
+        return
 
     generator.generate(dictionary, output_dir)
