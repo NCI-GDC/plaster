@@ -9,8 +9,8 @@ import psqlgml
 
 from plaster.models import edges, nodes
 
-env = j.Environment(
-    loader=j.PackageLoader("plaster"),
+env = j.Environment(  # nosec
+    loader=j.PackageLoader("plaster"),  # ignore B701 of bandit bug
     autoescape=j.select_autoescape(),
     trim_blocks=True,
     lstrip_blocks=True,
