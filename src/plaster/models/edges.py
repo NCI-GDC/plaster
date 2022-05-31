@@ -1,5 +1,6 @@
 import hashlib
 import logging
+from typing import Optional
 
 import attr
 import psqlgml
@@ -69,7 +70,7 @@ class EdgeMeta:
         return self.dst.class_name
 
     @property
-    def dst_src_assoc(self) -> str:
+    def dst_src_assoc(self) -> Optional[str]:
         return self.association.backref
 
     @property
