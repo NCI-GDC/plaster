@@ -16,6 +16,15 @@ repos:
         args: [--autofix]
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.15
+    hooks:
+      - id: forbid-crlf
+      - id: remove-crlf
+      - id: forbid-tabs
+        exclude: .(py|yaml|yml|tsv)$
+      - id: remove-tabs
+        exclude: .(py|yaml|yml|tsv)$
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
