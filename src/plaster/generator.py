@@ -59,7 +59,7 @@ def generate_nodes(
 
     for label, schema in dic.schema.items():
 
-        associations = set([a.name for a in dic.associations(label)])
+        associations = {a.name for a in dic.associations(label)}
 
         meta = nodes.NodeMeta(label, associations, schema.raw)
         rendered = template.render(meta=meta)

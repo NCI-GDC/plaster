@@ -41,7 +41,7 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
     shortened_table_name = (
         f"edge_{shortened_name}_{shortened_src_label}{shortened_label}{shortened_dst_label}"
     )
-    logger.debug("Shortening {} -> {}".format(table_name, shortened_table_name))
+    logger.debug(f"Shortening {table_name} -> {shortened_table_name}")
 
     return shortened_table_name
 
