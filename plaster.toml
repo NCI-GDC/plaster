@@ -19,9 +19,11 @@ url = "https://github.com/NCI-GDC/gdcdictionary.git"
 path = "gdcdictionary/schemas"
 version = "2.4.1"
 overwrite = false
+type = "remote"
 
 [profiles.biodictionary]
 url = "ssh://git@github.com/NCI-GDC/biodictionary.git"
 path = "biodictionary/schemas"
 version = "0.7.0"
 overwrite = false
+type = "remote"
