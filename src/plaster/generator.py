@@ -9,7 +9,7 @@ import psqlgml
 
 from plaster.models import edges, nodes
 
-env = j.Environment(
+env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
     autoescape=j.select_autoescape(),
     trim_blocks=True,
@@ -59,7 +59,7 @@ def generate_nodes(
 
     for label, schema in dic.schema.items():
 
-        associations = set([a.name for a in dic.associations(label)])
+        associations = {a.name for a in dic.associations(label)}
 
         meta = nodes.NodeMeta(label, associations, schema.raw)
         rendered = template.render(meta=meta)

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
-    """Generate a name for the edge table
+    """Generate a name for the edge table.
 
     Because of the limit on table name length on PostgreSQL, we have
     to truncate some of the longer names.  To do this we concatenate
@@ -23,7 +23,6 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
     gets us a name like ``edge_721d393f_LaLeSeqDaFrLaLeSeBu``.  This
     is rather an undesirable workaround. - jsm
     """
-
     table_name = (
         f"edge_{src_label.replace('_', '')}{label.replace('_', '')}{dst_label.replace('_', '')}"
     )
@@ -42,7 +41,7 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
     shortened_table_name = (
         f"edge_{shortened_name}_{shortened_src_label}{shortened_label}{shortened_dst_label}"
     )
-    logger.debug("Shortening {} -> {}".format(table_name, shortened_table_name))
+    logger.debug(f"Shortening {table_name} -> {shortened_table_name}")
 
     return shortened_table_name
 
