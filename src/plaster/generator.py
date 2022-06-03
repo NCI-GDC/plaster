@@ -2,12 +2,11 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, NamedTuple, Set
+from typing import Dict, NamedTuple, Set
 
 import black
 import jinja2 as j
 import psqlgml
-from psqlgml import types
 
 from plaster.models import edges, nodes
 
@@ -51,7 +50,7 @@ def generate_edges(
             f.write(rendered)
 
 
-def get_links(schema: types.DictionarySchema) -> List[Dict[str, Dict[str, str]]]:
+def get_links(schema: psqlgml.types.DictionarySchema) -> Dict[str, psqlgml.types.Link]:
     """Given a schema, pull out all of the ``links`` that this type can have an edge to.
 
     :returns: a ``dict`` of format ``{<name>: <link>}``
@@ -70,7 +69,7 @@ def get_links(schema: types.DictionarySchema) -> List[Dict[str, Dict[str, str]]]
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
 ) -> Dict[str, Dict[str, Dict[str, str]]]:
-    backref_dict = defaultdict(dict)
+    backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
     for label, schema in dic.schema.items():
         for link in get_links(schema).values():
             backref_dict[link["target_type"]][link["backref"]] = {
