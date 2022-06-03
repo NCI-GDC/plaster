@@ -6,7 +6,11 @@ import psqlgraph
 class {{ meta.class_name }}(psqlgraph.Node):
     __tablename__: str = "{{ meta.table_name }}"
 
-    _pg_backrefs: Dict[str, str] = {}
+    _pg_backrefs: Dict[str, str] = {
+        {% for key, value in meta.back_refs.items() %}
+            "{{ key }}": {"name": "{{ value["name"] }}", "src_type": psqlgraph.Node.get_subclass("{{ value["src_type"] }}")},
+        {% endfor %}
+    }
     _pg_edges: Dict[str, str] = {}
     _pg_links: Dict[str, str] = {}
 

@@ -61,3 +61,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
         return
 
     generator.generate(dictionary, output_dir)
+
+
+if __name__ == "__main__":
+    app()

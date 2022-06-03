@@ -1,11 +1,13 @@
 import logging
 import os
+from collections import defaultdict
 from pathlib import Path
-from typing import Dict, NamedTuple, Set
+from typing import Dict, List, NamedTuple, Set
 
 import black
 import jinja2 as j
 import psqlgml
+from psqlgml import types
 
 from plaster.models import edges, nodes
 
@@ -49,10 +51,42 @@ def generate_edges(
             f.write(rendered)
 
 
+def get_links(schema: types.DictionarySchema) -> List[Dict[str, Dict[str, str]]]:
+    """Given a schema, pull out all of the ``links`` that this type can have an edge to.
+
+    :returns: a ``dict`` of format ``{<name>: <link>}``
+
+    """
+    links = {}
+    for entry in schema.links:
+        if "subgroup" in entry:
+            for link in entry["subgroup"]:
+                links[link["name"]] = link
+        else:
+            links[entry["name"]] = entry
+    return links
+
+
+def process_dictionary_for_backrefs(
+    dic: psqlgml.Dictionary,
+) -> Dict[str, Dict[str, Dict[str, str]]]:
+    backref_dict = defaultdict(dict)
+    for label, schema in dic.schema.items():
+        for link in get_links(schema).values():
+            backref_dict[link["target_type"]][link["backref"]] = {
+                "name": link["name"],
+                "src_type": label,
+            }
+
+    return backref_dict
+
+
 def generate_nodes(
     dic: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION
 ) -> Dict[str, nodes.NodeMeta]:
     template = env.get_template("node.jinja2")
+
+    backref_dict = process_dictionary_for_backrefs(dic)
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
     os.makedirs(output_dir, exist_ok=True)
@@ -61,7 +95,7 @@ def generate_nodes(
 
         associations = {a.name for a in dic.associations(label)}
 
-        meta = nodes.NodeMeta(label, associations, schema.raw)
+        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict[label])
         rendered = template.render(meta=meta)
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{output_dir}/{label}.py")
