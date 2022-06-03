@@ -19,6 +19,10 @@ type = "remote"
 version = "0.1.0"
 local_directory = "tests/data"
 
+[profiles.dictionary_bad_location]
+version = "0.1.0"
+local_directory = "bad_location"
+
 [profiles.gdcdictionary]
 url = "https://github.com/NCI-GDC/gdcdictionary.git"
 path = "gdcdictionary/schemas"

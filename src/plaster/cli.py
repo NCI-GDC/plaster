@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import click
 import psqlgml
@@ -58,7 +59,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
 
     if dictionary is None:
         logger.error(f"Could not load dictionary for {profile_cfg}")
-        return
+        return sys.exit("Dictionary not loaded")
 
     generator.generate(dictionary, output_dir)
 
