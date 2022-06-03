@@ -69,6 +69,14 @@ def get_links(schema: psqlgml.types.DictionarySchema) -> Dict[str, psqlgml.types
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
 ) -> Dict[str, Dict[str, Dict[str, str]]]:
+    """Preprocess dictionary links to populate node class _pg_backrefs later.
+
+    Args:
+        dic: gdcdictionary or biodictioanry
+
+    Returns:
+        A dict containing node name and node backrefs.
+    """
     backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
     for label, schema in dic.schema.items():
         for link in get_links(schema).values():
