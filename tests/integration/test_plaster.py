@@ -57,4 +57,6 @@ def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> No
 
     assert bool(test_module.project.Project._pg_backrefs)
 
-    assert test_module.project.Project._pg_backrefs["cases"]["src_type"] == test_module.case.Case
+    project_pg_backrefs = test_module.Project._pg_backrefs
+    assert project_pg_backrefs["cases"]["src_type"] == test_module.case.Case
+    assert project_pg_backrefs["cases"]["name"] == "projects"
