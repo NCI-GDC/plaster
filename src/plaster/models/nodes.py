@@ -4,6 +4,8 @@ from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Uni
 import attr
 import psqlgml
 
+from plaster import utils
+
 DICTIONARY_KEY_LITERAL = Literal[
     "title",
     "namespace",
@@ -91,7 +93,7 @@ class PropertyMeta:
 class NodeMeta:
     label: str
     associations: Set[str]
-    schema: psqlgml.DictionarySchemaDict
+    schema: Dict[str, Any]
     back_refs: Dict[str, Dict[str, str]]
 
     @property
@@ -121,3 +123,11 @@ class NodeMeta:
             if key in EXCLUDED_PROPS or key in self.associations:
                 continue
             yield PropertyMeta(key, schema)
+
+    @property
+    def pg_links(self) -> Dict[str, Dict[str, str]]:
+        pg_links = {}
+        for name, link in utils.get_links(self.schema).items():
+            edge_name = utils.parse_edge(self.schema, link)
+            pg_links[link["name"]] = {"edge_out": edge_name, "dst_type": link["target_type"]}
+        return pg_links
