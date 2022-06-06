@@ -50,22 +50,6 @@ def generate_edges(
             f.write(rendered)
 
 
-def get_links(schema: psqlgml.types.DictionarySchema) -> Dict[str, psqlgml.types.Link]:
-    """Given a schema, pull out all of the ``links`` that this type can have an edge to.
-
-    :returns: a ``dict`` of format ``{<name>: <link>}``
-
-    """
-    links = {}
-    for entry in schema.links:
-        if "subgroup" in entry:
-            for link in entry["subgroup"]:
-                links[link["name"]] = link
-        else:
-            links[entry["name"]] = entry
-    return links
-
-
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
 ) -> Dict[str, Dict[str, Dict[str, str]]]:
@@ -78,13 +62,14 @@ def process_dictionary_for_backrefs(
         A dict containing node name and node backrefs.
     """
     backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
-    for label, schema in dic.schema.items():
-        for link in get_links(schema).values():
-            backref_dict[link["target_type"]][link["backref"]] = {
-                "name": link["name"],
-                "src_type": label,
-            }
 
+    for assoc in dic.all_associations():
+        if assoc.backref is None:
+            continue
+        backref_dict[assoc.dst][assoc.backref] = {
+            "name": assoc.name,
+            "src_type": assoc.src,
+        }
     return backref_dict
 
 
