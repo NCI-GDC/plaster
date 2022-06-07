@@ -61,7 +61,6 @@ def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> No
     assert project._pg_backrefs["cases"]["name"] == "projects"
 
 
-@pytest.mark.skip(reason="can not create instance yet")
 def test_pg_links(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
     result = cli_runner.invoke(
         cli.app,
