@@ -46,7 +46,6 @@ def test_generation(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) 
     assert Path(f"{tmpdir}/case.py").exists()
 
 
-@pytest.mark.skip(reason="can not create instance yet")
 def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
     result = cli_runner.invoke(
         cli.app,
