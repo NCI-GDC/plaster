@@ -12,6 +12,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @property
     def _pg_backrefs(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+        """_pg_backrefs are in_edges, links FROM other types."""
         return {
             {% for key, value in meta.back_refs.items() %}
                 "{{ key }}": {
@@ -23,6 +24,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @property
     def _pg_links(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+        """_pg_links are out_edges, links TO other types."""
         return {
             {% for key, value in meta.pg_links.items() %}
                 "{{ key }}": {

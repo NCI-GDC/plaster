@@ -2,7 +2,6 @@ import logging
 from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 import attr
-import psqlgml
 
 from plaster import utils
 
