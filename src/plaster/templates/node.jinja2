@@ -6,25 +6,32 @@ import psqlgraph
 class {{ meta.class_name }}(psqlgraph.Node):
     __tablename__: str = "{{ meta.table_name }}"
 
-    _pg_backrefs: Dict[str, str] = {
-        {% for key, value in meta.back_refs.items() %}
-            "{{ key }}": {
-                "name": "{{ value["name"] }}",
-                "src_type": psqlgraph.Node.get_subclass("{{ value["src_type"] }}")
-            },
-        {% endfor %}
-    }
     _pg_edges: Dict[str, str] = {}
-    _pg_links: Dict[str, str] = {
-        {% for key, value in meta.pg_links.items() %}
-            "{{ key }}": {
-                "edge_out": "{{ value["edge_out"] }}",
-                "dst_type": psqlgraph.Node.get_subclass("{{ value["dst_type"] }}")
-            },
-        {% endfor %}
-    }
 
     _dictionary: Dict[bool, Union[bool, str, List[str]]] = {{ meta.dictionary }}
+
+    @property
+    def _pg_backrefs(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+        return {
+            {% for key, value in meta.back_refs.items() %}
+                "{{ key }}": {
+                    "name": "{{ value["name"] }}",
+                    "src_type": psqlgraph.Node.get_subclass("{{ value["src_type"] }}"),
+                },
+            {% endfor %}
+        }
+
+    @property
+    def _pg_links(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+        return {
+            {% for key, value in meta.pg_links.items() %}
+                "{{ key }}": {
+                    "edge_out": "{{ value["edge_out"] }}",
+                    "dst_type": psqlgraph.Node.get_subclass("{{ value["dst_type"] }}"),
+                },
+            {% endfor %}
+        }
+
 
     @property
     def _default(self) -> Dict[str, Union[bool, float, int, str]]:
