@@ -19,14 +19,14 @@ def get_links(schema: psqlgml.types.DictionarySchema) -> Dict[str, psqlgml.types
     return links
 
 
-def get_class_name_from_id(_id):
+def get_class_name_from_id(_id: str) -> str:
     return "".join([a.capitalize() for a in _id.split("_")])
 
 
 def parse_edge(
-    subschema,
-    link,
-):
+    subschema: Dict[str, any],
+    link: psqlgml.types.Link,
+) -> str:
     """Parse an edge from the dictionary and create and Edge subclass.
 
     :returns: The outbound name of the edge
