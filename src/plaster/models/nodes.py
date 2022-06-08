@@ -5,7 +5,7 @@ import attr
 import psqlgml
 
 from plaster import utils
-from plaster.types import PgBackRefDict, PgLinksDict
+from plaster.types import PgBackRef, PgEdge, PgLink
 
 DICTIONARY_KEY_LITERAL = Literal[
     "title",
@@ -95,10 +95,10 @@ class NodeMeta:
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
-    backrefs_dict: Dict[str, Dict[str, PgBackRefDict]]
+    backrefs_dict: Dict[str, Dict[str, PgBackRef]]
 
     @property
-    def back_refs(self) -> Dict[str, Dict[str, str]]:
+    def back_refs(self) -> Dict[str, PgBackRef]:
         return self.backrefs_dict[self.label]
 
     @property
@@ -130,9 +130,9 @@ class NodeMeta:
             yield PropertyMeta(key, schema)
 
     @property
-    def pg_links(self) -> Dict[str, PgLinksDict]:
+    def pg_links(self) -> Dict[str, PgLink]:
         pg_links = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
-            pg_links[link["name"]] = {"edge_out": edge_name, "dst_type": link["target_type"]}
+            pg_links[link["name"]] = PgLink(edge_name, link["target_type"])
         return pg_links

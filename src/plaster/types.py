@@ -1,16 +1,16 @@
-from typing import TypedDict
+from typing import NamedTuple
 
 
-class PgLinksDict(TypedDict):
+class PgLink(NamedTuple):
     edges_out: str
     dst_type: str
 
 
-class PgBackRefDict(TypedDict):
+class PgBackRef(NamedTuple):
     name: str
     src_type: str
 
 
-class PgEdgeDict(TypedDict):
+class PgEdge(NamedTuple):
     backref: str
     type: str

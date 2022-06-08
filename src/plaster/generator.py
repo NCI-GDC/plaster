@@ -9,7 +9,7 @@ import jinja2 as j
 import psqlgml
 
 from plaster.models import edges, nodes
-from plaster.types import PgBackRefDict
+from plaster.types import PgBackRef
 
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
@@ -63,15 +63,12 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backrefs_dict: Dict[str, Dict[str, PgBackRefDict]] = defaultdict(dict)
+    backrefs_dict: Dict[str, Dict[str, PgBackRef]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backrefs_dict[assoc.dst][assoc.backref] = {
-            "name": assoc.name,
-            "src_type": assoc.src,
-        }
+        backrefs_dict[assoc.dst][assoc.backref] = PgBackRef(assoc.name, assoc.src)
     return backrefs_dict
 
 

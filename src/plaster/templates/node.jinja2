@@ -16,8 +16,8 @@ class {{ meta.class_name }}(psqlgraph.Node):
         return {
             {% for key, value in meta.back_refs.items() %}
                 "{{ key }}": {
-                    "name": "{{ value["name"] }}",
-                    "src_type": psqlgraph.Node.get_subclass("{{ value["src_type"] }}"),
+                    "name": "{{ value.name }}",
+                    "src_type": psqlgraph.Node.get_subclass("{{ value.src_type }}"),
                 },
             {% endfor %}
         }
@@ -28,8 +28,8 @@ class {{ meta.class_name }}(psqlgraph.Node):
         return {
             {% for key, value in meta.pg_links.items() %}
                 "{{ key }}": {
-                    "edge_out": "{{ value["edge_out"] }}",
-                    "dst_type": psqlgraph.Node.get_subclass("{{ value["dst_type"] }}"),
+                    "edge_out": "{{ value.edges_out }}",
+                    "dst_type": psqlgraph.Node.get_subclass("{{ value.dst_type }}"),
                 },
             {% endfor %}
         }
