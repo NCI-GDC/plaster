@@ -130,9 +130,24 @@ class NodeMeta:
             yield PropertyMeta(key, schema)
 
     @property
+    def pg_edges(self) -> Dict[str, PgEdge]:
+        pg_edges: Dict[str, PgEdge] = {}
+        for name, link in self.pg_links.items():
+            pg_edges[name] = PgEdge(self._find_backref(link, self.label), link.dst_type)
+
+        for name, back_ref in self.back_refs.items():
+            pg_edges[name] = PgEdge(back_ref.name, back_ref.src_type)
+        return pg_edges
+
+    @property
     def pg_links(self) -> Dict[str, PgLink]:
         pg_links: Dict[str, PgLink] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
             pg_links[link["name"]] = PgLink(edge_name, link["target_type"])
         return pg_links
+
+    def _find_backref(self, link: PgLink, label: str) -> str:
+        for name, backref in self.backrefs_dict[link.dst_type].items():
+            if backref.src_type == label:
+                return name
