@@ -89,7 +89,7 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict[label])
+        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict)
         node_metas[label] = meta
     return node_metas
 
