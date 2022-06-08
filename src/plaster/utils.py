@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 import psqlgml
 
@@ -24,7 +24,7 @@ def get_class_name_from_id(_id: str) -> str:
 
 
 def parse_edge(
-    subschema: Dict[str, any],
+    subschema: Dict[str, Any],
     link: psqlgml.types.Link,
 ) -> str:
     """Parse an edge from the dictionary and create and Edge subclass.

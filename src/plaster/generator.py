@@ -30,6 +30,15 @@ def generate_edges(
     associations: Set[psqlgml.Association],
     node_metas: Dict[str, nodes.NodeMeta],
 ) -> Generator[edges.EdgeMeta, None, None]:
+    """Read dictionary associations and generate metadata for edges.
+
+    Args:
+        associations: associations between nodes
+        node_metas: node metadata
+
+    Returns:
+        A generator of node metadata
+    """
     for assoc in associations:
         if assoc.is_reference:
             continue
@@ -66,6 +75,14 @@ def process_dictionary_for_backrefs(
 
 
 def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+    """Read dictionary and generate metadata for nodes.
+
+    Args:
+        dic: dictionary to read, gdcdictionary or biodictionary
+
+    Returns:
+        metadata for nodes
+    """
     backref_dict = process_dictionary_for_backrefs(dic)
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
@@ -78,6 +95,15 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
 
 
 def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) -> None:
+    """Generate the edges and nodes classes from dictionary.
+
+    Args:
+        dictionary: gdcdictionary or biodictionary to read
+        output_dir: directory to save the classes
+
+    Returns:
+        None
+    """
     os.makedirs(output_dir, exist_ok=True)
     import_metas: Set["ImportMeta"] = set()
 
@@ -88,16 +114,29 @@ def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) 
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
 
-    for meta in edges_meta_generator:
-        render_and_write_file(meta, "edge", output_dir, meta.class_name.lower())
-        import_metas.add(ImportMeta(package=meta.class_name.lower(), class_name=meta.class_name))
+    for edge_meta in edges_meta_generator:
+        render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
+        import_metas.add(
+            ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
+        )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
 
 
 def render_and_write_file(
     meta: Any, template_base_name: str, output_dir: str, file_base_name: str
-):
+) -> None:
+    """Write node, edge, etc to python file.
+
+    Args:
+        meta: metadata for jinja template
+        template_base_name: base name for jinja template to use
+        output_dir: output directory
+        file_base_name: base name for python file
+
+    Returns:
+        None
+    """
     template = env.get_template(f"{template_base_name}.jinja2")
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
