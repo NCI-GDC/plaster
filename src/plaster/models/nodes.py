@@ -131,7 +131,7 @@ class NodeMeta:
 
     @property
     def pg_links(self) -> Dict[str, PgLink]:
-        pg_links = {}
+        pg_links: Dict[str, PgLink] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
             pg_links[link["name"]] = PgLink(edge_name, link["target_type"])

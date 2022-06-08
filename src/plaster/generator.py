@@ -54,7 +54,7 @@ def generate_edges(
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, Dict[str, str]]]:
+) -> Dict[str, Dict[str, PgBackRef]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
