@@ -2,6 +2,7 @@ import logging
 from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 import attr
+import psqlgml
 
 from plaster import utils
 
@@ -92,7 +93,7 @@ class PropertyMeta:
 class NodeMeta:
     label: str
     associations: Set[str]
-    schema: Dict[str, Any]
+    schema: psqlgml.DictionarySchemaDict
     back_refs: Dict[str, Dict[str, str]]
 
     @property
