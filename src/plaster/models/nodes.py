@@ -151,3 +151,4 @@ class NodeMeta:
         for name, backref in self.backrefs_dict[link.dst_type].items():
             if backref.src_type == label:
                 return name
+        return ""
