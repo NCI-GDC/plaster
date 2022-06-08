@@ -92,6 +92,7 @@ class NodeMeta:
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
+    back_refs: Dict[str, Dict[str, str]]
 
     @property
     def class_name(self) -> str:

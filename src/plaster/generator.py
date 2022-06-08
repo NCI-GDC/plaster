@@ -1,5 +1,6 @@
 import logging
 import os
+from collections import defaultdict
 from pathlib import Path
 from typing import Dict, NamedTuple, Set
 
@@ -49,10 +50,35 @@ def generate_edges(
             f.write(rendered)
 
 
+def process_dictionary_for_backrefs(
+    dic: psqlgml.Dictionary,
+) -> Dict[str, Dict[str, Dict[str, str]]]:
+    """Preprocess dictionary links to populate node class _pg_backrefs later.
+
+    Args:
+        dic: gdcdictionary or biodictioanry
+
+    Returns:
+        A dict containing node name and node backrefs.
+    """
+    backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
+
+    for assoc in dic.all_associations():
+        if assoc.backref is None:
+            continue
+        backref_dict[assoc.dst][assoc.backref] = {
+            "name": assoc.name,
+            "src_type": assoc.src,
+        }
+    return backref_dict
+
+
 def generate_nodes(
     dic: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION
 ) -> Dict[str, nodes.NodeMeta]:
     template = env.get_template("node.jinja2")
+
+    backref_dict = process_dictionary_for_backrefs(dic)
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
     os.makedirs(output_dir, exist_ok=True)
@@ -61,7 +87,7 @@ def generate_nodes(
 
         associations = {a.name for a in dic.associations(label)}
 
-        meta = nodes.NodeMeta(label, associations, schema.raw)
+        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict[label])
         rendered = template.render(meta=meta)
         rendered = black.format_str(rendered, mode=black.FileMode())
         loc = Path(f"{output_dir}/{label}.py")

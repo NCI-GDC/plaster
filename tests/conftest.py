@@ -7,7 +7,7 @@ from plaster import config
 
 @pytest.fixture(scope="session")
 def app_settings() -> str:
-    return pkg_resources.resource_filename("tests", "../plaster.toml")
+    return pkg_resources.resource_filename("tests", "plaster-test.toml")
 
 
 @pytest.fixture()

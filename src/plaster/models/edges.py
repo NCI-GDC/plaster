@@ -90,7 +90,7 @@ class EdgeMeta:
 
     @property
     def src_table(self) -> str:
-        return self.dst.table_name
+        return self.src.table_name
 
     @property
     def table_name(self) -> str:
