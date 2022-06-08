@@ -9,6 +9,7 @@ import jinja2 as j
 import psqlgml
 
 from plaster.models import edges, nodes
+from plaster.types import PgBackRefDict
 
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
@@ -62,16 +63,16 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
+    backrefs_dict: Dict[str, Dict[str, PgBackRefDict]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backref_dict[assoc.dst][assoc.backref] = {
+        backrefs_dict[assoc.dst][assoc.backref] = {
             "name": assoc.name,
             "src_type": assoc.src,
         }
-    return backref_dict
+    return backrefs_dict
 
 
 def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
@@ -83,13 +84,13 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
     Returns:
         metadata for nodes
     """
-    backref_dict = process_dictionary_for_backrefs(dic)
+    backrefs_dict = process_dictionary_for_backrefs(dic)
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict)
+        meta = nodes.NodeMeta(label, associations, schema.raw, backrefs_dict)
         node_metas[label] = meta
     return node_metas
 
