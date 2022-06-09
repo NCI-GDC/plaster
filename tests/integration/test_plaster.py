@@ -1,6 +1,7 @@
 import sys
 from os import PathLike
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from click.testing import CliRunner
@@ -60,19 +61,19 @@ def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> Non
     return test_module
 
 
-def test_back_refs(graph_classes):
+def test_back_refs(graph_classes: ModuleType) -> None:
     project = graph_classes.Project()
     assert project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
     assert project._pg_backrefs["cases"]["name"] == "projects"
 
 
-def test_pg_links(graph_classes):
+def test_pg_links(graph_classes: ModuleType) -> None:
     pg_links = graph_classes.Case()._pg_links
     assert pg_links["projects"]["dst_type"] == graph_classes.Project
     assert pg_links["projects"]["edge_out"] == "_CaseMemberOfProject_out"
 
 
-def test_pg_edges(graph_classes):
+def test_pg_edges(graph_classes: ModuleType) -> None:
     pg_edges = graph_classes.Project()._pg_edges
     assert pg_edges["programs"]["backref"] == "projects"
     assert pg_edges["programs"]["type"] == graph_classes.Program
