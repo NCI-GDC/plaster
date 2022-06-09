@@ -61,3 +61,10 @@ def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> No
     project = test_module.Project()
     assert project._pg_backrefs["cases"]["src_type"] == test_module.Case
     assert project._pg_backrefs["cases"]["name"] == "projects"
+
+
+def test_id(graph_classes: ModuleType) -> None:
+    case = graph_classes.Case(node_id="case_id")
+    assert case.id == "case_id"
+    case.id = "new_case_id"
+    assert case.node_id == "new_case_id"

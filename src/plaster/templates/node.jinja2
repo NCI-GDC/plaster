@@ -23,6 +23,14 @@ class {{ meta.class_name }}(psqlgraph.Node):
         }
 
     @property
+    def id(self):
+        return self.node_id
+
+    @id.setter
+    def id(self, value):
+        self.node_id = value
+
+    @property
     def _default(self) -> Dict[str, Union[bool, float, int, str]]:
         return {{ meta.defaults }}
 
