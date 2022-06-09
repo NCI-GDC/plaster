@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
@@ -8,10 +8,20 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     _dictionary: Dict[str, Union[bool, str, List[str]]] = {{ meta.dictionary }}
 
-    @property
-    def _pg_backrefs(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+    _pg_backrefs: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+    _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+    _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+
+    @classmethod
+    def post_process(cls) -> None:
+        cls.populate_pg_backrefs()
+        cls.populate_pg_links()
+        cls.populate_pg_edges()
+
+    @classmethod
+    def populate_pg_backrefs(cls) -> None:
         """_pg_backrefs are in_edges, links FROM other types."""
-        return {
+        cls._pg_backrefs = {
             {% for key, value in meta.back_refs.items() %}
                 "{{ key }}": {
                     "name": "{{ value.name }}",
@@ -20,10 +30,10 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% endfor %}
         }
 
-    @property
-    def _pg_edges(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
-        """_pg_links are out_edges, links TO other types."""
-        return {
+    @classmethod
+    def populate_pg_edges(cls) -> None:
+        """_pg_edges are all edges, links to AND from other types."""
+        cls._pg_edges = {
             {% for key, value in meta.pg_edges.items() %}
                 "{{ key }}": {
                     "backref": "{{ value.backref }}",
@@ -32,10 +42,10 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% endfor %}
         }
 
-    @property
-    def _pg_links(self) -> Dict[str, Dict[str, Union[str, psqlgraph.Node]]]:
+    @classmethod
+    def populate_pg_links(cls) -> None:
         """_pg_links are out_edges, links TO other types."""
-        return {
+        cls._pg_links = {
             {% for key, value in meta.pg_links.items() %}
                 "{{ key }}": {
                     "edge_out": "{{ value.edges_out }}",

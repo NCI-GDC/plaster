@@ -1,3 +1,12 @@
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
+
+classes = [
+{% for imp in meta | sort %}
+    {{ imp.class_name }},
+{% endfor %}
+]
+
+for cls in classes:
+    cls.post_process()
