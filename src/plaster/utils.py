@@ -3,7 +3,7 @@ from typing import Any, Dict
 import psqlgml
 
 
-def get_links(schema: psqlgml.types.DictionarySchema) -> Dict[str, psqlgml.types.Link]:
+def get_links(schema: psqlgml.types.DictionarySchemaDict) -> Dict[str, psqlgml.types.Link]:
     """Given a schema, pull out all the ``links`` that this type can have an edge to.
 
     :returns: a ``dict`` of format ``{<name>: <link>}``
@@ -24,7 +24,7 @@ def get_class_name_from_id(_id: str) -> str:
 
 
 def parse_edge(
-    subschema: Dict[str, Any],
+    subschema: psqlgml.types.DictionarySchemaDict,
     link: psqlgml.types.Link,
 ) -> str:
     """Parse an edge from the dictionary and create and Edge subclass.
