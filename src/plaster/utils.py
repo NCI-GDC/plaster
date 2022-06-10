@@ -35,6 +35,6 @@ def parse_edge(
     dst_label = link["target_type"]
     edge_label = link["label"]
     src_label = subschema["id"]
-    edge_name = "".join(map(get_class_name_from_id, [src_label, edge_label, dst_label]))
+    edge_name = "".join(map(get_class_name_from_id, (src_label, edge_label, dst_label)))
 
     return "_{}_out".format(edge_name)
