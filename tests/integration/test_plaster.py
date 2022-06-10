@@ -1,6 +1,7 @@
 import sys
 from os import PathLike
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from click.testing import CliRunner
@@ -44,6 +45,20 @@ def test_generation(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) 
     assert Path(f"{tmpdir}/program.py").exists()
     assert Path(f"{tmpdir}/project.py").exists()
     assert Path(f"{tmpdir}/case.py").exists()
+
+
+@pytest.fixture
+def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
+    result = cli_runner.invoke(
+        cli.app,
+        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
+    )
+    assert result.exit_code == 0
+
+    sys.path.insert(0, str(tmpdir))
+    import test_module
+
+    return test_module
 
 
 def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
