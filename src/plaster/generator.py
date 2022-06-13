@@ -2,7 +2,7 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, Generator, NamedTuple, Set
+from typing import Any, Dict, Iterable, NamedTuple, Set
 
 import black
 import jinja2 as j
@@ -30,7 +30,7 @@ class ImportMeta(NamedTuple):
 def generate_edges(
     associations: Set[psqlgml.Association],
     node_metas: Dict[str, nodes.NodeMeta],
-) -> Generator[edges.EdgeMeta, None, None]:
+) -> Iterable[edges.EdgeMeta]:
     """Read dictionary associations and generate metadata for edges.
 
     Args:
