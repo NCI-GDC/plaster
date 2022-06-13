@@ -2,7 +2,7 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, NamedTuple, Set
+from typing import Any, Dict, Iterable, NamedTuple, Set
 
 import black
 import jinja2 as j
@@ -17,7 +17,7 @@ env = j.Environment(  # nosec B701
     lstrip_blocks=True,
 )
 OUTPUT_LOCATION = "examples/models"
-import_metas: Set["ImportMeta"] = set()
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,10 +29,16 @@ class ImportMeta(NamedTuple):
 def generate_edges(
     associations: Set[psqlgml.Association],
     node_metas: Dict[str, nodes.NodeMeta],
-    output_location: str,
-) -> None:
+) -> Iterable[edges.EdgeMeta]:
+    """Read dictionary associations and generate metadata for edges.
 
-    template = env.get_template("edge.jinja2")
+    Args:
+        associations: associations between nodes
+        node_metas: node metadata
+
+    Returns:
+        A generator of node metadata
+    """
     for assoc in associations:
         if assoc.is_reference:
             continue
@@ -41,13 +47,8 @@ def generate_edges(
         dst = node_metas[assoc.dst]
         meta = edges.EdgeMeta(assoc, src, dst)
         logger.info(f"Reading edge: {meta.class_name}")
-        rendered = template.render(meta=meta)
-        rendered = black.format_str(rendered, mode=black.FileMode())
-        loc = Path(f"{output_location}/{meta.class_name.lower()}.py")
 
-        import_metas.add(ImportMeta(package=meta.class_name.lower(), class_name=meta.class_name))
-        with loc.open("w") as f:
-            f.write(rendered)
+        yield meta
 
 
 def process_dictionary_for_backrefs(
@@ -73,39 +74,72 @@ def process_dictionary_for_backrefs(
     return backref_dict
 
 
-def generate_nodes(
-    dic: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION
-) -> Dict[str, nodes.NodeMeta]:
-    template = env.get_template("node.jinja2")
+def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+    """Read dictionary and generate metadata for nodes.
 
+    Args:
+        dic: dictionary to read, gdcdictionary or biodictionary
+
+    Returns:
+        metadata for nodes
+    """
     backref_dict = process_dictionary_for_backrefs(dic)
 
     node_metas: Dict[str, nodes.NodeMeta] = {}
-    os.makedirs(output_dir, exist_ok=True)
 
     for label, schema in dic.schema.items():
-
         associations = {a.name for a in dic.associations(label)}
-
         meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict[label])
-        rendered = template.render(meta=meta)
-        rendered = black.format_str(rendered, mode=black.FileMode())
-        loc = Path(f"{output_dir}/{label}.py")
-
-        import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
-        with loc.open("w") as f:
-            f.write(rendered)
         node_metas[label] = meta
     return node_metas
 
 
 def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) -> None:
-    node_metas = generate_nodes(dictionary, output_dir)
-    generate_edges(dictionary.all_associations(), node_metas, output_dir)
+    """Generate the edges and nodes classes from dictionary.
 
-    template = env.get_template("init.jinja2")
-    rendered = template.render(imports=import_metas)
+    Args:
+        dictionary: gdcdictionary or biodictionary to read
+        output_dir: directory to save the classes
+
+    Returns:
+        None
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    import_metas: Set["ImportMeta"] = set()
+
+    node_metas = generate_nodes(dictionary)
+    for meta in node_metas.values():
+        render_and_write_file(meta, "node", output_dir, meta.label)
+        import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
+
+    edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
+
+    for edge_meta in edges_meta_generator:
+        render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
+        import_metas.add(
+            ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
+        )
+
+    render_and_write_file(import_metas, "init", output_dir, "__init__")
+
+
+def render_and_write_file(
+    meta: Any, template_base_name: str, output_dir: str, file_base_name: str
+) -> None:
+    """Write node, edge, etc to python file.
+
+    Args:
+        meta: metadata for jinja template
+        template_base_name: base name for jinja template to use
+        output_dir: output directory
+        file_base_name: base name for python file
+
+    Returns:
+        None
+    """
+    template = env.get_template(f"{template_base_name}.jinja2")
+    rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
-    loc = Path(f"{output_dir}/__init__.py")
+    loc = Path(f"{output_dir}/{file_base_name}.py")
     with loc.open("w") as f:
         f.write(rendered)
