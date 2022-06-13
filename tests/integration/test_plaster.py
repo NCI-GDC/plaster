@@ -56,8 +56,21 @@ def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> No
     sys.path.insert(0, str(tmpdir))
     import test_module
 
-    assert bool(test_module.project.Project._pg_backrefs)
-
     project = test_module.Project()
     assert project._pg_backrefs["cases"]["src_type"] == test_module.Case
     assert project._pg_backrefs["cases"]["name"] == "projects"
+
+
+def test_pg_links(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
+    result = cli_runner.invoke(
+        cli.app,
+        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
+    )
+    assert result.exit_code == 0
+
+    sys.path.insert(0, str(tmpdir))
+    import test_module
+
+    pg_links = test_module.Case()._pg_links
+    assert pg_links["projects"]["dst_type"] == test_module.Project
+    assert pg_links["projects"]["edge_out"] == "_CaseMemberOfProject_out"
