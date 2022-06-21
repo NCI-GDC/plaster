@@ -1,3 +1,4 @@
+import itertools
 import logging
 import os
 from collections import defaultdict
@@ -141,8 +142,9 @@ def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) 
         import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
+    relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
 
-    for edge_meta in edges_meta_generator:
+    for edge_meta in itertools.chain(edges_meta_generator, relates_to_case_edge_meta_generator):
         render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
         import_metas.add(
             ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
