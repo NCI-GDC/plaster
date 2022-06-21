@@ -80,3 +80,16 @@ def test_pg_edges(graph_classes: ModuleType) -> None:
     assert pg_edges["programs"]["type"] == graph_classes.Program
     assert pg_edges["cases"]["backref"] == "projects"
     assert pg_edges["cases"]["type"] == graph_classes.Case
+
+
+def test_relates_to_case_edges(graph_classes: ModuleType) -> None:
+    edge = graph_classes.SampleRelatesToCase
+    assert edge.__tablename__ == "edge_samplerelatestocase"
+    assert edge.__label__ == "relates_to"
+    assert edge.__dst_class__ == "Case"
+    assert edge.__dst_table__ == "node_case"
+    assert edge.__src_class__ == "Sample"
+    assert edge.__src_table__ == "node_sample"
+
+    assert edge.__dst_src_assoc__ == "_related_sample"
+    assert edge.__src_dst_assoc__ == "_related_cases"
