@@ -63,6 +63,10 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def label(self) -> str:
         return "{{ meta.label }}"
 
+    @property
+    def related_cases_from_cache(self) -> List[psqlgraph.Node]:
+        return list(filter(None, getattr(self, "_related_cases", [])))
+
     {% for prop in meta.properties %}
 
     @psqlgraph.pg_property({% for p in prop.types[0] %}{{ p }}{% if not loop.last %},{% endif %} {% endfor %}{% if prop.types[1] %}, enum={{ prop.types[1] }}{% endif %})
