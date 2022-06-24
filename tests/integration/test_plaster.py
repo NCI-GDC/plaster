@@ -1,9 +1,7 @@
-import sys
 from os import PathLike
 from pathlib import Path
 from types import ModuleType
 
-import pytest
 from click.testing import CliRunner
 
 import plaster
@@ -47,20 +45,6 @@ def test_generation(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) 
     assert Path(f"{tmpdir}/case.py").exists()
 
 
-@pytest.fixture
-def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
-    result = cli_runner.invoke(
-        cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
-    )
-    assert result.exit_code == 0
-
-    sys.path.insert(0, str(tmpdir))
-    import test_module
-
-    return test_module
-
-
 def test_back_refs(graph_classes: ModuleType) -> None:
     Project = graph_classes.Project
     assert Project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
@@ -79,33 +63,3 @@ def test_pg_edges(graph_classes: ModuleType) -> None:
     assert pg_edges["programs"]["type"] == graph_classes.Program
     assert pg_edges["cases"]["backref"] == "projects"
     assert pg_edges["cases"]["type"] == graph_classes.Case
-
-
-def test_pg_links_for_edges_out(graph_classes: ModuleType) -> None:
-    project = graph_classes.Project("project_1")
-    case = graph_classes.Case("case_1")
-    case.projects = [project]
-
-    assert len(project.edges_in) == 1
-    assert project.edges_in[0].label == "member_of"
-    # probably need to add psqlgraph driver to make this work
-    # assert project.edges_in[0].src_id == "case_1"
-
-    assert len(case.edges_out) == 1
-    assert case.edges_out[0].label == "member_of"
-    assert case.edges_out[0].dst_id == "project_1"
-
-
-def test_pg_backrefs_for_edges_in(graph_classes: ModuleType) -> None:
-    project = graph_classes.Project("project_1")
-    case = graph_classes.Case("case_1")
-    project.cases = [case]
-
-    assert len(project.edges_in) == 1
-    assert project.edges_in[0].label == "member_of"
-    assert project.edges_in[0].src_id == "case_1"
-
-    assert len(case.edges_out) == 1
-    assert case.edges_out[0].label == "member_of"
-    # probably need to add psqlgraph driver to make this work
-    # assert case.edges_out[0].dst_id == "project_1"

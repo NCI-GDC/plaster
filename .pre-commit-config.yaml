@@ -29,8 +29,8 @@ repos:
     rev: 1.7.4
     hooks:
       - id: bandit
-        args: [--skip, 'B303,B101,B324,B404,B405,B607,B603', --exclude, tests, --exclude,
-          examples/tests]
+        args: [--skip, 'B101,B106,B303,B324,B404,B405,B607,B603', --exclude, tests,
+          --exclude, examples/tests]
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
