@@ -138,7 +138,10 @@ def render_and_write_file(
     Returns:
         None
     """
-    template = env.get_template(f"{template_base_name}.jinja2")
+    try:
+        template = env.get_template(f"{template_base_name}.jinja2")
+    except j.exceptions.TemplateNotFound:
+        template = env.get_template(f"{template_base_name}.py")
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
     loc = Path(f"{output_dir}/{file_base_name}.py")
