@@ -1,5 +1,7 @@
+import glob
 import logging
 import os
+import shutil
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Set
@@ -119,6 +121,7 @@ def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) 
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
+    render_and_write_file(None, "utils", output_dir, "utils")
 
 
 def render_and_write_file(
