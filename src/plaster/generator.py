@@ -9,7 +9,6 @@ import jinja2 as j
 import psqlgml
 
 from plaster.models import edges, nodes
-from plaster.types import PgBackRef
 
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
@@ -54,7 +53,7 @@ def generate_edges(
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, PgBackRef]]:
+) -> Dict[str, Dict[str, nodes.PgBackRef]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
@@ -63,12 +62,12 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backrefs_dict: Dict[str, Dict[str, PgBackRef]] = defaultdict(dict)
+    backrefs_dict: Dict[str, Dict[str, nodes.PgBackRef]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backrefs_dict[assoc.dst][assoc.backref] = PgBackRef(assoc.name, assoc.src)
+        backrefs_dict[assoc.dst][assoc.backref] = nodes.PgBackRef(assoc.name, assoc.src)
     return backrefs_dict
 
 

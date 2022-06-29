@@ -1,11 +1,21 @@
 import logging
-from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
+from typing import (
+    Any,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    NamedTuple,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
 
 import attr
 import psqlgml
 
 from plaster import utils
-from plaster.types import PgBackRef, PgEdge, PgLink
 
 DICTIONARY_KEY_LITERAL = Literal[
     "title",
@@ -88,6 +98,21 @@ class PropertyMeta:
             if meta.enums:
                 f_enums = meta.enums
         return f_types, f_enums
+
+
+class PgLink(NamedTuple):
+    edges_out: str
+    dst_type: str
+
+
+class PgBackRef(NamedTuple):
+    name: str
+    src_type: str
+
+
+class PgEdge(NamedTuple):
+    backref: str
+    type: str
 
 
 @attr.s(auto_attribs=True)
