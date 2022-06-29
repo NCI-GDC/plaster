@@ -22,7 +22,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def populate_pg_backrefs(cls) -> None:
         """_pg_backrefs are in_edges, links FROM other types."""
         cls._pg_backrefs = {
-            {% for key, value in meta.back_refs.items() %}
+            {% for key, value in meta.pg_backrefs.items() %}
                 "{{ key }}": {
                     "name": "{{ value.name }}",
                     "src_type": psqlgraph.Node.get_subclass("{{ value.src_type }}"),

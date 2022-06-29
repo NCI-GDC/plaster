@@ -123,10 +123,6 @@ class NodeMetaData:
     backrefs_dict: Dict[str, Dict[str, PgBackRef]]
 
     @property
-    def back_refs(self) -> Dict[str, PgBackRef]:
-        return self.backrefs_dict[self.label]
-
-    @property
     def class_name(self) -> str:
         return "".join([a.capitalize() for a in self.label.split("_")])
 
@@ -155,12 +151,16 @@ class NodeMetaData:
             yield PropertyMeta(key, schema)
 
     @property
+    def pg_backrefs(self) -> Dict[str, PgBackRef]:
+        return self.backrefs_dict[self.label]
+
+    @property
     def pg_edges(self) -> Dict[str, PgEdge]:
         pg_edges: Dict[str, PgEdge] = {}
         for name, link in self.pg_links.items():
             pg_edges[name] = PgEdge(self._find_backref(link, self.label), link.dst_type)
 
-        for name, back_ref in self.back_refs.items():
+        for name, back_ref in self.pg_backrefs.items():
             pg_edges[name] = PgEdge(back_ref.name, back_ref.src_type)
         return pg_edges
 
