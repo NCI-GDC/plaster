@@ -5,7 +5,7 @@ from typing import Optional
 import attr
 import psqlgml
 
-from plaster.models.nodes import NodeMeta
+from plaster.models.nodes import NodeMetaData
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +53,8 @@ def sentence_case(item: str) -> str:
 @attr.s(auto_attribs=True)
 class EdgeMeta:
     association: psqlgml.Association
-    src: NodeMeta
-    dst: NodeMeta
+    src: NodeMetaData
+    dst: NodeMetaData
 
     @property
     def class_name(self) -> str:

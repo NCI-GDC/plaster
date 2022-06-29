@@ -29,7 +29,7 @@ class ImportMeta(NamedTuple):
 
 def generate_edges(
     associations: Set[psqlgml.Association],
-    node_metas: Dict[str, nodes.NodeMeta],
+    node_metas: Dict[str, nodes.NodeMetaData],
 ) -> Iterable[edges.EdgeMeta]:
     """Read dictionary associations and generate metadata for edges.
 
@@ -72,7 +72,7 @@ def process_dictionary_for_backrefs(
     return backrefs_dict
 
 
-def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetaData]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
@@ -83,11 +83,11 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
     """
     backrefs_dict = process_dictionary_for_backrefs(dic)
 
-    node_metas: Dict[str, nodes.NodeMeta] = {}
+    node_metas: Dict[str, nodes.NodeMetaData] = {}
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMeta(label, associations, schema.raw, backrefs_dict)
+        meta = nodes.NodeMetaData(label, associations, schema.raw, backrefs_dict)
         node_metas[label] = meta
     return node_metas
 

@@ -91,7 +91,7 @@ class PropertyMeta:
 
 
 @attr.s(auto_attribs=True)
-class NodeMeta:
+class NodeMetaData:
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
