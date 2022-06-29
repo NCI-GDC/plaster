@@ -51,7 +51,7 @@ def sentence_case(item: str) -> str:
 
 
 @attr.s(auto_attribs=True)
-class EdgeMeta:
+class EdgeMetaData:
     association: psqlgml.Association
     src: NodeMetaData
     dst: NodeMetaData

@@ -30,7 +30,7 @@ class ImportMeta(NamedTuple):
 def generate_edges(
     associations: Set[psqlgml.Association],
     node_metas: Dict[str, nodes.NodeMetaData],
-) -> Iterable[edges.EdgeMeta]:
+) -> Iterable[edges.EdgeMetaData]:
     """Read dictionary associations and generate metadata for edges.
 
     Args:
@@ -46,7 +46,7 @@ def generate_edges(
 
         src = node_metas[assoc.src]
         dst = node_metas[assoc.dst]
-        meta = edges.EdgeMeta(assoc, src, dst)
+        meta = edges.EdgeMetaData(assoc, src, dst)
         logger.info(f"Reading edge: {meta.class_name}")
 
         yield meta
