@@ -13,3 +13,4 @@ def test_source_file_generation(test_dictionary: psqlgml.Dictionary, tmpdir: Pat
     assert Path(f"{tmpdir}/program.py").exists()
     assert Path(f"{tmpdir}/project.py").exists()
     assert Path(f"{tmpdir}/case.py").exists()
+    assert Path(f"{tmpdir}/sample.py").exists()
