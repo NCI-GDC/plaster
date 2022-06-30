@@ -27,3 +27,11 @@ def test_project_loading(test_dictionary: psqlgml.Dictionary) -> None:
     assert project.id == "project"
     assert project.category == "administrative"
     assert project.downloadable is False
+
+
+def test_sample_loading(test_dictionary: psqlgml.Dictionary) -> None:
+    sample = test_dictionary.schema["sample"]
+
+    assert sample.id == "sample"
+    assert sample.category == "biospecimen"
+    assert sample.downloadable is False
