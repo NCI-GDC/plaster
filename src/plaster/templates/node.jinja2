@@ -11,7 +11,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     _pg_backrefs: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
-    
+
     @property
     def id(self):
         return self.node_id

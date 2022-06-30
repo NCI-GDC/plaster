@@ -71,8 +71,8 @@ def test_pg_links(graph_classes: ModuleType) -> None:
     pg_links = graph_classes.Case._pg_links
     assert pg_links["projects"]["dst_type"] == graph_classes.Project
     assert pg_links["projects"]["edge_out"] == "_CaseMemberOfProject_out"
- 
- 
+
+
 def test_pg_edges(graph_classes: ModuleType) -> None:
     pg_edges = graph_classes.Project._pg_edges
     assert pg_edges["programs"]["backref"] == "projects"
