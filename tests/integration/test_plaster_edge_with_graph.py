@@ -1,33 +1,6 @@
-import warnings
 from types import ModuleType
 
 import psqlgraph
-import pytest
-from sqlalchemy import MetaData
-from sqlalchemy import exc as sa_exc
-
-
-def tear_down_graph(graph: psqlgraph.PsqlGraphDriver) -> None:
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=sa_exc.SAWarning)
-
-        m = MetaData(graph.engine)
-        m.reflect()
-        for tbl in reversed(m.sorted_tables):
-            graph.engine.execute(tbl.delete())
-
-        # close connection to database
-        graph.engine.dispose()
-
-
-@pytest.fixture
-def g(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
-    _g = psqlgraph.PsqlGraphDriver(
-        host="localhost", password="test", user="test", database="plaster"
-    )
-    psqlgraph.create_all(_g.engine)
-    yield _g
-    tear_down_graph(_g)
 
 
 def test_pg_links_for_edges_out(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
