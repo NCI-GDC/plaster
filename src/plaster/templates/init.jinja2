@@ -1,5 +1,10 @@
 import pydoc
 
+from psqlgraph import ext
+
+ext.register_base_class()
+
+
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
