@@ -1,26 +1,11 @@
-import sys
-from pathlib import Path
+from types import ModuleType
 
-from click.testing import CliRunner
-
-from plaster import cli
+import psqlgraph
 
 
-def test_get_related_case_edge_cls_name(
-    cli_runner: CliRunner, app_settings: str, tmpdir: Path
-) -> None:
-    result = cli_runner.invoke(
-        cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
-    )
-    assert result.exit_code == 0
+def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
+    sample = graph_classes.Sample("sample_1")
 
-    sys.path.insert(0, str(tmpdir))
-    import test_module
-    from test_module import utils
-
-    sample = test_module.Sample("sample_1")
-
-    edge_name = utils.get_related_case_edge_cls_name(sample)
+    edge_name = graph_classes.utils.get_related_case_edge_cls_name(sample)
 
     assert edge_name == "SampleRelatesToCase"
