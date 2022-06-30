@@ -62,3 +62,15 @@ def related_cases_from_cache(node: psqlgraph.Node) -> List[psqlgraph.Node]:
         List of Case nodes
     """
     return [case for case in getattr(node, RELATED_CASES_LINK_NAME, []) if case is not None]
+
+
+def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
+    """Generate shortcut edge class name.
+
+    Args:
+        node: The source node of the edge
+
+    Returns:
+        the related case edge class name
+    """
+    return f"{node.__class__.__name__}RelatesToCase"
