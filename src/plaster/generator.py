@@ -1,4 +1,5 @@
 import glob
+import itertools
 import logging
 import os
 import shutil
@@ -12,6 +13,13 @@ import psqlgml
 
 from plaster.models import edges, nodes
 from plaster.types import PgBackRef
+
+NOT_RELATED_CASES_CATEGORIES = {
+    "administrative",
+    "TBD",
+}
+
+RELATED_CASE_LINK_NAME = "_related_cases"
 
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
@@ -52,6 +60,29 @@ def generate_edges(
         logger.info(f"Reading edge: {meta.class_name}")
 
         yield meta
+
+
+def generate_relates_to_case_edges(
+    node_metas: Dict[str, nodes.NodeMeta]
+) -> Iterable[edges.EdgeMeta]:
+    case_meta = node_metas["case"]
+    for label, node_meta in node_metas.items():
+        if label == "annotation":
+            continue
+        if node_meta.dictionary["category"] in NOT_RELATED_CASES_CATEGORIES:
+            continue
+
+        association = psqlgml.Association(
+            src=label,
+            dst="case",
+            label="relates_to",
+            name=RELATED_CASE_LINK_NAME,
+            backref=f"_related_{label}",
+            is_reference=False,
+        )
+        edge_meta = edges.EdgeMeta(association, node_meta, case_meta)
+        logger.info(f"Reading edge {label} relates to case")
+        yield edge_meta
 
 
 def process_dictionary_for_backrefs(
@@ -113,8 +144,9 @@ def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) 
         import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
+    relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
 
-    for edge_meta in edges_meta_generator:
+    for edge_meta in itertools.chain(edges_meta_generator, relates_to_case_edge_meta_generator):
         render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
         import_metas.add(
             ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
