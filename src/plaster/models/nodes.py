@@ -100,27 +100,27 @@ class PropertyMeta:
         return f_types, f_enums
 
 
-class PgLink(NamedTuple):
+class LinkMetadata(NamedTuple):
     edges_out: str
     dst_type: str
 
 
-class PgBackRef(NamedTuple):
+class BackRefMetadata(NamedTuple):
     name: str
     src_type: str
 
 
-class PgEdge(NamedTuple):
+class EdgeMetadata(NamedTuple):
     backref: str
     type: str
 
 
 @attr.s(auto_attribs=True)
-class NodeMetaData:
+class NodeMetadata:
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
-    backrefs_dict: Dict[str, Dict[str, PgBackRef]]
+    backrefs_dict: Dict[str, Dict[str, BackRefMetadata]]
 
     @property
     def class_name(self) -> str:
@@ -151,7 +151,7 @@ class NodeMetaData:
             yield PropertyMeta(key, schema)
 
     @property
-    def pg_backrefs(self) -> Dict[str, PgBackRef]:
+    def pg_backrefs(self) -> Dict[str, BackRefMetadata]:
         """Generate data for _pg_backrefs -- in_edges(links from other types).
 
         _pg_backrefs is not required for Nodes and Edges to work correctly. it's
@@ -163,7 +163,7 @@ class NodeMetaData:
         return self.backrefs_dict[self.label]
 
     @property
-    def pg_edges(self) -> Dict[str, PgEdge]:
+    def pg_edges(self) -> Dict[str, EdgeMetadata]:
         """Generate data for _pg_edges -- all edges(links to and from other types).
 
         _pg_edges is not required for Nodes and Edges to work correctly. It's used by
@@ -172,16 +172,16 @@ class NodeMetaData:
         Returns:
             dictionary of all edges
         """
-        pg_edges: Dict[str, PgEdge] = {}
+        pg_edges: Dict[str, EdgeMetadata] = {}
         for name, link in self.pg_links.items():
-            pg_edges[name] = PgEdge(self._find_backref(link, self.label), link.dst_type)
+            pg_edges[name] = EdgeMetadata(self._find_backref(link, self.label), link.dst_type)
 
         for name, back_ref in self.pg_backrefs.items():
-            pg_edges[name] = PgEdge(back_ref.name, back_ref.src_type)
+            pg_edges[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
         return pg_edges
 
     @property
-    def pg_links(self) -> Dict[str, PgLink]:
+    def pg_links(self) -> Dict[str, LinkMetadata]:
         """Generate data for _pg_links -- out_edges(links to other types).
 
         _pg_links is not required for Nodes and Edges to work correctly, It's used by
@@ -190,13 +190,13 @@ class NodeMetaData:
         Returns:
             dictionary of out edges
         """
-        pg_links: Dict[str, PgLink] = {}
+        pg_links: Dict[str, LinkMetadata] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
-            pg_links[link["name"]] = PgLink(edge_name, link["target_type"])
+            pg_links[link["name"]] = LinkMetadata(edge_name, link["target_type"])
         return pg_links
 
-    def _find_backref(self, link: PgLink, label: str) -> str:
+    def _find_backref(self, link: LinkMetadata, label: str) -> str:
         for name, backref in self.backrefs_dict[link.dst_type].items():
             if backref.src_type == label:
                 return name
