@@ -74,3 +74,42 @@ def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
         the related case edge class name
     """
     return f"{node.__class__.__name__}RelatesToCase"
+
+
+def related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]:
+    """Get the cached related case ids from the parents of this node.
+
+    Get the cached related case ids from the parents of this node from
+    1. The shortcut edges of any parent nodes
+    2. If any parents are cases, include those ids
+
+    Args:
+        node: The Node instance
+
+    Returns:
+        List of Case nodes
+    """
+    skip_edges_named = [get_related_case_edge_cls_name(node)]
+
+    # Make sure the edges haven't been expunged
+    edges_out = [e for e in node.edges_out if e in node.get_session()]
+
+    # Get the cached ids from parents
+    cases = {
+        case
+        for edge in edges_out
+        if edge.dst
+        for case in edge.dst._related_cases_from_cache
+        if edge.__class__.__name__ not in skip_edges_named
+    }
+
+    # Are any parents cases?
+    for edge in edges_out:
+        if edge.__class__.__name__ in skip_edges_named:
+            continue
+        node_cls = edge.get_node_class()
+        dst_class = node_cls.get_subclass_named(edge.__dst_class__)
+        if dst_class.label == "case" and edge.dst:
+            cases.add(edge.dst)
+
+    return [case for case in cases if case is not None]
