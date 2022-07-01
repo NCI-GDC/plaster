@@ -51,6 +51,12 @@ def test_back_refs(graph_classes: ModuleType) -> None:
     assert Project._pg_backrefs["cases"]["name"] == "projects"
 
 
+def test_back_refs(graph_classes: ModuleType) -> None:
+    Project = graph_classes.Project
+    assert Project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
+    assert Project._pg_backrefs["cases"]["name"] == "projects"
+
+
 def test_pg_links(graph_classes: ModuleType) -> None:
     pg_links = graph_classes.Case._pg_links
     assert pg_links["projects"]["dst_type"] == graph_classes.Project
