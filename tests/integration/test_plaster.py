@@ -61,34 +61,24 @@ def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> Non
     return test_module
 
 
-def test_back_refs(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
-    result = cli_runner.invoke(
-        cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
-    )
-    assert result.exit_code == 0
-
-    sys.path.insert(0, str(tmpdir))
-    import test_module
-
-    project = test_module.Project()
-    assert project._pg_backrefs["cases"]["src_type"] == test_module.Case
-    assert project._pg_backrefs["cases"]["name"] == "projects"
+def test_back_refs(graph_classes: ModuleType) -> None:
+    Project = graph_classes.Project
+    assert Project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
+    assert Project._pg_backrefs["cases"]["name"] == "projects"
 
 
-def test_pg_links(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
-    result = cli_runner.invoke(
-        cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
-    )
-    assert result.exit_code == 0
-
-    sys.path.insert(0, str(tmpdir))
-    import test_module
-
-    pg_links = test_module.Case()._pg_links
-    assert pg_links["projects"]["dst_type"] == test_module.Project
+def test_pg_links(graph_classes: ModuleType) -> None:
+    pg_links = graph_classes.Case._pg_links
+    assert pg_links["projects"]["dst_type"] == graph_classes.Project
     assert pg_links["projects"]["edge_out"] == "_CaseMemberOfProject_out"
+
+
+def test_pg_edges(graph_classes: ModuleType) -> None:
+    pg_edges = graph_classes.Project._pg_edges
+    assert pg_edges["programs"]["backref"] == "projects"
+    assert pg_edges["programs"]["type"] == graph_classes.Program
+    assert pg_edges["cases"]["backref"] == "projects"
+    assert pg_edges["cases"]["type"] == graph_classes.Case
 
 
 def test_id(graph_classes: ModuleType) -> None:

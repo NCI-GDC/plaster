@@ -12,3 +12,7 @@ class {{ meta.class_name }}(psqlgraph.Edge):
 
     __dst_src_assoc__ = "{{ meta.dst_src_assoc }}"
     __src_dst_assoc__ = "{{ meta.src_dst_assoc }}"
+
+    @classmethod
+    def post_process(cls):
+        pass

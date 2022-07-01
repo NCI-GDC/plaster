@@ -28,8 +28,8 @@ class ImportMeta(NamedTuple):
 
 def generate_edges(
     associations: Set[psqlgml.Association],
-    node_metas: Dict[str, nodes.NodeMeta],
-) -> Iterable[edges.EdgeMeta]:
+    node_metas: Dict[str, nodes.NodeMetadata],
+) -> Iterable[edges.EdgeMetadata]:
     """Read dictionary associations and generate metadata for edges.
 
     Args:
@@ -45,7 +45,7 @@ def generate_edges(
 
         src = node_metas[assoc.src]
         dst = node_metas[assoc.dst]
-        meta = edges.EdgeMeta(assoc, src, dst)
+        meta = edges.EdgeMetadata(assoc, src, dst)
         logger.info(f"Reading edge: {meta.class_name}")
 
         yield meta
@@ -53,7 +53,7 @@ def generate_edges(
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, Dict[str, str]]]:
+) -> Dict[str, Dict[str, nodes.BackRefMetadata]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
@@ -62,19 +62,16 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backref_dict: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(dict)
+    backrefs_dict: Dict[str, Dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backref_dict[assoc.dst][assoc.backref] = {
-            "name": assoc.name,
-            "src_type": assoc.src,
-        }
-    return backref_dict
+        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(assoc.name, assoc.src)
+    return backrefs_dict
 
 
-def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
@@ -83,13 +80,13 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
     Returns:
         metadata for nodes
     """
-    backref_dict = process_dictionary_for_backrefs(dic)
+    backrefs_dict = process_dictionary_for_backrefs(dic)
 
-    node_metas: Dict[str, nodes.NodeMeta] = {}
+    node_metas: Dict[str, nodes.NodeMetadata] = {}
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMeta(label, associations, schema.raw, backref_dict[label])
+        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict)
         node_metas[label] = meta
     return node_metas
 

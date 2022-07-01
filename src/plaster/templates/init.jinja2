@@ -1,3 +1,16 @@
+import pydoc
+
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
+
+__all__ = [
+{% for imp in meta | sort %}
+    "{{ imp.class_name }}",
+{% endfor %}
+]
+
+
+for __type in __all__:
+    cls = pydoc.locate(f"{__name__}.{__type}")
+    cls.post_process()
