@@ -86,6 +86,7 @@ def test_id(graph_classes: ModuleType) -> None:
     case.id = "new_case_id"
     assert case.node_id == "new_case_id"
 
+
 def test_relates_to_case_edges(graph_classes: ModuleType) -> None:
     edge = graph_classes.SampleRelatesToCase
     assert edge.__tablename__ == "edge_samplerelatestocase"
