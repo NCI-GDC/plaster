@@ -63,3 +63,10 @@ def test_pg_edges(graph_classes: ModuleType) -> None:
     assert pg_edges["programs"]["type"] == graph_classes.Program
     assert pg_edges["cases"]["backref"] == "projects"
     assert pg_edges["cases"]["type"] == graph_classes.Case
+
+
+def test_id(graph_classes: ModuleType) -> None:
+    case = graph_classes.Case(node_id="case_id")
+    assert case.id == "case_id"
+    case.id = "new_case_id"
+    assert case.node_id == "new_case_id"
