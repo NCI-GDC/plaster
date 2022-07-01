@@ -61,8 +61,8 @@ def generate_edges(
 
 
 def generate_relates_to_case_edges(
-    node_metas: Dict[str, nodes.NodeMeta]
-) -> Iterable[edges.EdgeMeta]:
+    node_metas: Dict[str, nodes.NodeMetadata]
+) -> Iterable[edges.EdgeMetadata]:
     case_meta = node_metas["case"]
     for label, node_meta in node_metas.items():
         if label == "annotation":
@@ -78,7 +78,7 @@ def generate_relates_to_case_edges(
             backref=f"_related_{label}",
             is_reference=False,
         )
-        edge_meta = edges.EdgeMeta(association, node_meta, case_meta)
+        edge_meta = edges.EdgeMetadata(association, node_meta, case_meta)
         logger.info(f"Reading edge {label} relates to case")
         yield edge_meta
 
