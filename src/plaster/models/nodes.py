@@ -16,7 +16,6 @@ import attr
 import psqlgml
 
 from plaster import utils
-from plaster.types import PgBackRef, PgEdge, PgLink
 
 DICTIONARY_KEY_LITERAL = Literal[
     "title",

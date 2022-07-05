@@ -10,7 +10,6 @@ import jinja2 as j
 import psqlgml
 
 from plaster.models import edges, nodes
-from plaster.types import PgBackRef
 
 NOT_RELATED_CASES_CATEGORIES = {
     "administrative",
@@ -79,7 +78,7 @@ def generate_relates_to_case_edges(
             is_reference=False,
         )
         edge_meta = edges.EdgeMetadata(association, node_meta, case_meta)
-        logger.info(f"Reading edge {label} relates to case")
+        logger.debug(f"Creating {label} relates to case({case_meta}): {edge_meta}")
         yield edge_meta
 
 
