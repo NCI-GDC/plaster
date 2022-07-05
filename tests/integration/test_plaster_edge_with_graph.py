@@ -30,8 +30,15 @@ def g(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     tear_down_graph(_g)
 
 
-def test_pg_links_for_edges_out(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
+def test_add_out_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
     """Make sure that the out edges could be added correctly.
+
+        Given a project node and a case node
+        When add the project to case.projects
+        Then an edge between project and case should be created
+        And the edge should show in project's edges_in and case's edges_out
+        And the edge should have case's node_id as src_id
+        And the edge should have project's node_id as dst_id
 
         This test needs the graph driver to work
 
@@ -61,10 +68,15 @@ def test_pg_links_for_edges_out(graph_classes: ModuleType, g: psqlgraph.PsqlGrap
         assert case.edges_out[0].dst_id == "project_1"
 
 
-def test_pg_backrefs_for_edges_in(
-    graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver
-) -> None:
+def test_add_in_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
     """Make sure that the in edges could be added correctly.
+
+        Given a project node and a case node
+        When add the case to project.cases
+        Then an edge between project and case should be created
+        And the edge should show in project's edges_in and case's edges_out
+        And the edge should have case's node_id as src_id
+        And the edge should have project's node_id as dst_id
 
         This test needs the graph driver to work
 
