@@ -46,18 +46,10 @@ def test_generation(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) 
     assert Path(f"{tmpdir}/sample.py").exists()
 
 
-@pytest.fixture
-def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
-    result = cli_runner.invoke(
-        cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
-    )
-    assert result.exit_code == 0
-
-    sys.path.insert(0, str(tmpdir))
-    import test_module
-
-    return test_module
+def test_back_refs(graph_classes: ModuleType) -> None:
+    Project = graph_classes.Project
+    assert Project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
+    assert Project._pg_backrefs["cases"]["name"] == "projects"
 
 
 def test_back_refs(graph_classes: ModuleType) -> None:
