@@ -18,7 +18,7 @@ def test_dict() -> psqlgml.Dictionary:
     return psqlgml.load(version="2.4.0")
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
     result = cli_runner.invoke(
         cli.app,
