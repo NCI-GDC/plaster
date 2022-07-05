@@ -44,8 +44,8 @@ def generate_edges(
         associations: associations between nodes
         node_metas: node metadata
 
-    Returns:
-        A generator of node metadata
+    Yields:
+        Node metadata
     """
     for assoc in associations:
         if assoc.is_reference:
@@ -62,6 +62,19 @@ def generate_edges(
 def generate_relates_to_case_edges(
     node_metas: Dict[str, nodes.NodeMetadata]
 ) -> Iterable[edges.EdgeMetadata]:
+    """Generate relates to case edge metadata.
+
+        Given metadata for all the nodes
+        When this function is called
+        Then it will find The case node and all other nodes has relates_to case edges
+        And yield edge_meta for those edges
+
+    Args:
+        node_metas: the metadata for all the node classes to generate
+
+    Yields:
+        edge metadata for relates_to case edges
+    """
     case_meta = node_metas["case"]
     for label, node_meta in node_metas.items():
         if label == "annotation":
