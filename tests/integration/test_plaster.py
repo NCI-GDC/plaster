@@ -66,6 +66,13 @@ def test_pg_edges(graph_classes: ModuleType) -> None:
     assert pg_edges["cases"]["type"] == graph_classes.Case
 
 
+def test_id(graph_classes: ModuleType) -> None:
+    case = graph_classes.Case(node_id="case_id")
+    assert case.id == "case_id"
+    case.id = "new_case_id"
+    assert case.node_id == "new_case_id"
+
+
 def test_relates_to_case_edges(graph_classes: ModuleType) -> None:
     edge = graph_classes.SampleRelatesToCase
     assert edge.__tablename__ == "edge_samplerelatestocase"

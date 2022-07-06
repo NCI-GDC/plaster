@@ -6,6 +6,7 @@ from types import ModuleType
 import psqlgml
 import psqlgraph
 import pytest
+from _pytest import tmpdir
 from click.testing import CliRunner
 from sqlalchemy import MetaData
 from sqlalchemy import exc as sa_exc
@@ -23,8 +24,11 @@ def test_dict() -> psqlgml.Dictionary:
     return psqlgml.load(version="2.4.0")
 
 
-@pytest.fixture
-def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir: Path) -> None:
+@pytest.fixture(scope="session")
+def graph_classes(
+    cli_runner: CliRunner, app_settings: str, tmpdir_factory: tmpdir.TempdirFactory
+) -> None:
+    tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,
         ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],

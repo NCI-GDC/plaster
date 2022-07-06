@@ -19,6 +19,13 @@ NOT_RELATED_CASES_CATEGORIES = {
 
 RELATED_CASE_LINK_NAME = "_related_cases"
 
+NOT_RELATED_CASES_CATEGORIES = {
+    "administrative",
+    "TBD",
+}
+
+RELATED_CASE_LINK_NAME = "_related_cases"
+
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
     autoescape=j.select_autoescape(),
@@ -37,8 +44,8 @@ class ImportMeta(NamedTuple):
 
 def generate_edges(
     associations: Set[psqlgml.Association],
-    node_metas: Dict[str, nodes.NodeMeta],
-) -> Iterable[edges.EdgeMeta]:
+    node_metas: Dict[str, nodes.NodeMetadata],
+) -> Iterable[edges.EdgeMetadata]:
     """Read dictionary associations and generate metadata for edges.
 
     Args:
@@ -54,15 +61,28 @@ def generate_edges(
 
         src = node_metas[assoc.src]
         dst = node_metas[assoc.dst]
-        meta = edges.EdgeMeta(assoc, src, dst)
+        meta = edges.EdgeMetadata(assoc, src, dst)
         logger.info(f"Reading edge: {meta.class_name}")
 
         yield meta
 
 
 def generate_relates_to_case_edges(
-    node_metas: Dict[str, nodes.NodeMeta]
-) -> Iterable[edges.EdgeMeta]:
+    node_metas: Dict[str, nodes.NodeMetadata]
+) -> Iterable[edges.EdgeMetadata]:
+    """Generate relates to case edge metadata.
+
+        Given metadata for all the nodes
+        When this function is called
+        Then it will find The case node and all other nodes has relates_to case edges
+        And yield edge_meta for those edges
+
+    Args:
+        node_metas: the metadata for all the node classes to generate
+
+    Returns::
+        A generator of edge metadata for relates_to case edges
+    """
     case_meta = node_metas["case"]
     for label, node_meta in node_metas.items():
         if label == "annotation":
@@ -78,14 +98,14 @@ def generate_relates_to_case_edges(
             backref=f"_related_{label}",
             is_reference=False,
         )
-        edge_meta = edges.EdgeMeta(association, node_meta, case_meta)
-        logger.info(f"Reading edge {label} relates to case")
+        edge_meta = edges.EdgeMetadata(association, node_meta, case_meta)
+        logger.debug(f"Creating {label} relates to case({case_meta}): {edge_meta}")
         yield edge_meta
 
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, PgBackRef]]:
+) -> Dict[str, Dict[str, nodes.BackRefMetadata]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
@@ -94,16 +114,16 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backrefs_dict: Dict[str, Dict[str, PgBackRef]] = defaultdict(dict)
+    backrefs_dict: Dict[str, Dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backrefs_dict[assoc.dst][assoc.backref] = PgBackRef(assoc.name, assoc.src)
+        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(assoc.name, assoc.src)
     return backrefs_dict
 
 
-def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
+def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
@@ -114,11 +134,11 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMeta]:
     """
     backrefs_dict = process_dictionary_for_backrefs(dic)
 
-    node_metas: Dict[str, nodes.NodeMeta] = {}
+    node_metas: Dict[str, nodes.NodeMetadata] = {}
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMeta(label, associations, schema.raw, backrefs_dict)
+        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict)
         node_metas[label] = meta
     return node_metas
 
