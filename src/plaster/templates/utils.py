@@ -6,7 +6,6 @@ from psqlgraph import ext
 # the register_base_class is needed for edge.get_node_class to work
 ext.register_base_class()
 
-
 #: This variable contains the link name for the case shortcut
 #: association proxy
 RELATED_CASES_LINK_NAME = "_related_cases"
