@@ -18,20 +18,6 @@ NOT_RELATED_CASES_CATEGORIES = {
 
 RELATED_CASE_LINK_NAME = "_related_cases"
 
-NOT_RELATED_CASES_CATEGORIES = {
-    "administrative",
-    "TBD",
-}
-
-RELATED_CASE_LINK_NAME = "_related_cases"
-
-NOT_RELATED_CASES_CATEGORIES = {
-    "administrative",
-    "TBD",
-}
-
-RELATED_CASE_LINK_NAME = "_related_cases"
-
 env = j.Environment(  # nosec B701
     loader=j.PackageLoader("plaster"),
     autoescape=j.select_autoescape(),
