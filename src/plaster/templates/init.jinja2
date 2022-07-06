@@ -1,11 +1,5 @@
 import pydoc
 
-from psqlgraph import ext
-
-# the register_base_class is needed for edge.get_node_class to work
-ext.register_base_class()
-
-
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
