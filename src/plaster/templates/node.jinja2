@@ -2,6 +2,8 @@ from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
+from . import utils
+
 
 class {{ meta.class_name }}(psqlgraph.Node):
     __tablename__: str = "{{ meta.table_name }}"
@@ -70,6 +72,14 @@ class {{ meta.class_name }}(psqlgraph.Node):
     @property
     def label(self) -> str:
         return "{{ meta.label }}"
+
+    @property
+    def _related_cases_from_cache(self) -> List[psqlgraph.Node]:
+        return utils.related_cases_from_cache(self)
+
+    @property
+    def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
+        return utils.related_cases_from_parents(self)
 
     {% for prop in meta.properties %}
 
