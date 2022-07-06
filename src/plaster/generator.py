@@ -10,7 +10,6 @@ import jinja2 as j
 import psqlgml
 
 from plaster.models import edges, nodes
-from plaster.types import PgBackRef
 
 NOT_RELATED_CASES_CATEGORIES = {
     "administrative",
