@@ -25,7 +25,7 @@ def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
 
 
 def test_get_edge_src_and_get_edge_dst(
-    g: psqlgraph.PsqlGraphDriver, graph_classes: ModuleType
+    graph_driver: psqlgraph.PsqlGraphDriver, graph_classes: ModuleType
 ) -> None:
     """test get edge src and get edge dst.
 
@@ -44,7 +44,7 @@ def test_get_edge_src_and_get_edge_dst(
     Returns:
         None
     """
-    with g.session_scope() as s:
+    with graph_driver.session_scope() as s:
         project = graph_classes.Project("project_1")
         case = graph_classes.Case("case_1")
         case.projects = [project]
@@ -52,7 +52,7 @@ def test_get_edge_src_and_get_edge_dst(
 
         # need to get the node from the database again to reflect the changes.
         # This test needs the graph driver to work
-        project = g.nodes().get("project_1")
+        project = graph_driver.nodes().get("project_1")
         assert len(project.edges_in) == 1
         edge = project.edges_in[0]
 

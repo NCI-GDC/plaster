@@ -3,7 +3,9 @@ from types import ModuleType
 import psqlgraph
 
 
-def test_add_out_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
+def test_add_out_edges(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
     """Make sure that the out edges could be added correctly.
 
         Given a project node and a case node
@@ -22,7 +24,7 @@ def test_add_out_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) 
     Returns:
         None
     """
-    with g.session_scope() as s:
+    with graph_driver.session_scope() as s:
         project = graph_classes.Project("project_1")
         case = graph_classes.Case("case_1")
         case.projects = [project]
@@ -30,18 +32,18 @@ def test_add_out_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) 
 
         # need to get the node from the database again to reflect the changes.
         # This test needs the graph driver to work
-        project = g.nodes().get("project_1")
+        project = graph_driver.nodes().get("project_1")
         assert len(project.edges_in) == 1
         assert project.edges_in[0].label == "member_of"
         assert project.edges_in[0].src_id == "case_1"
 
-        case = g.nodes().get("case_1")
+        case = graph_driver.nodes().get("case_1")
         assert len(case.edges_out) == 1
         assert case.edges_out[0].label == "member_of"
         assert case.edges_out[0].dst_id == "project_1"
 
 
-def test_add_in_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -> None:
+def test_add_in_edges(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver) -> None:
     """Make sure that the in edges could be added correctly.
 
         Given a project node and a case node
@@ -60,19 +62,19 @@ def test_add_in_edges(graph_classes: ModuleType, g: psqlgraph.PsqlGraphDriver) -
     Returns:
         None
     """
-    with g.session_scope() as s:
+    with graph_driver.session_scope() as s:
         project = graph_classes.Project("project_1")
         case = graph_classes.Case("case_1")
         project.cases = [case]
         s.merge(case)
 
         # need to get the node from the database again to reflect the changes.
-        project = g.nodes().get("project_1")
+        project = graph_driver.nodes().get("project_1")
         assert len(project.edges_in) == 1
         assert project.edges_in[0].label == "member_of"
         assert project.edges_in[0].src_id == "case_1"
 
-        case = g.nodes().get("case_1")
+        case = graph_driver.nodes().get("case_1")
         assert len(case.edges_out) == 1
         assert case.edges_out[0].label == "member_of"
         assert case.edges_out[0].dst_id == "project_1"

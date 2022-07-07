@@ -55,10 +55,10 @@ def tear_down_graph(graph: psqlgraph.PsqlGraphDriver) -> None:
 
 
 @pytest.fixture
-def g(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
-    _g = psqlgraph.PsqlGraphDriver(
+def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
+    g = psqlgraph.PsqlGraphDriver(
         host="localhost", password="test", user="test", database="plaster"
     )
-    psqlgraph.create_all(_g.engine)
-    yield _g
-    tear_down_graph(_g)
+    psqlgraph.create_all(g.engine)
+    yield g
+    tear_down_graph(g)
