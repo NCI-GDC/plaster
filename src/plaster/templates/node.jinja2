@@ -75,11 +75,11 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @property
     def _related_cases_from_cache(self) -> List[psqlgraph.Node]:
-        return utils.related_cases_from_cache(self)
+        return utils.get_related_cases_from_cache(self)
 
     @property
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
-        return utils.related_cases_from_parents(self)
+        return utils.get_related_cases_from_parents(self)
 
     {% for prop in meta.properties %}
 

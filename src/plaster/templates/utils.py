@@ -56,7 +56,7 @@ def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[ps
     return dst
 
 
-def related_cases_from_cache(node: psqlgraph.Node) -> List[psqlgraph.Node]:
+def get_related_cases_from_cache(node: psqlgraph.Node) -> List[psqlgraph.Node]:
     """Get the cached related case ids from this node's case shortcut edges.
 
     Args:
@@ -80,7 +80,7 @@ def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
     return f"{node.__class__.__name__}RelatesToCase"
 
 
-def related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]:
+def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]:
     """Get the cached related case ids from the parents of this node.
 
     Get the cached related case ids from the parents of this node from
