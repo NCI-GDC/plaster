@@ -180,12 +180,40 @@ def render_and_write_file(
     Returns:
         None
     """
+    rendered = render_template(meta, template_base_name)
+    write_data_to_python_file(rendered, file_base_name, output_dir)
+
+
+def write_data_to_python_file(data: str, file_base_name: str, output_dir: str) -> None:
+    """Write data to python file.
+
+    Args:
+        data: content to write
+        file_base_name: base name for the python file
+        output_dir: directory to create the files
+
+    Returns:
+        None
+    """
+    loc = Path(f"{output_dir}/{file_base_name}.py")
+    with loc.open("w") as f:
+        f.write(data)
+
+
+def render_template(meta: Any, template_base_name: str) -> str:
+    """Render template with metadata to create concrete classes.
+
+    Args:
+        meta: node or edge metadata (or init metadata) for jinja template
+        template_base_name: base name for jinja template file
+
+    Returns:
+        rendered content
+    """
     try:
         template = env.get_template(f"{template_base_name}.jinja2")
     except j.exceptions.TemplateNotFound:
         template = env.get_template(f"{template_base_name}.py")
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
-    loc = Path(f"{output_dir}/{file_base_name}.py")
-    with loc.open("w") as f:
-        f.write(rendered)
+    return rendered
