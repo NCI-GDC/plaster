@@ -32,7 +32,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def populate_pg_backrefs(cls) -> None:
         """_pg_backrefs are in_edges, links FROM other types."""
         cls._pg_backrefs = {
-            {% for key, value in meta.pg_backrefs.items() %}
+            {% for key, value in meta.backrefs_metadata.items() %}
                 "{{ key }}": {
                     "name": "{{ value.name }}",
                     "src_type": psqlgraph.Node.get_subclass("{{ value.src_type }}"),
@@ -44,7 +44,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def populate_pg_edges(cls) -> None:
         """_pg_edges are all edges, links to AND from other types."""
         cls._pg_edges = {
-            {% for key, value in meta.pg_edges.items() %}
+            {% for key, value in meta.edges_metadata.items() %}
                 "{{ key }}": {
                     "backref": "{{ value.backref }}",
                     "type": psqlgraph.Node.get_subclass("{{ value.type }}"),
@@ -56,7 +56,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def populate_pg_links(cls) -> None:
         """_pg_links are out_edges, links TO other types."""
         cls._pg_links = {
-            {% for key, value in meta.pg_links.items() %}
+            {% for key, value in meta.links_metadata.items() %}
                 "{{ key }}": {
                     "edge_out": "{{ value.edges_out }}",
                     "dst_type": psqlgraph.Node.get_subclass("{{ value.dst_type }}"),

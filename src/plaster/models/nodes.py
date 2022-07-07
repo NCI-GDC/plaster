@@ -151,7 +151,7 @@ class NodeMetadata:
             yield PropertyMeta(key, schema)
 
     @property
-    def pg_backrefs(self) -> Dict[str, BackRefMetadata]:
+    def backrefs_metadata(self) -> Dict[str, BackRefMetadata]:
         """Generate data for _pg_backrefs -- in_edges(links from other types).
 
         _pg_backrefs is not required for Nodes and Edges to work correctly. it's
@@ -163,7 +163,7 @@ class NodeMetadata:
         return self.backrefs_dict[self.label]
 
     @property
-    def pg_edges(self) -> Dict[str, EdgeMetadata]:
+    def edges_metadata(self) -> Dict[str, EdgeMetadata]:
         """Generate data for _pg_edges -- all edges(links to and from other types).
 
         _pg_edges is not required for Nodes and Edges to work correctly. It's used by
@@ -172,16 +172,18 @@ class NodeMetadata:
         Returns:
             dictionary of all edges
         """
-        pg_edges: Dict[str, EdgeMetadata] = {}
-        for name, link in self.pg_links.items():
-            pg_edges[name] = EdgeMetadata(self._find_backref(link, self.label), link.dst_type)
+        edges_metadata: Dict[str, EdgeMetadata] = {}
+        for name, link in self.links_metadata.items():
+            edges_metadata[name] = EdgeMetadata(
+                self._find_backref(link, self.label), link.dst_type
+            )
 
-        for name, back_ref in self.pg_backrefs.items():
-            pg_edges[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
-        return pg_edges
+        for name, back_ref in self.backrefs_metadata.items():
+            edges_metadata[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
+        return edges_metadata
 
     @property
-    def pg_links(self) -> Dict[str, LinkMetadata]:
+    def links_metadata(self) -> Dict[str, LinkMetadata]:
         """Generate data for _pg_links -- out_edges(links to other types).
 
         _pg_links is not required for Nodes and Edges to work correctly, It's used by
@@ -190,11 +192,11 @@ class NodeMetadata:
         Returns:
             dictionary of out edges
         """
-        pg_links: Dict[str, LinkMetadata] = {}
+        links_metadata: Dict[str, LinkMetadata] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
-            pg_links[link["name"]] = LinkMetadata(edge_name, link["target_type"])
-        return pg_links
+            links_metadata[link["name"]] = LinkMetadata(edge_name, link["target_type"])
+        return links_metadata
 
     def _find_backref(self, link: LinkMetadata, label: str) -> str:
         for name, backref in self.backrefs_dict[link.dst_type].items():
