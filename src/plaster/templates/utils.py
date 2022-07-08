@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import psqlgraph
 from psqlgraph import ext
@@ -118,3 +118,35 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
             cases.add(edge.dst)
 
     return [case for case in cases if case is not None]
+
+
+def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]) -> None:
+    """Create new edges or deletes old edges.
+
+        Given node and a dictionary of correct_cases
+        When update_cache_edges called
+        Then remove cases not in correct_cases from node's _related_cases
+        And add missing edges from correct_cases to node's _related_cases
+
+    Args:
+        node: node to update _related_cases
+        correct_cases: a dictionary of correct_cases
+
+    Returns:
+        None
+    """
+    assoc_proxy = getattr(node, RELATED_CASES_LINK_NAME)
+
+    # Get information about the existing edges
+    edge_name = get_related_case_edge_cls_name(node)
+    existing_edges = getattr(node, "_{}_out".format(edge_name))
+
+    existing_edge_dst_case_dict = {e.dst_id: e.dst for e in existing_edges}
+
+    case_ids_disconnected = set(existing_edge_dst_case_dict) - set(correct_cases)
+    case_ids_connected = set(correct_cases) - set(existing_edge_dst_case_dict)
+
+    for case_id in case_ids_disconnected:
+        assoc_proxy.remove(existing_edge_dst_case_dict[case_id])
+
+    assoc_proxy.extend([correct_cases[case_id] for case_id in case_ids_connected])

@@ -116,3 +116,39 @@ def test_exist_related_cases_from_parents_property(graph_classes: ModuleType) ->
     """
     sample = graph_classes.Sample("sample_1")
     assert sample._related_cases_from_parents == []
+
+
+def test_update_cac_edges(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """test update cache edges.
+
+        Given a sample node and a dictionary of correct_cases
+        When update_cache_edges called
+        Then remove cases not in correct_cases from sample node's _related_cases
+        And add missing edges from correct_cases to sample node's _related_cases
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    sample = graph_classes.Sample("sample_1")
+    case1 = graph_classes.Case("case_1")
+    case2 = graph_classes.Case("case_2")
+    case3 = graph_classes.Case("case_3")
+    case4 = graph_classes.Case("case_4")
+
+    with graph_driver.session_scope() as s:
+        s.merge(sample)
+
+        sample = graph_driver.nodes().get("sample_1")
+        sample._related_cases.extend([case1, case2, case3])
+
+        parent_cases = [case2, case3, case4]
+        correct_cases = {c.node_id: c for c in parent_cases}
+
+        graph_classes.utils.update_cache_edges(sample, correct_cases)
+        assert set(sample._related_cases) == {case2, case3, case4}
