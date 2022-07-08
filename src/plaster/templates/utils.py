@@ -92,6 +92,8 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
 
     Returns:
         List of Case nodes
+
+    TODO: DEV-1261 DEV-1262
     """
     skip_edges_named = [get_related_case_edge_cls_name(node)]
 
