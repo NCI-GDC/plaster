@@ -78,3 +78,33 @@ def test_add_in_edges(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGra
         assert len(case.edges_out) == 1
         assert case.edges_out[0].label == "member_of"
         assert case.edges_out[0].dst_id == "project_1"
+
+
+def test_cls_inject_created_datetime_hook(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    with graph_driver.session_scope() as s:
+        case = graph_classes.Case("case_1")
+        s.add(case)
+
+        case = graph_driver.nodes().get("case_1")
+        assert case.created_datetime is not None
+        assert case.updated_datetime is not None
+
+
+def test_cls_inject_updated_datetime_hook(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    with graph_driver.session_scope() as s:
+        case = graph_classes.Case("case_1")
+        s.add(case)
+        s.commit()
+
+        case = graph_driver.nodes().get("case_1")
+        assert case.created_datetime == case.updated_datetime
+
+        case.submitter_id = "id_1"
+        s.merge(case)
+
+        case = graph_driver.nodes().get("case_1")
+        assert case.created_datetime != case.updated_datetime

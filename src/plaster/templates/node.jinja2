@@ -88,3 +88,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
         self._set_property("{{ prop.name }}", value)  # type: ignore  # inherited from CommonBase
 
     {% endfor %}
+
+
+utils.cls_inject_created_datetime_hook({{ meta.class_name }})
+utils.cls_inject_updated_datetime_hook({{ meta.class_name }})
