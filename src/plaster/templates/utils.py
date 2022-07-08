@@ -144,7 +144,7 @@ def cls_inject_created_datetime_hook(
 
     @event.listens_for(cls, "before_insert")
     def set_created_updated_datetimes(
-        mapper: orm.mapper.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
+        mapper: orm.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
     ) -> None:
         ts = target.get_session()._flush_timestamp.isoformat("T")
         if updated_key in target.props:
@@ -173,7 +173,7 @@ def cls_inject_updated_datetime_hook(
 
     @event.listens_for(cls, "before_update")
     def set_updated_datetimes(
-        mapper: orm.mapper.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
+        mapper: orm.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
     ) -> None:
         # SQLAlchemy fires this event when associations change, but we should
         # only adjust the timestamp if the object itself was modified.
