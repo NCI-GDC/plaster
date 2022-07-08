@@ -83,6 +83,19 @@ def test_add_in_edges(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGra
 def test_cls_inject_created_datetime_hook(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
+    """Test created datetime hook.
+
+        Given a case node
+        When the node is added to session
+        Then the created_datetime and updated_datetime should be set
+
+    Args:
+        graph_classes: All node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
     with graph_driver.session_scope() as s:
         case = graph_classes.Case("case_1")
         s.add(case)
@@ -95,6 +108,19 @@ def test_cls_inject_created_datetime_hook(
 def test_cls_inject_updated_datetime_hook(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
+    """Test updated datetime hook
+
+        Given a case node
+        When the node is modified and merged to session
+        Then the updated datetime should be updated
+
+    Args:
+        graph_classes: All edge and case classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
     with graph_driver.session_scope() as s:
         case = graph_classes.Case("case_1")
         s.add(case)
