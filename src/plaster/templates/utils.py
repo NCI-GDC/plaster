@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import psqlgraph
 from psqlgraph import ext
-from sqlalchemy import event
+from sqlalchemy import engine, event, orm
 
 # the register_base_class is needed for edge.get_node_class to work
 ext.register_base_class()
@@ -143,7 +143,9 @@ def cls_inject_created_datetime_hook(
     """
 
     @event.listens_for(cls, "before_insert")
-    def set_created_updated_datetimes(mapper, connection, target) -> None:
+    def set_created_updated_datetimes(
+        mapper: orm.mapper.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
+    ) -> None:
         ts = target.get_session()._flush_timestamp.isoformat("T")
         if updated_key in target.props:
             target._props[updated_key] = ts
@@ -170,7 +172,9 @@ def cls_inject_updated_datetime_hook(
     """
 
     @event.listens_for(cls, "before_update")
-    def set_updated_datetimes(mapper, connection, target) -> None:
+    def set_updated_datetimes(
+        mapper: orm.mapper.Mapper, connection: engine.base.Connection, target: psqlgraph.Node
+    ) -> None:
         # SQLAlchemy fires this event when associations change, but we should
         # only adjust the timestamp if the object itself was modified.
         target_session = target.get_session()
