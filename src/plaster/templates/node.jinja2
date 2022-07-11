@@ -1,6 +1,9 @@
 from typing import Any, Dict, List, Union, Optional
 
 import psqlgraph
+from sqlalchemy.ext.hybrid import (
+    hybrid_property,
+)
 
 from . import utils
 
@@ -91,6 +94,13 @@ class {{ meta.class_name }}(psqlgraph.Node):
                 continue
             vals.append({key: getattr(self, key, None) for key in keys})
         return vals
+
+    @hybrid_property
+    def _secondary_keys(self):
+        vals = []
+        for keys in self.__pg_secondary_keys:
+            vals.append(tuple(getattr(self, key) for key in keys))
+        return tuple(vals)
 
     {% for prop in meta.properties %}
 

@@ -87,7 +87,7 @@ def test_relates_to_case_edges(graph_classes: ModuleType) -> None:
     assert edge.__src_dst_assoc__ == "_related_cases"
 
 
-def test_secondary_keys(graph_classes: ModuleType) -> None:
+def test_pg_secondary_keys(graph_classes: ModuleType) -> None:
     Case = graph_classes.Case
     assert DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
 
@@ -98,3 +98,11 @@ def test_secondary_keys_dict(graph_classes: ModuleType) -> None:
     case.submitter_id = "submitter_1"
     expected = [{"project_id": "project_1", "submitter_id": "submitter_1"}]
     assert DeepDiff(case._secondary_keys_dicts, expected) == {}
+
+
+def test_secondary_keys(graph_classes: ModuleType) -> None:
+    case = graph_classes.Case("case_1")
+    case.project_id = "project_1"
+    case.submitter_id = "submitter_1"
+    expected = (("project_1", "submitter_1"),)
+    assert DeepDiff(case._secondary_keys, expected) == {}
