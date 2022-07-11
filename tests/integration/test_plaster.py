@@ -3,6 +3,7 @@ from pathlib import Path
 from types import ModuleType
 
 from click.testing import CliRunner
+from deepdiff import DeepDiff
 
 import plaster
 from plaster import cli
@@ -84,3 +85,8 @@ def test_relates_to_case_edges(graph_classes: ModuleType) -> None:
 
     assert edge.__dst_src_assoc__ == "_related_sample"
     assert edge.__src_dst_assoc__ == "_related_cases"
+
+
+def test_secondary_keys(graph_classes: ModuleType) -> None:
+    Case = graph_classes.Case
+    assert DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
