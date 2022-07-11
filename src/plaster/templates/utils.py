@@ -1,7 +1,9 @@
-from typing import List, Optional
+from typing import Any, Iterable, List, Optional
 
 import psqlgraph
 from psqlgraph import ext
+from sqlalchemy import and_
+from sqlalchemy.ext import hybrid
 
 # the register_base_class is needed for edge.get_node_class to work
 ext.register_base_class()
@@ -118,3 +120,29 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
             cases.add(edge.dst)
 
     return [case for case in cases if case is not None]
+
+
+class SecondaryKeyComparator(hybrid.Comparator):
+    def __eq__(self, other: Iterable[Iterable[Any]]) -> bool:  # type: ignore
+        """Compare 2 nodes and check whether they are the same.
+
+            Given an Iterable of secondary keys and a node
+            When checking whether the secondary keys are equal
+            Then create dictionaries containing secondary keys and values from other
+            And return True iff the node have same values for those keys
+
+        Args:
+            other:
+                _secondary_keys for the other node
+        Returns:
+            Ture iff the value for uniqueKeys are the same.
+        """
+        filters = []
+        cls = self.__clause_element__()
+        secondary_keys = getattr(cls, f"_{cls.__name__}__pg_secondary_keys", [])
+        for keys, values in zip(secondary_keys, other):
+            if "id" in keys:
+                continue
+            other_dict = {key: val for key, val in zip(keys, values)}
+            filters.append(cls._props.contains(other_dict))
+        return and_(*filters)
