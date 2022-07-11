@@ -106,3 +106,7 @@ def test_secondary_keys(graph_classes: ModuleType) -> None:
     case.submitter_id = "submitter_1"
     expected = (("project_1", "submitter_1"),)
     assert DeepDiff(case._secondary_keys, expected) == {}
+
+
+def test_secondary_keys_not_pg_property(graph_classes: ModuleType) -> None:
+    assert graph_classes.Case._secondary_keys._is_pg_property is False

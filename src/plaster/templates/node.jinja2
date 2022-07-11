@@ -104,6 +104,9 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def _secondary_keys(cls):
         return utils.SecondaryKeyComparator(cls)
 
+    # Set this attribute so psqlgraph doesn't treat it as a property
+    _secondary_keys._is_pg_property = False
+
     {% for prop in meta.properties %}
 
     @psqlgraph.pg_property({% for p in prop.types[0] %}{{ p }}{% if not loop.last %},{% endif %} {% endfor %}{% if prop.types[1] %}, enum={{ prop.types[1] }}{% endif %})
