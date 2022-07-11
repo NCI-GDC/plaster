@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, Optional
+from typing import Any, Dict, List, Union, Optional
 
 import psqlgraph
 
@@ -81,6 +81,16 @@ class {{ meta.class_name }}(psqlgraph.Node):
     @property
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
         return utils.get_related_cases_from_parents(self)
+
+    @property
+    def _secondary_keys_dicts(self) -> List[Dict[str, Any]]:
+        vals = []
+        secondary_keys = self.__pg_secondary_keys
+        for keys in secondary_keys:
+            if "id" in keys:
+                continue
+            vals.append({key: getattr(self, key, None) for key in keys})
+        return vals
 
     {% for prop in meta.properties %}
 
