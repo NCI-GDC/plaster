@@ -4,6 +4,7 @@ import psqlgraph
 from sqlalchemy.ext import hybrid
 
 from . import utils
+from . import indexes
 
 
 class {{ meta.class_name }}(psqlgraph.Node):
@@ -26,9 +27,16 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @classmethod
     def post_process(cls) -> None:
+        cls.add_secondary_key_indexes()
         cls.populate_pg_backrefs()
         cls.populate_pg_links()
         cls.populate_pg_edges()
+
+    @classmethod
+    def add_secondary_key_indexes(cls) -> None:
+        secondary_key_indexes = indexes.get_secondary_key_indexes(cls)
+        for index in secondary_key_indexes:
+            cls.__table__.append_constraint(index)
 
     @classmethod
     def populate_pg_backrefs(cls) -> None:
