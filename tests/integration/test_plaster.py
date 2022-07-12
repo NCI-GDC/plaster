@@ -110,3 +110,15 @@ def test_secondary_keys(graph_classes: ModuleType) -> None:
 
 def test_secondary_keys_not_pg_property(graph_classes: ModuleType) -> None:
     assert graph_classes.Case._secondary_keys._is_pg_property is False
+
+
+def test_secondary_keys_indexes(graph_classes: ModuleType) -> None:
+    Case = graph_classes.Case
+    index_names = {i.name for i in Case.__table__.indexes}
+    expected = {
+        "index_node_case_submitter_id",
+        "index_node_case_project_id",
+        "index_node_case_project_id_lower",
+        "index_node_case_submitter_id_lower",
+    }
+    assert expected - index_names == set()
