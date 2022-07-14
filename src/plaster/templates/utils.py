@@ -216,10 +216,10 @@ def cache_related_cases_on_insert(
     session: orm.Session,
     flush_context: unitofwork.UOWTransaction,
     instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
-):
-    """Update the related case cache on source node and its children.
+) -> None:
+    """Update the related case cache on source node and its children for edge insertion.
 
-        Hook on updated edges.  Update the related case cache on source
+        Hook on created edges.  Update the related case cache on source
         node and its children iff this update changes the related case
         source node's cache.
         This will be called when an edge is inserted to db.
@@ -244,6 +244,34 @@ def cache_related_cases_on_insert(
     if not target.dst:
         target.dst = get_edge_dst(target, allow_query=True)
 
-    cache_related_cases_recursive(
-        get_edge_src(target),
-    )
+    cache_related_cases_recursive(get_edge_src(target))
+
+
+def cache_related_cases_on_update(
+    target: psqlgraph.Edge,
+    session: orm.Session,
+    flush_context: unitofwork.UOWTransaction,
+    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+) -> None:
+    """Update the related case cache on source node and its children for edge update.
+
+        Hook on updated edges.  Update the related case cache on source
+        node and its children iff this update changes the related case
+        source node's cache.
+        This will be called when an edge instance is updated.
+
+        https://docs.sqlalchemy.org/en/14/orm/events.html#sqlalchemy.orm.SessionEvents.before_flush
+
+    Args:
+        target: psqlgraph edge to insert
+        session: sqlalchemy session of the target
+        flush_context: Internal UOWTransaction object which handles the details of
+            the flush.
+        instances:  Usually None, this is the collection of objects which can be
+            passed to the Session.flush() method (note this usage is
+            deprecated).
+
+    Returns:
+        None
+    """
+    cache_related_cases_recursive(get_edge_src(target))

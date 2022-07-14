@@ -21,6 +21,10 @@ class {{ meta.class_name }}(psqlgraph.Edge):
         utils.cache_related_cases_on_insert
     ]
 
+    _session_hooks_before_update: List[Callable] = psqlgraph.Edge._session_hooks_before_update + [
+        utils.cache_related_cases_on_update
+    ]
+
     @classmethod
     def post_process(cls) -> None:
         pass

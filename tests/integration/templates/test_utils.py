@@ -2,6 +2,7 @@ from types import ModuleType
 
 import psqlgraph
 from deepdiff import DeepDiff
+from sqlalchemy.orm.attributes import flag_dirty
 
 
 def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
@@ -234,7 +235,7 @@ def test_cache_related_cases_recursive__update_when_cases_changes(
 def test_related_case_hook_before_insert(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
-    """Test related case hook before insert
+    """Test related case hook before insert.
 
         Given a sample node and a child aliquot node with cases ancestors
         When a new edge is added
@@ -260,4 +261,43 @@ def test_related_case_hook_before_insert(
 
         aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
         expected = ["case_1", "case_2"]
+        assert DeepDiff(aliquot_related_case_ids, expected, ignore_order=True) == {}
+
+
+def test_related_case_hook_before_update(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """Test related case hook before update.
+
+        Given a sample node and a child aliquot node with cases ancestors
+        When an edge is updated
+        Then the _related_cases should be updated for the aliquot nodes
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    sample = graph_classes.Sample("sample_1")
+    case1 = graph_classes.Case("case_1")
+    case2 = graph_classes.Case("case_2")
+    case3 = graph_classes.Case("case_3")
+    aliquot = graph_classes.Aliquot("aliquot_1")
+
+    with graph_driver.session_scope() as s:
+        sample.cases = [case1, case2]
+        sample.aliquots = [aliquot]
+        s.add(sample)
+        s.commit()
+
+        for e in sample.edges_out:
+            if e.dst.node_id == "case_2":
+                e.dst = case3
+        flag_dirty(sample.edges_in[0])
+        s.merge(sample)
+        s.commit()
+        aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
+        expected = ["case_1", "case_3"]
         assert DeepDiff(aliquot_related_case_ids, expected, ignore_order=True) == {}
