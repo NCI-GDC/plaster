@@ -1,4 +1,9 @@
-from typing import Dict, List, Optional
+"""This file only contains helper functions about related cases.
+
+This file should be renamed to related cases when refactored.
+TODO: DEV-1271
+"""
+from typing import Dict, List, Optional, Set
 
 import psqlgraph
 from psqlgraph import ext
@@ -150,3 +155,55 @@ def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.
         assoc_proxy.remove(existing_edge_dst_case_dict[case_id])
 
     assoc_proxy.extend([correct_cases[case_id] for case_id in case_ids_connected])
+
+
+def cache_related_cases_recursive(
+    node: psqlgraph.Node, visited_nodes: Optional[Set[str]] = None
+) -> None:
+    """Update the related case cache on source node and its children recursively.
+
+        Update the related case cache on source node and its children
+        recursively iff the update changes the related case source
+        node's shortcut edges.
+
+    Args:
+        node: root node to update
+        visited_nodes: remember visited node for dfs
+
+    Returns:
+        None
+    """
+    visited_nodes = set() if visited_nodes is None else visited_nodes
+
+    # Check preconditions for updating shortcut edge
+    if not node or not hasattr(node, RELATED_CASES_LINK_NAME):
+        return
+
+    if node.node_id in visited_nodes:
+        return
+
+    visited_nodes.add(node.node_id)
+
+    # These are the cases that are currently connected by a shortcut edge
+    current_cases = {c.node_id: c for c in get_related_cases_from_cache(node)}
+
+    # These are the cases are currently connected by a shortcut edge
+    # to this node's parents
+    updated_cases = {c.node_id: c for c in get_related_cases_from_parents(node)}
+
+    current_case_ids = set(current_cases.keys())
+    updated_case_ids = set(updated_cases.keys())
+    diff = current_case_ids ^ updated_case_ids
+
+    # If nothing has changed, we don't need to update or recur
+    if not diff:
+        return
+
+    update_cache_edges(node, updated_cases)
+
+    to_recur = (e for e in node.edges_in if e.src)
+    for edge in to_recur:
+        cache_related_cases_recursive(
+            get_edge_src(edge),
+            visited_nodes,
+        )

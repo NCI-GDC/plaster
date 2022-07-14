@@ -1,6 +1,7 @@
 from types import ModuleType
 
 import psqlgraph
+from deepdiff import DeepDiff
 
 
 def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
@@ -152,3 +153,52 @@ def test_update_cac_edges(
 
         graph_classes.utils.update_cache_edges(sample, correct_cases)
         assert set(sample._related_cases) == {case2, case3, case4}
+
+
+def test_cache_related_cases_recursive(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    sample = graph_classes.Sample("sample_1")
+    case1 = graph_classes.Case("case_1")
+    case2 = graph_classes.Case("case_2")
+    aliquot = graph_classes.Aliquot("aliquot_1")
+
+    with graph_driver.session_scope() as s:
+        sample.cases = [case1, case2]
+        sample.aliquots = [aliquot]
+        s.add(sample)
+
+        graph_classes.utils.cache_related_cases_recursive(sample)
+        assert len(sample._related_cases) == 2
+        sample_related_case_ids = [n.node_id for n in sample._related_cases]
+        aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
+        expected = ["case_1", "case_2"]
+        assert DeepDiff(sample_related_case_ids, expected, ignore_order=True) == {}
+        assert DeepDiff(aliquot_related_case_ids, expected, ignore_order=True) == {}
+
+
+def test_cache_related_cases_recursive__update_when_cases_changes(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    sample = graph_classes.Sample("sample_1")
+    case1 = graph_classes.Case("case_1")
+    case2 = graph_classes.Case("case_2")
+    case3 = graph_classes.Case("case_3")
+    aliquot = graph_classes.Aliquot("aliquot_1")
+
+    with graph_driver.session_scope() as s:
+        sample.cases = [case1, case2]
+        sample.aliquots = [aliquot]
+        s.add(sample)
+
+        graph_classes.utils.cache_related_cases_recursive(sample)
+
+        sample.cases = [case1, case3]
+        s.merge(sample)
+        graph_classes.utils.cache_related_cases_recursive(sample)
+        assert len(sample._related_cases) == 2
+        sample_related_case_ids = [n.node_id for n in sample._related_cases]
+        aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
+        expected = ["case_1", "case_3"]
+        assert DeepDiff(sample_related_case_ids, expected, ignore_order=True) == {}
+        assert DeepDiff(aliquot_related_case_ids, expected, ignore_order=True) == {}
