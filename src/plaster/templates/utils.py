@@ -275,3 +275,36 @@ def cache_related_cases_on_update(
         None
     """
     cache_related_cases_recursive(get_edge_src(target))
+
+
+def cache_related_cases_on_delete(
+    target: psqlgraph.Edge,
+    session: orm.Session,
+    flush_context: unitofwork.UOWTransaction,
+    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+) -> None:
+    """Update the related case cache on source node and its children for edge deletion.
+
+        Hook on updated edges.  Update the related case cache on source
+        node and its children.
+        This will be called when an edge instance is explicitly deleted in the session.
+
+        https://docs.sqlalchemy.org/en/14/orm/events.html#sqlalchemy.orm.SessionEvents.before_flush
+
+    Args:
+        target: psqlgraph edge to insert
+        session: sqlalchemy session of the target
+        flush_context: Internal UOWTransaction object which handles the details of
+            the flush.
+        instances:  Usually None, this is the collection of objects which can be
+            passed to the Session.flush() method (note this usage is
+            deprecated).
+
+    Returns:
+        None
+    """
+    # Remove the source and destination of application local
+    # association_proxy so cache_related_cases_update_children doesn't
+    # traverse the edge
+    target.dst, target.src = None, None
+    cache_related_cases_recursive(get_edge_src(target))

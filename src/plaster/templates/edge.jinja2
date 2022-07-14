@@ -25,6 +25,10 @@ class {{ meta.class_name }}(psqlgraph.Edge):
         utils.cache_related_cases_on_update
     ]
 
+    _session_hooks_before_delete: List[Callable] = psqlgraph.Edge._session_hooks_before_delete + [
+        utils.cache_related_cases_on_delete
+    ]
+
     @classmethod
     def post_process(cls) -> None:
         pass
