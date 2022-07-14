@@ -3,10 +3,12 @@
 This file should be renamed to related cases when refactored.
 TODO: DEV-1271
 """
-from typing import Dict, List, Optional, Set
+from typing import Collection, Dict, List, Optional, Set, Union
 
 import psqlgraph
 from psqlgraph import ext
+from sqlalchemy import orm
+from sqlalchemy.orm import unitofwork
 
 # the register_base_class is needed for edge.get_node_class to work
 ext.register_base_class()
@@ -207,3 +209,41 @@ def cache_related_cases_recursive(
             get_edge_src(edge),
             visited_nodes,
         )
+
+
+def cache_related_cases_on_insert(
+    target: psqlgraph.Edge,
+    session: orm.Session,
+    flush_context: unitofwork.UOWTransaction,
+    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+):
+    """Update the related case cache on source node and its children.
+
+        Hook on updated edges.  Update the related case cache on source
+        node and its children iff this update changes the related case
+        source node's cache.
+        This will be called when an edge is inserted to db.
+
+        https://docs.sqlalchemy.org/en/14/orm/events.html#sqlalchemy.orm.SessionEvents.before_flush
+
+    Args:
+        target: psqlgraph edge to insert
+        session: sqlalchemy session of the target
+        flush_context: Internal UOWTransaction object which handles the details of
+            the flush.
+        instances:  Usually None, this is the collection of objects which can be
+            passed to the Session.flush() method (note this usage is
+            deprecated).
+
+    Returns:
+        None
+    """
+    if not target.src:
+        target.src = get_edge_src(target)
+
+    if not target.dst:
+        target.dst = get_edge_dst(target, allow_query=True)
+
+    cache_related_cases_recursive(
+        get_edge_src(target),
+    )

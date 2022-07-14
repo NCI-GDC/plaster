@@ -1,4 +1,8 @@
+from typing import List, Callable
+
 import psqlgraph
+
+from . import utils
 
 
 class {{ meta.class_name }}(psqlgraph.Edge):
@@ -12,6 +16,10 @@ class {{ meta.class_name }}(psqlgraph.Edge):
 
     __dst_src_assoc__: str = "{{ meta.dst_src_assoc }}"
     __src_dst_assoc__: str = "{{ meta.src_dst_assoc }}"
+
+    _session_hooks_before_insert: List[Callable] = psqlgraph.Edge._session_hooks_before_insert + [
+        utils.cache_related_cases_on_insert
+    ]
 
     @classmethod
     def post_process(cls) -> None:
