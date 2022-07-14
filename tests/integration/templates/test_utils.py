@@ -158,6 +158,19 @@ def test_update_cac_edges(
 def test_cache_related_cases_recursive(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
+    """Test cache_related_cases_recursive function.
+
+        Given a sample node and a child aliquot node added to session
+        When cache_related_cases_recursive called with sample node
+        Then the _related_cases should be updated for the sample and aliquot nodes
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
     sample = graph_classes.Sample("sample_1")
     case1 = graph_classes.Case("case_1")
     case2 = graph_classes.Case("case_2")
@@ -180,6 +193,20 @@ def test_cache_related_cases_recursive(
 def test_cache_related_cases_recursive__update_when_cases_changes(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
+    """Test cache_related_cases_recursive function update _related_cases.
+
+        Given a sample node and a child aliquot node added to session
+        When ancestor cases changed
+        And cache_related_cases_recursive called with sample node
+        Then the _related_cases should be updated for the sample and aliquot nodes
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
     sample = graph_classes.Sample("sample_1")
     case1 = graph_classes.Case("case_1")
     case2 = graph_classes.Case("case_2")
