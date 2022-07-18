@@ -203,3 +203,11 @@ class NodeMetadata:
             if backref.src_type == label:
                 return name
         return ""
+
+    @property
+    def tag_props(self) -> Optional[List[str]]:
+        return self.schema.get("tagProperties")
+
+    @property
+    def tag_config(self) -> Dict[str, Any]:  # type: ignore
+        return self.schema.get("tagBuilderConfig", {})

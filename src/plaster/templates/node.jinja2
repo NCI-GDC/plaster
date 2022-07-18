@@ -81,6 +81,22 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
         return utils.get_related_cases_from_parents(self)
 
+    {% if meta.tag_props %}
+
+    @property
+    def tag(self) -> str:
+        """Unique identifier for a group of nodes that are part of the same version family.
+
+        Tags are generated when a node is saved.
+        They can be manually created using an external script
+
+        Returns:
+            str: tag value
+        """
+        return self._sysan.get("tag")
+
+    {% endif %}
+
     {% for prop in meta.properties %}
 
     @psqlgraph.pg_property({% for p in prop.types[0] %}{{ p }}{% if not loop.last %},{% endif %} {% endfor %}{% if prop.types[1] %}, enum={{ prop.types[1] }}{% endif %})
