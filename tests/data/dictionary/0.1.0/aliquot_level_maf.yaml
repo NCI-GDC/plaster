@@ -31,7 +31,13 @@ tagBuilderConfig:
       values:
         - SomaticSniper
 
-links: []
+links:
+  - name: vcf2maf_workflows
+    backref: aliquot_level_mafs
+    label: data_from
+    target_type: vcf2maf_workflow
+    multiplicity: one_to_one
+    required: true
 
 required:
   - submitter_id
