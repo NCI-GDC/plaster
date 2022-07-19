@@ -74,3 +74,21 @@ def test_tag_properties(graph_classes: ModuleType) -> None:
     """
     AliquotLevelMaf = graph_classes.AliquotLevelMaf
     assert AliquotLevelMaf.tag_properties == ["data_type"]
+
+
+def test_is_latest(graph_classes: ModuleType) -> None:
+    """test is latest property
+
+    Args:
+        graph_classes:  all nodes and edges classes
+
+    Returns:
+        None
+    """
+    AliquotLevelMaf = graph_classes.AliquotLevelMaf
+    assert hasattr(AliquotLevelMaf, "is_latest")
+
+    alm = AliquotLevelMaf("alm_1")
+    assert alm.is_latest is False
+    alm._sysan["latest"] = True
+    assert alm.is_latest == True

@@ -40,6 +40,15 @@ class {{ meta.class_name }}(psqlgraph.Node):
         """
         return self._sysan.get("ver")
 
+    @property
+    def is_latest(self) -> bool:
+        """latest version of the node based on tagging
+
+        Returns:
+            bool: True if it's the latest version otherwise false
+        """
+        return self._sysan.get("latest", False)
+
 {% endif %}
 
     @property
