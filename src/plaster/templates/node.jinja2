@@ -81,7 +81,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
         return utils.get_related_cases_from_parents(self)
 
-    {% if meta.tag_props %}
+{% if meta.tag_props %}
 
     @property
     def tag(self) -> str:
@@ -95,7 +95,18 @@ class {{ meta.class_name }}(psqlgraph.Node):
         """
         return self._sysan.get("tag")
 
-    {% endif %}
+    @property
+    def ver(self) -> int:
+        """node version number based on tagging.
+
+        versions are computed during save or via an external script
+
+        Returns:
+            int: version number
+        """
+        return self._sysan.get("ver")
+
+{% endif %}
 
     {% for prop in meta.properties %}
 
