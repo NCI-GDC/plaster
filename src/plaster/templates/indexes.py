@@ -33,7 +33,7 @@ def index_name(cls: Type[psqlgraph.Node], description: str) -> str:
     # truncate the each part of the name
     if len(name) > 40:
         old_name = name
-        logger.debug("Edge tablename {} too long, shortening".format(old_name))
+        logger.debug(f"index name '{old_name}' too long, shortening")
         name = "index_{}_{}_{}".format(
             hashlib.md5(cls.__tablename__.encode("utf-8")).hexdigest()[:8],
             "".join([a[:4] for a in cls.get_label().split("_")])[:20],
