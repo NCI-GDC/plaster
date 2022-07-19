@@ -44,7 +44,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @property
     def is_latest(self) -> bool:
-        """latest version of the node based on tagging
+        """Check whether this is the latest version of the node based on tagging
 
         Returns:
             bool: True if it's the latest version otherwise false
@@ -58,6 +58,25 @@ class {{ meta.class_name }}(psqlgraph.Node):
             bool: True if node can be tagged
         """
         return self.tag_builder_config.is_taggable(self)
+
+    def get_tag_property_values(self) -> List[str]:
+        """Get values that are used for computing the node's tag.
+
+        Returns:
+            list[str]: List of property values
+        """
+        keys = []
+        for prop in self.tag_properties:
+            property_val = self[prop]
+
+            if not property_val:
+                raise ValueError(
+                    "Property {0} must have a value on instance {1} for tagging to proceed".format(
+                        prop, self
+                    )
+                )
+            keys.append(property_val)
+        return keys
 
 {% endif %}
 

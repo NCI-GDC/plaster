@@ -1,5 +1,7 @@
 from types import ModuleType
 
+import pytest
+
 
 def test_tag(graph_classes: ModuleType) -> None:
     """Test AliquotLevelMaf has tag
@@ -140,3 +142,15 @@ def test_is_taggable__with_path(graph_classes: ModuleType) -> None:
     assert aliquot_level_maf.is_taggable() is True
     aliquot_level_maf["vcf2maf_workflows"] = [vcf_2_maf_workflow]
     assert aliquot_level_maf.is_taggable() is False
+
+
+def test_get_tag_property_values(graph_classes: ModuleType) -> None:
+    aliquot_level_maf = graph_classes.AliquotLevelMaf("aliquot_level_maf_1")
+    aliquot_level_maf.data_type = "Aliquot Level MAF"
+    assert aliquot_level_maf.get_tag_property_values() == ["Aliquot Level MAF"]
+
+
+def test_get_tag_property_values__raise_for_missing_value(graph_classes: ModuleType) -> None:
+    aliquot_level_maf = graph_classes.AliquotLevelMaf("aliquot_level_maf_1")
+    with pytest.raises(ValueError):
+        aliquot_level_maf.get_tag_property_values()
