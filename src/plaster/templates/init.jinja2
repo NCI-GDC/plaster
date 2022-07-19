@@ -4,7 +4,7 @@ import pydoc
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
 
-from . import utils
+from . import utils, versioning
 
 __all__ = [
 {% for imp in meta | sort %}

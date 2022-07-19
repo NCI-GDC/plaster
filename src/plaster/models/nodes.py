@@ -214,5 +214,5 @@ class NodeMetadata:
         return self.schema.get("tagProperties")
 
     @property
-    def tag_config(self) -> Dict[str, Any]:  # type: ignore
-        return self.schema.get("tagBuilderConfig", {})
+    def tag_config(self) -> Dict[str, Any]:
+        return self.schema.get("tagBuilderConfig", {})  # type: ignore

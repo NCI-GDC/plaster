@@ -2,7 +2,7 @@ from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
-from . import utils
+from . import utils, versioning
 
 
 class {{ meta.class_name }}(psqlgraph.Node):
@@ -16,6 +16,8 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
 {% if meta.tag_props %}
     tag_properties: List[str] = {{ meta.tag_props }}
+    # Tagging configuration instance used for checking if node instance participates in versioning
+    tag_builder_config: versioning.TagBuilderConfig = versioning.TagBuilderConfig(cfg={{ meta.tag_config }})
 
     @property
     def tag(self) -> str:
@@ -48,6 +50,14 @@ class {{ meta.class_name }}(psqlgraph.Node):
             bool: True if it's the latest version otherwise false
         """
         return self._sysan.get("latest", False)
+
+    def is_taggable(self) -> bool:
+        """Returns True if a node instance can be tagged and versioned
+
+        Returns:
+            bool: True if node can be tagged
+        """
+        return self.tag_builder_config.is_taggable(self)
 
 {% endif %}
 
