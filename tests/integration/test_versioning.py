@@ -49,7 +49,7 @@ def test_ver(graph_classes: ModuleType) -> None:
     And its ver property should return 1
 
     Args:
-        graph_classes:  all node and edge classes.
+        graph_classes:  all nodes and edges classes.
 
     Returns:
         None
@@ -61,3 +61,16 @@ def test_ver(graph_classes: ModuleType) -> None:
     assert alm.ver is None
     alm._sysan["ver"] = 1
     assert alm.ver == 1
+
+
+def test_tag_properties(graph_classes: ModuleType) -> None:
+    """Test teg properties
+
+    Args:
+        graph_classes: all nodes and edges classes
+
+    Returns:
+        None
+    """
+    AliquotLevelMaf = graph_classes.AliquotLevelMaf
+    assert AliquotLevelMaf.tag_properties == ["data_type"]

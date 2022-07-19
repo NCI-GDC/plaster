@@ -206,6 +206,11 @@ class NodeMetadata:
 
     @property
     def tag_props(self) -> Optional[List[str]]:
+        """Keys specified in the dictionary, used for generation of tags.
+
+        Returns:
+            list[str]: list of keys used to generate tags
+        """
         return self.schema.get("tagProperties")
 
     @property

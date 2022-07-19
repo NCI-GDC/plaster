@@ -14,6 +14,34 @@ class {{ meta.class_name }}(psqlgraph.Node):
     _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
 
+{% if meta.tag_props %}
+    tag_properties: List[str] = {{ meta.tag_props }}
+
+    @property
+    def tag(self) -> str:
+        """Unique identifier for a group of nodes that are part of the same version family.
+
+        Tags are generated when a node is saved.
+        They can be manually created using an external script
+
+        Returns:
+            str: tag value
+        """
+        return self._sysan.get("tag")
+
+    @property
+    def ver(self) -> int:
+        """node version number based on tagging.
+
+        versions are computed during save or via an external script
+
+        Returns:
+            int: version number
+        """
+        return self._sysan.get("ver")
+
+{% endif %}
+
     @property
     def id(self):
         return self.node_id
@@ -80,33 +108,6 @@ class {{ meta.class_name }}(psqlgraph.Node):
     @property
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
         return utils.get_related_cases_from_parents(self)
-
-{% if meta.tag_props %}
-
-    @property
-    def tag(self) -> str:
-        """Unique identifier for a group of nodes that are part of the same version family.
-
-        Tags are generated when a node is saved.
-        They can be manually created using an external script
-
-        Returns:
-            str: tag value
-        """
-        return self._sysan.get("tag")
-
-    @property
-    def ver(self) -> int:
-        """node version number based on tagging.
-
-        versions are computed during save or via an external script
-
-        Returns:
-            int: version number
-        """
-        return self._sysan.get("ver")
-
-{% endif %}
 
     {% for prop in meta.properties %}
 
