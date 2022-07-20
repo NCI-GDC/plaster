@@ -41,6 +41,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
     profile_cfg = cfg.get_profile(profile)
     if not profile_cfg:
         raise ValueError(f"Unrecognized profile {profile} entered")
+    namespace = profile_cfg.get("namespace")
 
     if profile_cfg.get("type", "local") == "local":
         dictionary = psqlgml.load_local(
@@ -61,7 +62,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
         logger.error(f"Could not load dictionary for {profile_cfg}")
         sys.exit("Dictionary not loaded")
 
-    generator.generate(dictionary, output_dir, profile)
+    generator.generate(dictionary, output_dir, namespace=namespace)
 
 
 if __name__ == "__main__":
