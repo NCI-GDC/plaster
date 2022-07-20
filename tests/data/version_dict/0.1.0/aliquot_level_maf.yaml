@@ -1,0 +1,69 @@
+---
+$schema: "http://json-schema.org/draft-04/schema#"
+
+id: "aliquot_level_maf"
+title: Aliquot Level MAF
+type: object
+category: data_file
+namespace: https://gdc.cancer.gov/
+program: '*'
+project: '*'
+description: >
+  Data file containing the observed annotated somatic mutations from a aliquot in
+  mutation annotation format.
+additionalProperties: false
+submittable: true
+validators:
+
+systemProperties:
+  - id
+  - project_id
+  - created_datetime
+  - updated_datetime
+
+tagProperties:
+  - data_type
+
+tagBuilderConfig:
+  ignoreEntries:
+    - path: vcf2maf_workflows
+      prop: workflow_type
+      values:
+        - SomaticSniper
+
+links:
+  - name: vcf2maf_workflows
+    backref: aliquot_level_mafs
+    label: data_from
+    target_type: vcf2maf_workflow
+    multiplicity: one_to_one
+    required: true
+
+required:
+  - submitter_id
+  - data_format
+  - data_category
+  - data_type
+  - experimental_strategy
+
+uniqueKeys:
+  - [id]
+  - [project_id, submitter_id]
+
+properties:
+  data_category:
+    enum:
+      - Simple Nucleotide Variation
+  data_format:
+    enum:
+      - MAF
+  data_type:
+    enum:
+      - Aliquot Level MAF
+  experimental_strategy:
+    enum:
+      - WGS
+      - WXS
+      - Low Pass WGS
+      - Validation
+      - Targeted Sequencing
