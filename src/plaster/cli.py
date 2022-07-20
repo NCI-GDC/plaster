@@ -61,7 +61,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
         logger.error(f"Could not load dictionary for {profile_cfg}")
         sys.exit("Dictionary not loaded")
 
-    generator.generate(dictionary, output_dir)
+    generator.generate(dictionary, output_dir, profile)
 
 
 if __name__ == "__main__":

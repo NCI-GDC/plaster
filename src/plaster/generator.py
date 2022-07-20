@@ -135,12 +135,15 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
     return node_metas
 
 
-def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) -> None:
+def generate(
+    dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION, profile: str = "dictionary"
+) -> None:
     """Generate the edges and nodes classes from dictionary.
 
     Args:
         dictionary: gdcdictionary or biodictionary to read
         output_dir: directory to save the classes
+        profile: profile name of the dictionary, used to add psqlgraph base class name
 
     Returns:
         None
@@ -163,7 +166,7 @@ def generate(dictionary: psqlgml.Dictionary, output_dir: str = OUTPUT_LOCATION) 
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
-    render_and_write_file(None, "utils", output_dir, "utils")
+    render_and_write_file(profile, "utils", output_dir, "utils")
     render_and_write_file(None, "versioning", output_dir, "versioning")
 
 

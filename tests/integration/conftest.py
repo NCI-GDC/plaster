@@ -8,6 +8,7 @@ import psqlgraph
 import pytest
 from _pytest import tmpdir
 from click.testing import CliRunner
+from psqlgraph import ext
 from sqlalchemy import MetaData
 from sqlalchemy import exc as sa_exc
 
@@ -76,6 +77,7 @@ def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
         host="localhost", password="test", user="test", database="plaster"
     )
-    psqlgraph.create_all(g.engine)
+    base = ext.get_orm_base(graph_classes.namespace)
+    psqlgraph.create_all(g.engine, base=base)
     yield g
     tear_down_graph(g)

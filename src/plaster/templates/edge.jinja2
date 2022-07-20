@@ -1,7 +1,7 @@
-import psqlgraph
+from . import utils
 
 
-class {{ meta.class_name }}(psqlgraph.Edge):
+class {{ meta.class_name }}(utils.Edge):
     __tablename__: str = "{{ meta.table_name }}"
 
     __label__: str = "{{ meta.label }}"
