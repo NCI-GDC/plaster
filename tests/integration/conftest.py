@@ -75,7 +75,11 @@ def tear_down_graph(graph: psqlgraph.PsqlGraphDriver) -> None:
 @pytest.fixture
 def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
-        host="localhost", password="test", user="test", database="plaster"
+        host="localhost",
+        password="test",
+        user="test",
+        database="plaster",
+        package_namespace=graph_classes.namespace,
     )
     base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
