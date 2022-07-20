@@ -51,39 +51,6 @@ current_weight:
       cde_version: 1.0
       term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432606&version=1.0"
 
-data_category:
-  common:
-    description: >-
-      Broad categorization of the contents of the data file.
-    termDef:
-      term:
-      source:
-      cde_id:
-      cde_version:
-      term_url:
-
-data_format:
-  common:
-    description: >-
-      Format of the data files.
-    termDef:
-      term:
-      source:
-      cde_id:
-      cde_version:
-      term_url:
-
-data_type:
-  common:
-    description: >-
-      Specific content type of the data file.
-    termDef:
-      term:
-      source:
-      cde_id:
-      cde_version:
-      term_url:
-
 datetime:
   common:
     description: >-
@@ -153,17 +120,6 @@ distributor_reference:
   common:
     description: >-
       Distributor reference number for cancer model.
-    termDef:
-      term:
-      source:
-      cde_id:
-      cde_version:
-      term_url:
-
-experimental_strategy:
-  common:
-    description: >-
-      The sequencing strategy used to generate the data file.
     termDef:
       term:
       source:

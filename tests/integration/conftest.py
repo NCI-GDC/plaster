@@ -1,5 +1,4 @@
 import sys
-import warnings
 from types import ModuleType
 
 import psqlgml
@@ -8,10 +7,9 @@ import pytest
 from _pytest import tmpdir
 from click.testing import CliRunner
 from psqlgraph import ext
-from sqlalchemy import MetaData
-from sqlalchemy import exc as sa_exc
 
 from plaster import cli
+from tests.integration import helper
 
 
 @pytest.fixture(scope="session")
@@ -41,19 +39,6 @@ def graph_classes(
     return test_module
 
 
-def tear_down_graph(graph: psqlgraph.PsqlGraphDriver) -> None:
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=sa_exc.SAWarning)
-
-        m = MetaData(graph.engine)
-        m.reflect()
-        for tbl in reversed(m.sorted_tables):
-            graph.engine.execute(tbl.delete())
-
-        # close connection to database
-        graph.engine.dispose()
-
-
 @pytest.fixture
 def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
@@ -68,4 +53,4 @@ def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
         base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
     yield g
-    tear_down_graph(g)
+    helper.tear_down_graph(g)
