@@ -139,7 +139,7 @@ class SecondaryKeyComparator(hybrid.Comparator):
         """
         filters = []
         cls = self.__clause_element__()
-        secondary_keys = getattr(cls, f"_{cls.__name__}__pg_secondary_keys", [])
+        secondary_keys = getattr(cls, f"_{cls.__name__}__pg_secondary_keys", ())
         for keys, values in zip(secondary_keys, other):
             if "id" in keys:
                 continue
