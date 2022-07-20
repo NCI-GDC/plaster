@@ -1,5 +1,7 @@
 import pydoc
 
+from psqlgraph import Node
+
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}

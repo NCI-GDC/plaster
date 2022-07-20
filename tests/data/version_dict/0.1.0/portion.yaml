@@ -1,0 +1,23 @@
+---
+id: portion
+category: biospecimen
+required:
+  - submitter_id
+properties:
+  submitter_id:
+    type: string
+tagProperties:
+  - submitter_id
+links:
+  - name: samples
+    backref: portions
+    label: derived_from
+    target_type: sample
+    multiplicity: many_to_one
+    required: true
+  - name: centers
+    backref: portions
+    label: shipped_to
+    target_type: center
+    multiplicity: many_to_one
+    required: false

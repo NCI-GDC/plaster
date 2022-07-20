@@ -1,6 +1,12 @@
+import os
+import uuid
+from functools import lru_cache
 from typing import Any, Dict, Iterator, List
 
 import psqlgraph
+
+UUID_NAMESPACE_SEED = os.getenv("UUID_NAMESPACE_SEED", "86bb916a-24c5-48e4-8a46-5ea73a379d47")
+UUID_NAMESPACE = uuid.UUID("urn:uuid:{}".format(UUID_NAMESPACE_SEED), version=4)
 
 
 class TaggingConstraint:
@@ -87,3 +93,27 @@ class TagBuilderConfig:
             bool: True for nodes that can be tagged
         """
         return not any(criteria.match(node) for criteria in self._constraints())
+
+
+def __generate_hash(seed: List[str], label: str) -> str:
+    namespace = UUID_NAMESPACE
+    name = f"{seed}-{label}"
+    return str(uuid.uuid5(namespace, name))
+
+
+@lru_cache(maxsize=None)
+def compute_tag(node: psqlgraph.Node) -> str:
+    """Compute unique tag for given node.
+
+    Args:
+        node (models.Node): mode instance
+    Returns:
+        str: computed tag
+    """
+    keys = node.get_tag_property_values()
+    keys += sorted(
+        compute_tag(p.dst)
+        for p in node.edges_out
+        if p.dst.is_taggable() and p.label != "relates_to"
+    )
+    return __generate_hash(keys, node.label)
