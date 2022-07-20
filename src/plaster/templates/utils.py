@@ -1,8 +1,8 @@
 from typing import Any, Iterable, List, Optional
 
 import psqlgraph
+import sqlalchemy
 from psqlgraph import ext
-from sqlalchemy import and_
 from sqlalchemy.ext import hybrid
 
 # the register_base_class is needed for edge.get_node_class to work
@@ -140,9 +140,10 @@ class SecondaryKeyComparator(hybrid.Comparator):
         filters = []
         cls = self.__clause_element__()
         secondary_keys = getattr(cls, f"_{cls.__name__}__pg_secondary_keys", ())
-        for keys, values in zip(secondary_keys, other):
-            if "id" in keys:
-                continue
+        key_pairs = (
+            (keys, values) for keys, values in zip(secondary_keys, other) if "id" not in keys
+        )
+        for keys, values in key_pairs:
             other_dict = {key: val for key, val in zip(keys, values)}
             filters.append(cls._props.contains(other_dict))
-        return and_(*filters)
+        return sqlalchemy.and_(*filters)
