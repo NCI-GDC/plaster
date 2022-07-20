@@ -228,7 +228,7 @@ def test_cache_related_cases_recursive__update_when_cases_changes(
         sample_related_case_ids = [n.node_id for n in sample._related_cases]
         aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
         expected = ["case_1", "case_3"]
-        assert DeepDiff(sample_related_case_ids, expected, ignore_order=True) == {}
+        assert not DeepDiff(sample_related_case_ids, expected, ignore_order=True)
         assert DeepDiff(aliquot_related_case_ids, expected, ignore_order=True) == {}
 
 
