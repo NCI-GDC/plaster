@@ -63,7 +63,9 @@ def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
         database="plaster",
         package_namespace=graph_classes.namespace,
     )
-    base = ext.get_orm_base(graph_classes.namespace)
+    base = psqlgraph.base.ORMBase
+    if graph_classes.namespace is not None:
+        base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
     yield g
     tear_down_graph(g)
