@@ -129,7 +129,7 @@ class SecondaryKeyComparator(hybrid.Comparator):
             Given an Iterable of secondary keys and a node
             When checking whether the secondary keys are equal
             Then create dictionaries containing secondary keys and values from other
-            And return True iff the node have same values for those keys
+            And return True if the nodes have same values for those keys
 
         Args:
             other:
