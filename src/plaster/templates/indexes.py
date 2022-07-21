@@ -1,9 +1,28 @@
+"""This file is for __pg_secondary_keys of node.
+
+The secondary keys used for querying a node:
+
+    secondary_keys = (("project_1", "submitter_1"),)
+
+    case = (
+        graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+    )
+
+To speed up the query, indexes are built based on secondary keys.
+
+    "index_node_case_submitter_id",
+    "index_node_case_project_id",
+    "index_node_case_project_id_lower",
+    "index_node_case_submitter_id_lower",
+"""
 import hashlib
 import logging
-from typing import Tuple, Type
+from typing import Any, Iterable, Tuple, Type
 
 import psqlgraph
+import sqlalchemy
 from sqlalchemy import Index, func
+from sqlalchemy.ext import hybrid
 
 logger = logging.getLogger(__name__)
 
@@ -79,3 +98,30 @@ def get_secondary_key_indexes(cls: Type[psqlgraph.Node]) -> Tuple:
     )
 
     return tuple(key_indexes) + tuple(lower_key_indexes)
+
+
+class SecondaryKeyComparator(hybrid.Comparator):
+    def __eq__(self, other: Iterable[Iterable[Any]]) -> bool:  # type: ignore
+        """Compare 2 nodes and check whether they are the same.
+
+            Given an Iterable of secondary keys and a node
+            When checking whether the secondary keys are equal
+            Then create dictionaries containing secondary keys and values from other
+            And return True if the nodes have same values for those keys
+
+        Args:
+            other:
+                _secondary_keys for the other node
+        Returns:
+            Ture iff the value for uniqueKeys are the same.
+        """
+        filters = []
+        cls = self.__clause_element__()
+        secondary_keys = getattr(cls, f"_{cls.__name__}__pg_secondary_keys", ())
+        key_pairs = (
+            (keys, values) for keys, values in zip(secondary_keys, other) if "id" not in keys
+        )
+        for keys, values in key_pairs:
+            other_dict = {key: val for key, val in zip(keys, values)}
+            filters.append(cls._props.contains(other_dict))
+        return sqlalchemy.and_(*filters)

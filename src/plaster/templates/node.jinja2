@@ -3,8 +3,7 @@ from typing import Any, Dict, List, Union, Optional
 import psqlgraph
 from sqlalchemy.ext import hybrid
 
-from . import utils
-from . import indexes
+from . import indexes, utils
 
 
 class {{ meta.class_name }}(psqlgraph.Node):
@@ -110,7 +109,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
     @_secondary_keys.comparator
     def _secondary_keys(cls):
-        return utils.SecondaryKeyComparator(cls)
+        return indexes.SecondaryKeyComparator(cls)
 
     # Set this attribute so psqlgraph doesn't treat it as a property
     _secondary_keys._is_pg_property = False
