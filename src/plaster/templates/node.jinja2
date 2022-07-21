@@ -156,4 +156,6 @@ class {{ meta.class_name }}(utils.Node):
     {% endfor %}
 
 
+{% if meta.tag_props %}
 versioning.inject_set_tag_after_insert({{ meta.class_name }})
+{% endif %}
