@@ -44,6 +44,7 @@ setup(
     extras_require={
         "dev": [
             "coverage[toml]~=5.5",
+            "deepdiff~=5.8.1",
             "mypy==0.910",
             "pre-commit~=2.13",
             "pytest~=6.2",
