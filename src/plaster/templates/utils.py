@@ -193,9 +193,7 @@ def cache_related_cases_recursive(
     # to this node's parents
     updated_cases = {c.node_id: c for c in get_related_cases_from_parents(node)}
 
-    current_case_ids = set(current_cases.keys())
-    updated_case_ids = set(updated_cases.keys())
-    diff = current_case_ids ^ updated_case_ids
+    diff = current_cases.keys() ^ updated_cases.keys()
 
     # If nothing has changed, we don't need to update or recur
     if not diff:
