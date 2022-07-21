@@ -1,6 +1,44 @@
 ---
 id: _terms
 
+
+aliquot_quantity:
+  common:
+    description: >-
+      The quantity in micrograms (ug) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Aliquot Quantity
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+aliquot_volume:
+  common:
+    description: >-
+      The volume in microliters (ul) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Aliquot Volume
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+amount:
+  common:
+    description: >-
+      Weight in grams or volume in mL.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
 biospecimen_laterality:
   common:
     description: >-
@@ -23,6 +61,20 @@ catalog_reference:
       cde_id:
       cde_version:
       term_url:
+
+concentration:
+  common:
+    description: >-
+      Numeric value that represents the concentration of an analyte or aliquot extracted
+      from the sample or sample portion, measured in milligrams per milliliter.
+    termDef:
+      term: >-
+        Biospecimen Analyte or Aliquot Extracted Concentration Milligram per Milliliter
+        Value
+      source: caDSR
+      cde_id: 5432594
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432594&version=1.0"
 
 consent_type:
   common:
@@ -233,6 +285,58 @@ longest_dimension:
       cde_version: 1.0
       term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432602&version=1.0"
 
+no_matched_normal_low_pass_wgs:
+  common:
+    description: >-
+      There will be no matched normal low pass WGS aliquots for this case that can
+      be used for variant calling purposes. The GDC may elect to use a single tumor
+      calling pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_targeted_sequencing:
+  common:
+    description: >-
+      There will be no matched normal Targeted Sequencing aliquots for this case that
+      can be used for variant calling purposes. The GDC may elect to use a single
+      tumor calling pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_wgs:
+  common:
+    description: >-
+      There will be no matched normal WGS aliquots for this case that can be used
+      for variant calling purposes. The GDC may elect to use a single tumor calling
+      pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_wxs:
+  common:
+    description: >-
+      There will be no matched normal WXS aliquots for this case that can be used
+      for variant calling purposes. The GDC may elect to use a single tumor calling
+      pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
 oct_embedded:
   common:
     description: >-
@@ -328,6 +432,66 @@ shortest_dimension:
       cde_id: 5432603
       cde_version: 1.0
       term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432603&version=1.0"
+
+source_center:
+  common:
+    description: >-
+      Name of the center that provided the item.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_low_pass_wgs:
+  common:
+    description: >-
+      Denotes which low-pass WGS normal aliquot the submitter prefers to use for variant
+      calling. Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_targeted_sequencing:
+  common:
+    description: >-
+      Denotes which targeted_sequencing normal aliquot the submitter prefers to use
+      for variant calling. Only one normal per experimental strategy per case can
+      be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_wgs:
+  common:
+    description: >-
+      Denotes which WGS normal aliquot the submitter prefers to use for variant calling.
+      Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_wxs:
+  common:
+    description: >-
+      Denotes which WXS normal aliquot the submitter prefers to use for variant calling.
+      Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
 
 time_between_clamping_and_freezing:
   common:
