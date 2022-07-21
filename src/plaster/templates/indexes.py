@@ -109,9 +109,12 @@ class SecondaryKeyComparator(hybrid.Comparator):
             Then create dictionaries containing secondary keys and values from other
             And return True if the nodes have same values for those keys
 
+            Note: The field _secondary_keys contains the values of uniqueProperties
+            instead of the keys.
+
         Args:
-            other:
-                _secondary_keys for the other node
+            other: _secondary_keys for the other node
+
         Returns:
             Ture iff the value for uniqueKeys are the same.
         """
