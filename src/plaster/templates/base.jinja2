@@ -1,5 +1,6 @@
 from psqlgraph import ext
 
+# namespace needed for multiple dictionaries to work at same time(graphmanager)
 {% if meta %}
 namespace = "{{ meta }}"
 {% else %}
@@ -7,5 +8,4 @@ namespace = None
 {% endif %}
 
 # the register_base_class is needed for edge.get_node_class to work
-# This is also needed for multiple dictionaries to work at same time(graphmanager)
 Node, Edge = ext.register_base_class(namespace)
