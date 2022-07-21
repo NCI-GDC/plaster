@@ -4,9 +4,17 @@ from functools import lru_cache
 from typing import Any, Dict, Iterator, List
 
 import psqlgraph
+import sqlalchemy
+from sqlalchemy import engine, event, orm
 
 UUID_NAMESPACE_SEED = os.getenv("UUID_NAMESPACE_SEED", "86bb916a-24c5-48e4-8a46-5ea73a379d47")
 UUID_NAMESPACE = uuid.UUID("urn:uuid:{}".format(UUID_NAMESPACE_SEED), version=4)
+
+
+class TagKeys:
+    tag = "tag"
+    latest = "latest"
+    version = "ver"
 
 
 class TaggingConstraint:
@@ -117,3 +125,63 @@ def compute_tag(node: psqlgraph.Node) -> str:
         if p.dst.is_taggable() and p.label != "relates_to"
     )
     return __generate_hash(keys, node.label)
+
+
+def __get_tagged_version(
+    node_id: str, table: sqlalchemy.Table, tag: str, conn: sqlalchemy.engine.Connection
+) -> int:
+    """Super private function to figure out the proper version number to use just after insertion.
+
+    Args:
+        node_id (str): current node_id
+        table (sqlalchemy.Table): node table instance
+        tag (str): currently computed tag
+        conn (sqlalchemy.engine.Connection): currently active connection instance
+
+    Returns:
+        int: appropriate version number to use. 1 greater than the current max
+    """
+    query = sqlalchemy.select([table]).where(
+        sqlalchemy.and_(table.c._sysan[TagKeys.tag].astext == tag, table.c.node_id != node_id)
+    )
+    max_version = 0
+    for r in conn.execute(query):
+        max_version = max(r._sysan.get(TagKeys.version, 0), max_version)
+
+        # reset latest
+        r._sysan[TagKeys.latest] = False
+        conn.execute(table.update().where(table.c.node_id == r.node_id).values(_sysan=r._sysan))
+    return max_version + 1
+
+
+def inject_set_tag_after_insert(cls: psqlgraph.Node) -> None:
+    """Add hook to set tag, and version info for node after insert.
+
+    Inject an event listener that sets the tag and version properties on nodes,
+    just before they are inserted
+
+    Args:
+        cls (class): node class type
+    """
+
+    @event.listens_for(cls, "after_insert")
+    def set_node_tag(
+        mapper: orm.Mapper, conn: engine.base.Connection, node: psqlgraph.Node
+    ) -> None:
+        table = node.__table__
+
+        if not node.is_taggable():
+            return  # do nothing
+
+        tag = compute_tag(node)
+
+        version = __get_tagged_version(node.node_id, table, tag, conn)
+
+        node._sysan[TagKeys.tag] = tag
+        node._sysan[TagKeys.latest] = True
+        node._sysan[TagKeys.version] = version
+
+        # update tag and version
+        conn.execute(
+            table.update().where(table.c.node_id == node.node_id).values(_sysan=node._sysan)
+        )

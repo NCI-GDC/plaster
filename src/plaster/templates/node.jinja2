@@ -29,7 +29,7 @@ class {{ meta.class_name }}(utils.Node):
         Returns:
             str: tag value
         """
-        return self._sysan.get("tag")
+        return self._sysan.get(versioning.TagKeys.tag)
 
     @property
     def ver(self) -> int:
@@ -40,7 +40,7 @@ class {{ meta.class_name }}(utils.Node):
         Returns:
             int: version number
         """
-        return self._sysan.get("ver")
+        return self._sysan.get(versioning.TagKeys.version)
 
     @property
     def is_latest(self) -> bool:
@@ -49,7 +49,7 @@ class {{ meta.class_name }}(utils.Node):
         Returns:
             bool: True if it's the latest version otherwise false
         """
-        return self._sysan.get("latest", False)
+        return self._sysan.get(versioning.TagKeys.latest, False)
 
     def is_taggable(self) -> bool:
         """Returns True if a node instance can be tagged and versioned
@@ -154,3 +154,6 @@ class {{ meta.class_name }}(utils.Node):
         self._set_property("{{ prop.name }}", value)  # type: ignore  # inherited from CommonBase
 
     {% endfor %}
+
+
+versioning.inject_set_tag_after_insert({{ meta.class_name }})

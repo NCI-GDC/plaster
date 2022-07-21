@@ -95,7 +95,6 @@ def create_samples(sample_data: List[psqlgraph.Node], version_graph_driver: Modu
             version_graph_driver.node_delete(n.node_id)
 
 
-@pytest.mark.skip("tag hook not implemented")
 @pytest.mark.parametrize(
     "node_id, tag, version",
     [
@@ -109,7 +108,7 @@ def create_samples(sample_data: List[psqlgraph.Node], version_graph_driver: Modu
         ("fb69d25b-5c5d-4879-8955-8f2126e57524", "293d5dd3-117c-5a0a-8030-a428fdf2681b", 1),
     ],
 )
-def test_1(
+def test_set_tag_after_insert_hook(
     create_samples: None,
     version_graph_driver: psqlgraph.PsqlGraphDriver,
     node_id: str,
