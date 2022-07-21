@@ -12,11 +12,15 @@ class {{ meta.class_name }}(psqlgraph.Node):
     # this field contains values of uniqueProperties instead of keys
     __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
 
+    # _defaults: default value for specified fields in the dictionary
+    _defaults:  Dict[str, Union[bool, float, int, str]] = {{ meta.defaults }}
     _dictionary: Dict[str, Union[bool, str, List[str]]] = {{ meta.dictionary }}
 
     _pg_backrefs: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+
+    label: str = "{{ meta.label }}"
 
     @property
     def id(self):
@@ -75,14 +79,6 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% endfor %}
         }
 
-
-    @property
-    def _default(self) -> Dict[str, Union[bool, float, int, str]]:
-        return {{ meta.defaults }}
-
-    @property
-    def label(self) -> str:
-        return "{{ meta.label }}"
 
     @property
     def _related_cases_from_cache(self) -> List[psqlgraph.Node]:
