@@ -2,7 +2,7 @@ from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
-from . import utils
+from . import utils, datetime_hooks
 
 
 class {{ meta.class_name }}(psqlgraph.Node):
@@ -86,5 +86,5 @@ class {{ meta.class_name }}(psqlgraph.Node):
     {% endfor %}
 
 
-utils.cls_inject_created_datetime_hook({{ meta.class_name }})
-utils.cls_inject_updated_datetime_hook({{ meta.class_name }})
+datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
+datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
