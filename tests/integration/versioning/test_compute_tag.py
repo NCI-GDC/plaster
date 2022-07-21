@@ -122,3 +122,47 @@ def test_set_tag_after_insert_hook(
         assert node.tag == tag
         assert node.ver == version
         assert graph_classes_versioning.versioning.compute_tag(node) == node.tag
+
+
+def test_multi_parent(
+    sample_data: List[psqlgraph.Node], graph_classes_versioning: ModuleType
+) -> None:
+    """Test version tag resolves to the same value independent of how the parents were attached."""
+
+    portion = graph_classes_versioning.Portion(
+        node_id="b9b6fdb3-6c31-4ed3-9f8c-67d4eae72102", submitter_id="portion_2"
+    )
+    v_tag = graph_classes_versioning.versioning.compute_tag(portion)
+    assert v_tag == "5776f97a-a58b-5900-83da-43cbc7105796"
+
+    sample = center = None
+    for node in sample_data:
+        if node.label == "center":
+            center = node
+        elif node.label == "sample":
+            sample = node
+
+    if not all([center, sample]):
+        assert False
+
+    portion.samples.append(sample)
+    portion.centers.append(center)
+
+    graph_classes_versioning.versioning.compute_tag.cache_clear()
+    v_tag = graph_classes_versioning.versioning.compute_tag(portion)
+    assert v_tag == "a9a67fae-d916-5843-bdf3-b7db0b7a82a2"
+
+    # unlink
+    portion.samples = []
+    portion.centers = []
+
+    graph_classes_versioning.versioning.compute_tag.cache_clear()
+    v_tag = graph_classes_versioning.versioning.compute_tag(portion)
+    assert v_tag == "5776f97a-a58b-5900-83da-43cbc7105796"
+
+    portion.centers.append(center)
+    portion.samples.append(sample)
+
+    graph_classes_versioning.versioning.compute_tag.cache_clear()
+    v_tag = graph_classes_versioning.versioning.compute_tag(portion)
+    assert v_tag == "a9a67fae-d916-5843-bdf3-b7db0b7a82a2"
