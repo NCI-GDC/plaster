@@ -13,9 +13,6 @@ def test_tag(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning:  all node and edge classes.
-
-    Returns:
-        None
     """
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert hasattr(AliquotLevelMaf, "tag")
@@ -34,9 +31,6 @@ def test_no_tag(graph_classes: ModuleType) -> None:
 
     Args:
         graph_classes:
-
-    Returns:
-        None
     """
     Case = graph_classes.Case
     assert not hasattr(Case, "tag")
@@ -52,9 +46,6 @@ def test_ver(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning:  all nodes and edges classes.
-
-    Returns:
-        None
     """
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert hasattr(AliquotLevelMaf, "ver")
@@ -70,9 +61,6 @@ def test_tag_properties(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning: all nodes and edges classes
-
-    Returns:
-        None
     """
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert AliquotLevelMaf.tag_properties == ["data_type"]
@@ -83,9 +71,6 @@ def test_is_latest(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning:  all nodes and edges classes
-
-    Returns:
-        None
     """
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert hasattr(AliquotLevelMaf, "is_latest")
@@ -105,9 +90,6 @@ def test_is_taggable__no_path(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning: all nodes and edges classes
-
-    Returns:
-        None
     """
     Vcf2mafWorkflow = graph_classes_versioning.Vcf2mafWorkflow
     assert hasattr(Vcf2mafWorkflow, "tag_builder_config")
@@ -128,9 +110,6 @@ def test_is_taggable__with_path(graph_classes_versioning: ModuleType) -> None:
 
     Args:
         graph_classes_versioning: all nodes and edges classes
-
-    Returns:
-        None
     """
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert hasattr(AliquotLevelMaf, "tag_builder_config")
