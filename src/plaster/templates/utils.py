@@ -138,9 +138,6 @@ def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.
     Args:
         node: node to update _related_cases
         correct_cases: a dictionary of correct_cases
-
-    Returns:
-        None
     """
     assoc_proxy = getattr(node, RELATED_CASES_LINK_NAME)
 
@@ -171,9 +168,6 @@ def cache_related_cases_recursive(
     Args:
         node: root node to update
         visited_nodes: remember visited node for dfs
-
-    Returns:
-        None
     """
     visited_nodes = set() if visited_nodes is None else visited_nodes
 
@@ -232,9 +226,6 @@ def cache_related_cases_on_insert(
         instances:  Usually None, this is the collection of objects which can be
             passed to the Session.flush() method (note this usage is
             deprecated).
-
-    Returns:
-        None
     """
     if not target.src:
         target.src = get_edge_src(target)
@@ -268,9 +259,6 @@ def cache_related_cases_on_update(
         instances:  Usually None, this is the collection of objects which can be
             passed to the Session.flush() method (note this usage is
             deprecated).
-
-    Returns:
-        None
     """
     cache_related_cases_recursive(get_edge_src(target))
 
@@ -297,9 +285,6 @@ def cache_related_cases_on_delete(
         instances:  Usually None, this is the collection of objects which can be
             passed to the Session.flush() method (note this usage is
             deprecated).
-
-    Returns:
-        None
     """
     # Remove the source and destination of application local
     # association_proxy so cache_related_cases_update_children doesn't
