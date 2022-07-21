@@ -116,6 +116,20 @@ def test_set_tag_after_insert_hook(
     version: int,
     graph_classes_versioning: ModuleType,
 ) -> None:
+    """Test set tag after insert hook.
+
+        Given a taggable node
+        When the node is inserted into the database
+        Then the set_tag_after_insert_hook should set tag, version value for the node
+
+    Args:
+        create_samples: fixture to create nodes for testing
+        version_graph_driver: graph driver for the versioned graph (version_dict)
+        node_id: node_id of node to check tag and version
+        tag: tag number of the node
+        version: version number of the node
+        graph_classes_versioning: fixture of the versioned graph
+    """
 
     with version_graph_driver.session_scope():
         node = version_graph_driver.nodes().get(node_id)
@@ -127,8 +141,23 @@ def test_set_tag_after_insert_hook(
 def test_multi_parent(
     sample_data: List[psqlgraph.Node], graph_classes_versioning: ModuleType
 ) -> None:
-    """Test version tag resolves to the same value independent of how the parents were attached."""
+    """Test compute tag for multi parent
 
+        Test version tag resolves to the same value independent of how the parents
+        were attached.
+
+        Given a portion node
+        When no parents or parents removed
+        Then it should have the same tag number.
+
+        Given a portion node
+        When same parents were attached
+        Then the portion node should have the same tag number
+
+    Args:
+        sample_data: fixture to create test data
+        graph_classes_versioning: fixture to create the versioned graph
+    """
     portion = graph_classes_versioning.Portion(
         node_id="b9b6fdb3-6c31-4ed3-9f8c-67d4eae72102", submitter_id="portion_2"
     )
