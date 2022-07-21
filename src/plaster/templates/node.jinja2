@@ -2,10 +2,10 @@ from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
-from . import utils, versioning
+from . import utils, versioning, base
 
 
-class {{ meta.class_name }}(utils.Node):
+class {{ meta.class_name }}(base.Node):
     __tablename__: str = "{{ meta.table_name }}"
 
     _dictionary: Dict[str, Union[bool, str, List[str]]] = {{ meta.dictionary }}
@@ -101,7 +101,7 @@ class {{ meta.class_name }}(utils.Node):
             {% for key, value in meta.backrefs_metadata.items() %}
                 "{{ key }}": {
                     "name": "{{ value.name }}",
-                    "src_type": utils.Node.get_subclass("{{ value.src_type }}"),
+                    "src_type": base.Node.get_subclass("{{ value.src_type }}"),
                 },
             {% endfor %}
         }
@@ -113,7 +113,7 @@ class {{ meta.class_name }}(utils.Node):
             {% for key, value in meta.edges_metadata.items() %}
                 "{{ key }}": {
                     "backref": "{{ value.backref }}",
-                    "type": utils.Node.get_subclass("{{ value.type }}"),
+                    "type": base.Node.get_subclass("{{ value.type }}"),
                 },
             {% endfor %}
         }
@@ -125,7 +125,7 @@ class {{ meta.class_name }}(utils.Node):
             {% for key, value in meta.links_metadata.items() %}
                 "{{ key }}": {
                     "edge_out": "{{ value.edges_out }}",
-                    "dst_type": utils.Node.get_subclass("{{ value.dst_type }}"),
+                    "dst_type": base.Node.get_subclass("{{ value.dst_type }}"),
                 },
             {% endfor %}
         }

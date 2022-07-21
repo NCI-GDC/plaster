@@ -168,7 +168,8 @@ def generate(
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
-    render_and_write_file(namespace, "utils", output_dir, "utils")
+    render_and_write_file(namespace, "base", output_dir, "base")
+    render_and_write_file(None, "utils", output_dir, "utils")
     render_and_write_file(None, "versioning", output_dir, "versioning")
 
 

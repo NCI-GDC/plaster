@@ -1,7 +1,7 @@
-from . import utils
+from . import base
 
 
-class {{ meta.class_name }}(utils.Edge):
+class {{ meta.class_name }}(base.Edge):
     __tablename__: str = "{{ meta.table_name }}"
 
     __label__: str = "{{ meta.label }}"

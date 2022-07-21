@@ -4,10 +4,10 @@ import pydoc
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
 
-from . import utils, versioning
+from . import utils, versioning, base
 
-namespace = utils.namespace
-Node = utils.Node
+namespace = base.namespace
+Node = base.Node
 
 __all__ = [
 {% for imp in meta | sort %}
