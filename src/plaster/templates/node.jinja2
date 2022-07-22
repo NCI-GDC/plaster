@@ -156,5 +156,5 @@ datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
 datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
 
 {% if meta.tag_props %}
-    versioning.inject_set_tag_after_insert({{ meta.class_name }})
+versioning.inject_set_tag_after_insert({{ meta.class_name }})
 {% endif %}
