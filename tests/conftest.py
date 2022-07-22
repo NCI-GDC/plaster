@@ -19,9 +19,3 @@ def plaster_config(app_settings: str) -> config.PlasterConfig:
 def test_dictionary(plaster_config: config.PlasterConfig) -> psqlgml.Dictionary:
     dict_dir = pkg_resources.resource_filename("tests", "data")
     return psqlgml.load_local(version="0.1.0", name="dictionary", dictionary_location=dict_dir)
-
-
-@pytest.fixture(scope="session")
-def test_dictionary_versioning(plaster_config: config.PlasterConfig) -> psqlgml.Dictionary:
-    dict_dir = pkg_resources.resource_filename("tests", "data")
-    return psqlgml.load_local(version="0.1.0", name="version_dict", dictionary_location=dict_dir)
