@@ -2,7 +2,7 @@ from typing import Dict, List, Union, Optional
 
 import psqlgraph
 
-from . import base, utils, versioning
+from . import base, datetime_hooks, utils, versioning
 
 
 class {{ meta.class_name }}(base.Node):
@@ -152,6 +152,9 @@ class {{ meta.class_name }}(base.Node):
     {% endfor %}
 
 
+datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
+datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
+
 {% if meta.tag_props %}
-versioning.inject_set_tag_after_insert({{ meta.class_name }})
+    versioning.inject_set_tag_after_insert({{ meta.class_name }})
 {% endif %}
