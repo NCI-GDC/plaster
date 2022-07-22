@@ -103,3 +103,131 @@ def test_secondary_keys_comparator_wrong_values_return_none(
             graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
         )
         assert case is None
+
+
+def test_secondary_keys_comparator__match_when_first_value_match(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """test secondary keys comparator
+
+        Given a saved case node
+        When filter with secondary keys for single value
+        Then case node with first value match should be returned
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    with graph_driver.session_scope() as s:
+        Case = graph_classes.Case
+        case = Case("case_1")
+        case.project_id = "project_1"
+        case.submitter_id = "submitter_1"
+        s.add(case)
+        s.commit()
+
+        secondary_keys = (("project_1",),)
+
+        case = (
+            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+        )
+        assert case.node_id == "case_1"
+
+
+def test_secondary_keys_comparator__miss_when_second_value_match(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """test secondary keys comparator
+
+        Given a saved case node
+        When filter with secondary keys for single value
+        Then case node with second value match should not be returned
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    with graph_driver.session_scope() as s:
+        Case = graph_classes.Case
+        case = Case("case_1")
+        case.project_id = "project_1"
+        case.submitter_id = "submitter_1"
+        s.add(case)
+        s.commit()
+
+        secondary_keys = (("submitter_1",),)
+
+        case = (
+            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+        )
+        assert case is None
+
+
+def test_secondary_keys_comparator__match_when_empty_search_value(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """test secondary keys comparator
+
+        Given a saved case node
+        When filter with secondary keys for empty value
+        Then all case nodes should be returned
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    with graph_driver.session_scope() as s:
+        Case = graph_classes.Case
+        case = Case("case_1")
+        case.project_id = "project_1"
+        case.submitter_id = "submitter_1"
+        s.add(case)
+        s.commit()
+
+        secondary_keys = ((),)
+
+        case = (
+            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+        )
+        assert case.node_id == "case_1"
+
+
+def test_secondary_keys_comparator__match_with_extra_value(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
+    """test secondary keys comparator
+
+        Given a saved case node
+        When filter with secondary keys containing extra value
+        Then case node with right values for first 2 values should be returned
+
+    Args:
+        graph_classes: all node and edge classes
+        graph_driver: psqlgraph driver
+
+    Returns:
+        None
+    """
+    with graph_driver.session_scope() as s:
+        Case = graph_classes.Case
+        case = Case("case_1")
+        case.project_id = "project_1"
+        case.submitter_id = "submitter_1"
+        s.add(case)
+        s.commit()
+
+        secondary_keys = (("project_1", "submitter_1", "any_1"),)
+
+        case = (
+            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+        )
+        assert case.node_id == "case_1"
