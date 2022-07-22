@@ -128,3 +128,7 @@ plaster generate -p biodictionary -o "example/biodictionary"
 - gdcdictionary: https://github.com/NCI-GDC/gdcdictionary
 - psqlgml: https://github.com/NCI-GDC/psqlgml
 - psqlgraph: https://github.com/NCI-GDC/psqlgraph
+
+# Repo Visualizer
+
+![Visualization of this repo](images/diagram.svg)

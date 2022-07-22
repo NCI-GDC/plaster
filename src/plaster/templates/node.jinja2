@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Union, Optional
 import psqlgraph
 from sqlalchemy.ext import hybrid
 
-from . import indexes, utils
+from . import datetime_hooks, indexes, utils
 
 
 class {{ meta.class_name }}(psqlgraph.Node):
@@ -119,3 +119,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
         self._set_property("{{ prop.name }}", value)  # type: ignore  # inherited from CommonBase
 
     {% endfor %}
+
+
+datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
+datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
