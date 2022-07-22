@@ -187,18 +187,22 @@ def test_secondary_keys_comparator__match_when_empty_search_value(
     """
     with graph_driver.session_scope() as s:
         Case = graph_classes.Case
-        case = Case("case_1")
-        case.project_id = "project_1"
-        case.submitter_id = "submitter_1"
-        s.add(case)
+        case1 = Case("case_1")
+        case1.project_id = "project_1"
+        case1.submitter_id = "submitter_1"
+        case2 = Case("case_2")
+        case2.project_id = "project_2"
+        case3 = Case("case_3")
+        case3.submitter_id = "submitter_3"
+        case4 = Case("case_4")
+
+        s.add_all([case1, case2, case3, case4])
         s.commit()
 
         secondary_keys = ((),)
 
-        case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
-        )
-        assert case.node_id == "case_1"
+        cases = graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).all()
+        assert len(cases) == 4
 
 
 def test_secondary_keys_comparator__match_with_extra_value(
