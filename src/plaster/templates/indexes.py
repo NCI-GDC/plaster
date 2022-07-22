@@ -102,18 +102,28 @@ def get_secondary_key_indexes(cls: Type[psqlgraph.Node]) -> Tuple:
 
 class SecondaryKeyComparator(hybrid.Comparator):
     def __eq__(self, other: Iterable[Iterable[Any]]) -> bool:  # type: ignore
-        """Compare 2 nodes and check whether they are the same.
+        """Check whether node(self) contains the _secondary_key values in `other`.
+
+            Compare the node (self) and check whether it contains the _secondary_key
+            values found in other. Other contains a iterable of iterables where each
+            sub iterable contains a sequence of values which corresponds to the node's
+            _secondary_keys
 
             Given an Iterable of secondary keys and a node
             When checking whether the secondary keys are equal
             Then create dictionaries containing secondary keys and values from other
             And return True if the nodes have same values for those keys
 
-            Note: The field _secondary_keys contains the values of uniqueProperties
-            instead of the keys.
+            NOTE: It is possible to pass only a subset of the secondary keys as long as
+            they maintain the sequential  order of the node's _secondary_keys. Also any
+            extra key values passed in other will be ignored and not affect the
+            comparison. Finally, an empty set of values e.g. ((),) will match all
+            objects in the data store.
 
         Args:
-            other: _secondary_keys for the other node
+            other: the values of the _secondary_keys being tested. (Note: The field
+                _secondary_keys contains the values of uniqueProperties
+                instead of the keys.)
 
         Returns:
             Ture iff the value for uniqueKeys are the same.
