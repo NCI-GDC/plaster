@@ -9,6 +9,7 @@ attrs==21.2.0
     #   jsonschema
     #   psqlgml
     #   pytest
+    #   pytest-psqlgraph
 backports.entry-points-selectable==1.1.0
     # via virtualenv
 black==21.9b0
@@ -77,9 +78,13 @@ pluggy==0.13.1
 pre-commit==2.13.0
     # via plaster (setup.py)
 psqlgml==0.1.3
-    # via plaster (setup.py)
+    # via
+    #   plaster (setup.py)
+    #   pytest-psqlgraph
 psqlgraph @ git+ssh://git@github.com/NCI-GDC/psqlgraph.git@3.4.0
-    # via plaster (setup.py)
+    # via
+    #   plaster (setup.py)
+    #   pytest-psqlgraph
 psycopg2==2.8.6
     # via psqlgraph
 py==1.10.0
@@ -93,26 +98,34 @@ pytest==6.2.4
     #   plaster (setup.py)
     #   pytest-cov
     #   pytest-env
+    #   pytest-psqlgraph
 pytest-cov==2.12.1
     # via plaster (setup.py)
 pytest-env==0.6.2
+    # via plaster (setup.py)
+pytest-psqlgraph==0.1.1
     # via plaster (setup.py)
 pyyaml==5.4.1
     # via
     #   plaster (setup.py)
     #   pre-commit
     #   psqlgml
+    #   pytest-psqlgraph
 regex==2021.9.24
     # via black
 rstr==2.2.6
-    # via psqlgraph
+    # via
+    #   psqlgraph
+    #   pytest-psqlgraph
 six==1.15.0
     # via
     #   jsonschema
     #   psqlgraph
     #   virtualenv
 sqlalchemy==1.3.24
-    # via psqlgraph
+    # via
+    #   psqlgraph
+    #   pytest-psqlgraph
 toml==0.10.2
     # via
     #   coverage

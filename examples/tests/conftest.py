@@ -1,3 +1,4 @@
+import os
 from typing import Dict
 
 import pkg_resources
@@ -18,10 +19,10 @@ def test_dictionary() -> psqlgml.Dictionary:
 def psqlgraph_config(test_dictionary: psqlgml.Dictionary) -> Dict[str, DatabaseDriverConfig]:
     return {
         "pg_driver": DatabaseDriverConfig(
-            host="localhost",
-            user="test",
-            password="test",
-            database="plaster",
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASS"),
+            database=os.getenv("DB_NAME"),
             model=models,
             dictionary=test_dictionary,
         )

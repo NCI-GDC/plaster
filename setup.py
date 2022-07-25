@@ -50,6 +50,7 @@ setup(
             "pytest~=6.2",
             "pytest-cov~=2.12",
             "pytest-env~=0.6.2",
+            "pytest-psqlgraph~=0.1",
         ],
         "docs": [
             "sphinx~=4.1",
