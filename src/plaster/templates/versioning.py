@@ -1,3 +1,17 @@
+"""Creat Tags and versions for biograph.
+
+Biogrpah will save different version for a node. And usually the latest version for a
+gencode version will be exported and imported into gdcgraph.
+
+To accomplish this, we use tagging and versioning to find different versions of nodes.
+
+Rules:
+1. The nodes with same parents and tag properties will have the same tag.
+2. The nodes with dame tag will have different version number according to creation time.
+3. The newest created node will have the latest set to True, and all other versions will
+    have it set to False.
+4. ver, tag, latest will be set at node creation with hooks.
+"""
 import os
 import uuid
 from functools import lru_cache
