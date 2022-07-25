@@ -172,6 +172,7 @@ def generate(
     render_and_write_file(None, "datetime_hooks", output_dir, "datetime_hooks")
     render_and_write_file(None, "utils", output_dir, "utils")
     render_and_write_file(None, "versioning", output_dir, "versioning")
+    render_and_write_file(None, "indexes", output_dir, "indexes")
 
 
 def render_and_write_file(

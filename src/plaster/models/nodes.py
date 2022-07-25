@@ -216,3 +216,8 @@ class NodeMetadata:
     @property
     def tag_config(self) -> Dict[str, Any]:
         return self.schema.get("tagBuilderConfig", {})  # type: ignore
+
+    @property
+    def secondary_keys(self) -> List[List[str]]:
+        unique_keys = self.schema.get("uniqueKeys", [])
+        return [keys for keys in unique_keys if "id" not in keys]

@@ -1,12 +1,16 @@
-from typing import Dict, List, Union, Optional
+from typing import Any, Dict, List, Union, Optional
 
 import psqlgraph
+from sqlalchemy.ext import hybrid
 
-from . import base, datetime_hooks, utils, versioning
+from . import base, datetime_hooks, indexes, utils, versioning
 
 
 class {{ meta.class_name }}(base.Node):
     __tablename__: str = "{{ meta.table_name }}"
+
+    # this field contains values of uniqueProperties
+    __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
 
     # _defaults: default value for specified fields in the dictionary
     _defaults:  Dict[str, Union[bool, float, int, str]] = {{ meta.defaults }}
@@ -94,9 +98,16 @@ class {{ meta.class_name }}(base.Node):
 
     @classmethod
     def post_process(cls) -> None:
+        cls.add_secondary_key_indexes()
         cls.populate_pg_backrefs()
         cls.populate_pg_links()
         cls.populate_pg_edges()
+
+    @classmethod
+    def add_secondary_key_indexes(cls) -> None:
+        secondary_key_indexes = indexes.get_secondary_key_indexes(cls)
+        for index in secondary_key_indexes:
+            cls.__table__.append_constraint(index)
 
     @classmethod
     def populate_pg_backrefs(cls) -> None:
@@ -142,6 +153,30 @@ class {{ meta.class_name }}(base.Node):
     @property
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
         return utils.get_related_cases_from_parents(self)
+
+    @property
+    def _secondary_keys_dicts(self) -> List[Dict[str, Any]]:
+        vals = []
+        secondary_keys = self.__pg_secondary_keys
+        for keys in secondary_keys:
+            if "id" in keys:
+                continue
+            vals.append({key: getattr(self, key, None) for key in keys})
+        return vals
+
+    @hybrid.hybrid_property
+    def _secondary_keys(self):
+        vals = []
+        for keys in self.__pg_secondary_keys:
+            vals.append(tuple(getattr(self, key) for key in keys))
+        return tuple(vals)
+
+    @_secondary_keys.comparator
+    def _secondary_keys(cls):
+        return indexes.SecondaryKeyComparator(cls)
+
+    # Set this attribute so psqlgraph doesn't treat it as a property
+    _secondary_keys._is_pg_property = False
 
     {% for prop in meta.properties %}
 
