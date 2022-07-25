@@ -203,3 +203,8 @@ class NodeMetadata:
             if backref.src_type == label:
                 return name
         return ""
+
+    @property
+    def secondary_keys(self) -> List[List[str]]:
+        unique_keys = self.schema.get("uniqueKeys", [])
+        return [keys for keys in unique_keys if "id" not in keys]

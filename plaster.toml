@@ -21,3 +21,10 @@ path = "gdcdictionary/schemas"
 version = "2.4.1"
 overwrite = false
 type = "remote"
+
+[profiles.midrc_dictionary]
+url = "https://github.com/uc-cdis/midrc_dictionary.git"     # need to skip _settings.yaml
+path = "gdcdictionary/schemas"
+version = "0.7.6"
+overwrite = false
+type = "remote"
