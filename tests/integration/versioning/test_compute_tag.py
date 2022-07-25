@@ -35,7 +35,7 @@ def sample_data(
 
 
 @pytest.fixture(scope="module")
-def version_graph_driver(graph_classes_versioning: ModuleType) -> psqlgraph.PsqlGraphDriver:
+def graph_driver_versioning(graph_classes_versioning: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
         host=os.getenv("DB_HOST"),
         password=os.getenv("DB_PASS"),
@@ -73,8 +73,10 @@ def test_compute_tag(
 
 
 @pytest.fixture(scope="module")
-def create_samples(sample_data: List[psqlgraph.Node], version_graph_driver: ModuleType) -> None:
-    with version_graph_driver.session_scope() as s:
+def create_samples(
+    sample_data: List[psqlgraph.Node], graph_driver_versioning: ModuleType
+) -> None:
+    with graph_driver_versioning.session_scope() as s:
 
         version_2s = []
         for node in sample_data:
@@ -91,9 +93,9 @@ def create_samples(sample_data: List[psqlgraph.Node], version_graph_driver: Modu
             s.add(v2)
     yield
 
-    with version_graph_driver.session_scope():
+    with graph_driver_versioning.session_scope():
         for n in sample_data:
-            version_graph_driver.node_delete(n.node_id)
+            graph_driver_versioning.node_delete(n.node_id)
 
 
 @pytest.mark.parametrize(
@@ -111,7 +113,7 @@ def create_samples(sample_data: List[psqlgraph.Node], version_graph_driver: Modu
 )
 def test_set_tag_after_insert_hook(
     create_samples: None,
-    version_graph_driver: psqlgraph.PsqlGraphDriver,
+    graph_driver_versioning: psqlgraph.PsqlGraphDriver,
     node_id: str,
     tag: str,
     version: int,
@@ -125,15 +127,15 @@ def test_set_tag_after_insert_hook(
 
     Args:
         create_samples: fixture to create nodes for testing
-        version_graph_driver: graph driver for the versioned graph (version_dict)
+        graph_driver_versioning: graph driver for the versioned graph (version_dict)
         node_id: node_id of node to check tag and version
         tag: tag number of the node
         version: version number of the node
         graph_classes_versioning: fixture of the versioned graph
     """
 
-    with version_graph_driver.session_scope():
-        node = version_graph_driver.nodes().get(node_id)
+    with graph_driver_versioning.session_scope():
+        node = graph_driver_versioning.nodes().get(node_id)
         assert node.tag == tag
         assert node.ver == version
         assert graph_classes_versioning.versioning.compute_tag(node) == node.tag
