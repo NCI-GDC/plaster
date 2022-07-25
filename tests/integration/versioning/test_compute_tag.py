@@ -1,3 +1,4 @@
+import os
 from collections import namedtuple
 from types import ModuleType
 from typing import List
@@ -36,10 +37,10 @@ def sample_data(
 @pytest.fixture(scope="module")
 def version_graph_driver(graph_classes_versioning: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
-        host="localhost",
-        password="test",
-        user="test",
-        database="plaster",
+        host=os.getenv("DB_HOST"),
+        password=os.getenv("DB_PASS"),
+        user=os.getenv("DB_USER"),
+        database=os.getenv("DB_NAME"),
         package_namespace=graph_classes_versioning.namespace,
     )
     base = ext.get_orm_base(graph_classes_versioning.namespace)

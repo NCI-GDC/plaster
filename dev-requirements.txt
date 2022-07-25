@@ -92,7 +92,10 @@ pytest==6.2.4
     # via
     #   plaster (setup.py)
     #   pytest-cov
+    #   pytest-env
 pytest-cov==2.12.1
+    # via plaster (setup.py)
+pytest-env==0.6.2
     # via plaster (setup.py)
 pyyaml==5.4.1
     # via

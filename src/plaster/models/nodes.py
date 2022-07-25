@@ -209,7 +209,7 @@ class NodeMetadata:
         """Keys specified in the dictionary, used for generation of tags.
 
         Returns:
-            list[str]: list of keys used to generate tags
+            list of keys used to generate tags
         """
         return self.schema.get("tagProperties")
 

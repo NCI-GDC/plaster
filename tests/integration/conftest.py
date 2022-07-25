@@ -1,3 +1,4 @@
+import os
 import sys
 from types import ModuleType
 
@@ -42,10 +43,10 @@ def graph_classes(
 @pytest.fixture
 def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = psqlgraph.PsqlGraphDriver(
-        host="localhost",
-        password="test",
-        user="test",
-        database="plaster",
+        host=os.getenv("DB_HOST"),
+        password=os.getenv("DB_PASS"),
+        user=os.getenv("DB_USER"),
+        database=os.getenv("DB_NAME"),
         package_namespace=graph_classes.namespace,
     )
     base = psqlgraph.base.ORMBase
