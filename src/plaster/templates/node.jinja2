@@ -41,7 +41,7 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def ver(self) -> int:
-        """node version number based on tagging.
+        """Node version number based on tagging.
 
         versions are computed during save or via an external script
 
@@ -52,7 +52,7 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def is_latest(self) -> bool:
-        """Check whether this is the latest version of the node based on tagging
+        """Check whether this is the latest version of the node based on tagging.
 
         Returns:
             bool: True if it's the latest version otherwise false
@@ -60,7 +60,7 @@ class {{ meta.class_name }}(base.Node):
         return self._sysan.get(versioning.TagKeys.latest, False)
 
     def is_taggable(self) -> bool:
-        """Return True if a node instance can be tagged and versioned
+        """Return True if a node instance can be tagged and versioned.
 
         Returns:
             bool: True if node can be tagged
