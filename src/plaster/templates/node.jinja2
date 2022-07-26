@@ -29,7 +29,7 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def tag(self) -> str:
-        """Unique identifier for a group of nodes that are part of the same version family.
+        """Add unique identifier for a group of nodes that are part of the same version family.
 
         Tags are generated when a node is saved.
         They can be manually created using an external script
@@ -41,7 +41,7 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def ver(self) -> int:
-        """Node version number based on tagging.
+        """Add node version number based on tagging.
 
         versions are computed during save or via an external script
 
