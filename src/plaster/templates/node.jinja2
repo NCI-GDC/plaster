@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Union, Optional
 import psqlgraph
 from sqlalchemy.ext import hybrid
 
-from . import base, datetime_hooks, indexes, utils, versioning
+from . import base, datetime_hooks, indexes, related_cases, versioning
 
 
 class {{ meta.class_name }}(base.Node):
@@ -148,11 +148,11 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def _related_cases_from_cache(self) -> List[psqlgraph.Node]:
-        return utils.get_related_cases_from_cache(self)
+        return related_cases.get_related_cases_from_cache(self)
 
     @property
     def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
-        return utils.get_related_cases_from_parents(self)
+        return related_cases.get_related_cases_from_parents(self)
 
     @property
     def _secondary_keys_dicts(self) -> List[Dict[str, Any]]:

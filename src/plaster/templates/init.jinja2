@@ -4,7 +4,7 @@ import pydoc
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
 
-from . import base, indexes, utils, versioning
+from . import base, indexes, related_cases, versioning
 
 namespace = base.namespace
 Node = base.Node
