@@ -60,7 +60,7 @@ class {{ meta.class_name }}(base.Node):
         return self._sysan.get(versioning.TagKeys.latest, False)
 
     def is_taggable(self) -> bool:
-        """Returns True if a node instance can be tagged and versioned
+        """Return True if a node instance can be tagged and versioned
 
         Returns:
             bool: True if node can be tagged
