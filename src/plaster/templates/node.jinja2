@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Union, Optional
 import psqlgraph
 from sqlalchemy.ext import hybrid
 
-from . import base, datetime_hooks, indexes, related_cases, versioning
+from .helpers import base, datetime_hooks, indexes, related_cases, versioning
 
 
 class {{ meta.class_name }}(base.Node):
