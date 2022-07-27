@@ -20,7 +20,9 @@ class {{ meta.class_name }}(base.Node):
     _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
 
-    label: str = "{{ meta.label }}"
+    @classmethod
+    def get_label(cls):
+        return "{{ meta.label }}"
 
 {% if meta.tag_props %}
     tag_properties: List[str] = {{ meta.tag_props }}
