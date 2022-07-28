@@ -14,6 +14,7 @@ path = "biodictionary/schemas"
 version = "0.12.0"
 overwrite = false
 type = "remote"
+namespace = "gpas"
 
 [profiles.gdcdictionary]
 url = "https://github.com/NCI-GDC/gdcdictionary.git"
