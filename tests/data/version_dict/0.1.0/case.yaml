@@ -1,0 +1,23 @@
+---
+id: case
+category: administrative
+tagProperties:
+  - submitter_id
+required:
+  - submitter_id
+properties:
+  submitter_id:
+    type: string
+  consent_type:
+    enum:
+      - Consent by Death
+      - Consent Exemption
+      - Consent Waiver
+      - Informed Consent
+links:
+  - name: projects
+    backref: cases
+    label: member_of
+    target_type: project
+    multiplicity: many_to_one
+    required: true

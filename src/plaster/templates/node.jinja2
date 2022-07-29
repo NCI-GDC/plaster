@@ -3,13 +3,13 @@ from typing import Any, Dict, List, Union, Optional
 import psqlgraph
 from sqlalchemy.ext import hybrid
 
-from . import datetime_hooks, indexes, utils
+from . import base, datetime_hooks, indexes, utils, versioning
 
 
-class {{ meta.class_name }}(psqlgraph.Node):
+class {{ meta.class_name }}(base.Node):
     __tablename__: str = "{{ meta.table_name }}"
 
-    # this field contains values of uniqueProperties instead of keys
+    # this field contains values of uniqueProperties
     __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
 
     # _defaults: default value for specified fields in the dictionary
@@ -21,6 +21,72 @@ class {{ meta.class_name }}(psqlgraph.Node):
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
 
     label: str = "{{ meta.label }}"
+
+{% if meta.tag_props %}
+    tag_properties: List[str] = {{ meta.tag_props }}
+    # Tagging configuration instance used for checking if node instance participates in versioning
+    tag_builder_config: versioning.TagBuilderConfig = versioning.TagBuilderConfig(cfg={{ meta.tag_config }})
+
+    @property
+    def tag(self) -> str:
+        """Unique identifier for a group of nodes that are part of the same version family.
+
+        Tags are generated when a node is saved.
+        They can be manually created using an external script
+
+        Returns:
+            str: tag value
+        """
+        return self._sysan.get(versioning.TagKeys.tag)
+
+    @property
+    def ver(self) -> int:
+        """node version number based on tagging.
+
+        versions are computed during save or via an external script
+
+        Returns:
+            int: version number
+        """
+        return self._sysan.get(versioning.TagKeys.version)
+
+    @property
+    def is_latest(self) -> bool:
+        """Check whether this is the latest version of the node based on tagging
+
+        Returns:
+            bool: True if it's the latest version otherwise false
+        """
+        return self._sysan.get(versioning.TagKeys.latest, False)
+
+    def is_taggable(self) -> bool:
+        """Returns True if a node instance can be tagged and versioned
+
+        Returns:
+            bool: True if node can be tagged
+        """
+        return self.tag_builder_config.is_taggable(self)
+
+    def get_tag_property_values(self) -> List[str]:
+        """Get values that are used for computing the node's tag.
+
+        Returns:
+            list[str]: List of property values
+        """
+        keys = []
+        for prop in self.tag_properties:
+            property_val = self[prop]
+
+            if not property_val:
+                raise ValueError(
+                    "Property {0} must have a value on instance {1} for tagging to proceed".format(
+                        prop, self
+                    )
+                )
+            keys.append(property_val)
+        return keys
+
+{% endif %}
 
     @property
     def id(self):
@@ -50,7 +116,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% for key, value in meta.backrefs_metadata.items() %}
                 "{{ key }}": {
                     "name": "{{ value.name }}",
-                    "src_type": psqlgraph.Node.get_subclass("{{ value.src_type }}"),
+                    "src_type": base.Node.get_subclass("{{ value.src_type }}"),
                 },
             {% endfor %}
         }
@@ -62,7 +128,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% for key, value in meta.edges_metadata.items() %}
                 "{{ key }}": {
                     "backref": "{{ value.backref }}",
-                    "type": psqlgraph.Node.get_subclass("{{ value.type }}"),
+                    "type": base.Node.get_subclass("{{ value.type }}"),
                 },
             {% endfor %}
         }
@@ -74,7 +140,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
             {% for key, value in meta.links_metadata.items() %}
                 "{{ key }}": {
                     "edge_out": "{{ value.edges_out }}",
-                    "dst_type": psqlgraph.Node.get_subclass("{{ value.dst_type }}"),
+                    "dst_type": base.Node.get_subclass("{{ value.dst_type }}"),
                 },
             {% endfor %}
         }
@@ -123,3 +189,7 @@ class {{ meta.class_name }}(psqlgraph.Node):
 
 datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
 datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
+
+{% if meta.tag_props %}
+versioning.inject_set_tag_after_insert({{ meta.class_name }})
+{% endif %}

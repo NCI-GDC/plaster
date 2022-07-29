@@ -1,0 +1,19 @@
+---
+id: sample
+category: biospecimen
+tagProperties:
+  - submitter_id
+required:
+  - submitter_id
+properties:
+  submitter_id:
+    type: string
+  catalog_reference:
+    type: string
+links:
+  - name: cases
+    backref: samples
+    label: derived_from
+    target_type: case
+    multiplicity: many_to_one
+    required: true

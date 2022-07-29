@@ -1,0 +1,12 @@
+---
+id: program
+category: administrative
+tagProperties:
+  - name
+required:
+  - name
+properties:
+  name:
+    type: string
+
+links: []

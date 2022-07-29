@@ -1,0 +1,17 @@
+---
+id: center
+category: administrative
+required:
+  - code
+properties:
+  code:
+    type: string
+tagProperties:
+  - code
+tagBuilderConfig:
+  ignoreEntries:
+    - prop: code
+      values:
+        - A101
+
+links: []

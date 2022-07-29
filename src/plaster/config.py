@@ -26,6 +26,7 @@ class Profile(TypedDict):
     version: str
     overwrite: bool
     local_directory: str
+    namespace: str
 
 
 class Config(TypedDict):
