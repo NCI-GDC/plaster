@@ -36,7 +36,7 @@ class {{ meta.class_name }}(base.Node):
         Tags are generated when a node is saved.
         They can be manually created using an external script
 
-        Returns:
+        Return:
             str: tag value
         """
         return self._sysan.get(versioning.TagKeys.tag)
@@ -47,7 +47,7 @@ class {{ meta.class_name }}(base.Node):
 
         versions are computed during save or via an external script
 
-        Returns:
+        Return:
             int: version number
         """
         return self._sysan.get(versioning.TagKeys.version)
@@ -56,7 +56,7 @@ class {{ meta.class_name }}(base.Node):
     def is_latest(self) -> bool:
         """Check whether this is the latest version of the node based on tagging.
 
-        Returns:
+        Return:
             bool: True if it's the latest version otherwise false
         """
         return self._sysan.get(versioning.TagKeys.latest, False)
@@ -64,7 +64,7 @@ class {{ meta.class_name }}(base.Node):
     def is_taggable(self) -> bool:
         """Return True if a node instance can be tagged and versioned.
 
-        Returns:
+        Return:
             bool: True if node can be tagged
         """
         return self.tag_builder_config.is_taggable(self)
@@ -72,7 +72,7 @@ class {{ meta.class_name }}(base.Node):
     def get_tag_property_values(self) -> List[str]:
         """Get values that are used for computing the node's tag.
 
-        Returns:
+        Return:
             list[str]: List of property values
         """
         keys = []
@@ -89,73 +89,6 @@ class {{ meta.class_name }}(base.Node):
         return keys
 
 {% endif %}
-
-{% if meta.tag_props %}
-    tag_properties: List[str] = {{ meta.tag_props }}
-    # Tagging configuration instance used for checking if node instance participates in versioning
-    tag_builder_config: versioning.TagBuilderConfig = versioning.TagBuilderConfig(cfg={{ meta.tag_config }})
-
-    @property
-    def tag(self) -> str:
-        """Unique identifier for a group of nodes that are part of the same version family.
-
-        Tags are generated when a node is saved.
-        They can be manually created using an external script
-
-        Returns:
-            str: tag value
-        """
-        return self._sysan.get(versioning.TagKeys.tag)
-
-    @property
-    def ver(self) -> int:
-        """node version number based on tagging.
-
-        versions are computed during save or via an external script
-
-        Returns:
-            int: version number
-        """
-        return self._sysan.get(versioning.TagKeys.version)
-
-    @property
-    def is_latest(self) -> bool:
-        """Check whether this is the latest version of the node based on tagging
-
-        Returns:
-            bool: True if it's the latest version otherwise false
-        """
-        return self._sysan.get(versioning.TagKeys.latest, False)
-
-    def is_taggable(self) -> bool:
-        """Returns True if a node instance can be tagged and versioned
-
-        Returns:
-            bool: True if node can be tagged
-        """
-        return self.tag_builder_config.is_taggable(self)
-
-    def get_tag_property_values(self) -> List[str]:
-        """Get values that are used for computing the node's tag.
-
-        Returns:
-            list[str]: List of property values
-        """
-        keys = []
-        for prop in self.tag_properties:
-            property_val = self[prop]
-
-            if not property_val:
-                raise ValueError(
-                    "Property {0} must have a value on instance {1} for tagging to proceed".format(
-                        prop, self
-                    )
-                )
-            keys.append(property_val)
-        return keys
-
-{% endif %}
-
     @property
     def id(self):
         return self.node_id
