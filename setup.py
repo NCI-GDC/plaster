@@ -38,7 +38,7 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
-        "psqlgml>=0.1.3",
+        "psqlgml>=0.2.0",
         "psqlgraph @ git+ssh://git@github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={
