@@ -10,7 +10,7 @@ import pytest
 import yaml
 from psqlgraph import ext, mocks
 
-from tests.integration import helper
+from tests.integration import tear_down_graph
 
 
 @pytest.fixture(scope="module")
@@ -46,7 +46,7 @@ def graph_driver_versioning(graph_classes_versioning: ModuleType) -> psqlgraph.P
     base = ext.get_orm_base(graph_classes_versioning.namespace)
     psqlgraph.create_all(g.engine, base=base)
     yield g
-    helper.tear_down_graph(g)
+    tear_down_graph(g)
 
 
 EXPECTED_TAGS = {

@@ -33,7 +33,7 @@ deepdiff==5.8.1
     # via plaster (setup.py)
 distlib==0.3.2
     # via virtualenv
-dulwich==0.20.25
+dulwich==0.20.45
     # via
     #   plaster (setup.py)
     #   psqlgml

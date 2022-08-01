@@ -10,7 +10,7 @@ from click.testing import CliRunner
 from psqlgraph import ext
 
 from plaster import cli
-from tests.integration import helper
+from tests.integration import tear_down_graph
 
 
 @pytest.fixture(scope="session")
@@ -54,4 +54,4 @@ def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
         base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
     yield g
-    helper.tear_down_graph(g)
+    tear_down_graph(g)

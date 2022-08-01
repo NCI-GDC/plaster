@@ -1,10 +1,10 @@
-import pydoc
+import sys
 
 {% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
 
-from . import base, indexes, utils, versioning
+from .helpers import base, indexes, related_cases, versioning
 
 namespace = base.namespace
 Node = base.Node
@@ -17,5 +17,5 @@ __all__ = [
 
 
 for __type in __all__:
-    cls = pydoc.locate(f"{__name__}.{__type}")
+    cls = sys.modules.get(__name__).__dict__.get(__type)
     cls.post_process()
