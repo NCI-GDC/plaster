@@ -159,7 +159,7 @@ class NodeMetadata:
         used by some repo to get in_edges types.
 
         Returns:
-            dictionary of in edges
+            dictionary of 'in' edges
         """
         return OrderedDict(sorted(self.backrefs_dict[self.label].items()))
 
