@@ -49,7 +49,7 @@ TYPE_MAPPING = {
     "float": ["float"],
     "integer": ["int"],
     "string": ["str"],
-    "null": ["None"],
+    "null": ["type(None)"],
     "number": ["float", "int"],
 }
 EXCLUDED_PROPS = ["id", "type"]
