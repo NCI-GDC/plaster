@@ -20,7 +20,7 @@ def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
     """
     sample = graph_classes.Sample("sample_1")
 
-    edge_name = graph_classes.utils.get_related_case_edge_cls_name(sample)
+    edge_name = graph_classes.related_cases.get_related_case_edge_cls_name(sample)
 
     assert edge_name == "SampleRelatesToCase"
 
@@ -51,7 +51,7 @@ def test_get_edge_src(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGra
         assert len(project.edges_in) == 1
         edge = project.edges_in[0]
 
-        src = graph_classes.utils.get_edge_src(edge)
+        src = graph_classes.related_cases.get_edge_src(edge)
         assert src.node_id == "case_1"
 
 
@@ -81,7 +81,7 @@ def test_get_edge_dst(graph_driver: psqlgraph.PsqlGraphDriver, graph_classes: Mo
         assert len(project.edges_in) == 1
         edge = project.edges_in[0]
 
-        dst = graph_classes.utils.get_edge_dst(edge)
+        dst = graph_classes.related_cases.get_edge_dst(edge)
         assert dst.node_id == "project_1"
 
 
@@ -151,7 +151,7 @@ def test_update_cac_edges(
         parent_cases = [case2, case3, case4]
         correct_cases = {c.node_id: c for c in parent_cases}
 
-        graph_classes.utils.update_cache_edges(sample, correct_cases)
+        graph_classes.related_cases.update_cache_edges(sample, correct_cases)
         assert set(sample._related_cases) == {case2, case3, case4}
 
 
@@ -181,7 +181,7 @@ def test_cache_related_cases_recursive(
         sample.aliquots = [aliquot]
         s.add(sample)
 
-        graph_classes.utils.cache_related_cases_recursive(sample)
+        graph_classes.related_cases.cache_related_cases_recursive(sample)
         assert len(sample._related_cases) == 2
         sample_related_case_ids = [n.node_id for n in sample._related_cases]
         aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
@@ -218,11 +218,11 @@ def test_cache_related_cases_recursive__update_when_cases_changes(
         sample.aliquots = [aliquot]
         s.add(sample)
 
-        graph_classes.utils.cache_related_cases_recursive(sample)
+        graph_classes.related_cases.cache_related_cases_recursive(sample)
 
         sample.cases = [case1, case3]
         s.merge(sample)
-        graph_classes.utils.cache_related_cases_recursive(sample)
+        graph_classes.related_cases.cache_related_cases_recursive(sample)
         assert len(sample._related_cases) == 2
         sample_related_case_ids = [n.node_id for n in sample._related_cases]
         aliquot_related_case_ids = [n.node_id for n in aliquot._related_cases]
