@@ -2,7 +2,7 @@ from typing import List, Callable
 
 import psqlgraph
 
-from .helpers import base, related_cases
+from . import base, utils
 
 
 class {{ meta.class_name }}(base.Edge):
@@ -18,15 +18,15 @@ class {{ meta.class_name }}(base.Edge):
     __src_dst_assoc__: str = "{{ meta.src_dst_assoc }}"
 
     _session_hooks_before_insert: List[Callable] = psqlgraph.Edge._session_hooks_before_insert + [
-        related_cases.cache_related_cases_on_insert
+        utils.cache_related_cases_on_insert
     ]
 
     _session_hooks_before_update: List[Callable] = psqlgraph.Edge._session_hooks_before_update + [
-        related_cases.cache_related_cases_on_update
+        utils.cache_related_cases_on_update
     ]
 
     _session_hooks_before_delete: List[Callable] = psqlgraph.Edge._session_hooks_before_delete + [
-        related_cases.cache_related_cases_on_delete
+        utils.cache_related_cases_on_delete
     ]
 
     @classmethod

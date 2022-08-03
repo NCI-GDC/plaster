@@ -11,10 +11,9 @@ log_file = "plaster.log"
 [profiles.biodictionary]
 url = "ssh://git@github.com/NCI-GDC/biodictionary.git"
 path = "biodictionary/schemas"
-version = "0.12.0"
+version = "0.7.0"
 overwrite = false
 type = "remote"
-namespace = "gpas"
 
 [profiles.gdcdictionary]
 url = "https://github.com/NCI-GDC/gdcdictionary.git"

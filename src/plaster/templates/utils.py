@@ -106,7 +106,9 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
     # Get the cached ids from parents
     edges_out_filtered = (e for e in edges_out if e.__class__.__name__ not in skip_edges_named)
     dsts = (e.dst for e in edges_out_filtered if e.dst)
-    cases_list: List[psqlgraph.Node] = sum((dst._related_cases_from_cache for dst in dsts), [])
+    cases_list: List[psqlgraph.Node] = sum(
+        (dst._related_cases_from_cache for dst in dsts), start=[]
+    )
     cases = set(cases_list)
 
     # Are any parents cases?

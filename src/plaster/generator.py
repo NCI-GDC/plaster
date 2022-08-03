@@ -168,14 +168,11 @@ def generate(
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
-
-    helpers_dir = output_dir + "/helpers"
-    os.makedirs(helpers_dir, exist_ok=True)
-    render_and_write_file(namespace, "base", helpers_dir, "base")
-    render_and_write_file(None, "datetime_hooks", helpers_dir, "datetime_hooks")
-    render_and_write_file(None, "indexes", helpers_dir, "indexes")
-    render_and_write_file(None, "related_cases", helpers_dir, "related_cases")
-    render_and_write_file(None, "versioning", helpers_dir, "versioning")
+    render_and_write_file(namespace, "base", output_dir, "base")
+    render_and_write_file(None, "datetime_hooks", output_dir, "datetime_hooks")
+    render_and_write_file(None, "utils", output_dir, "utils")
+    render_and_write_file(None, "versioning", output_dir, "versioning")
+    render_and_write_file(None, "indexes", output_dir, "indexes")
 
 
 def render_and_write_file(

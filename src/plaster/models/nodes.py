@@ -1,5 +1,4 @@
 import logging
-from collections import OrderedDict
 from typing import (
     Any,
     Dict,
@@ -159,9 +158,9 @@ class NodeMetadata:
         used by some repo to get in_edges types.
 
         Returns:
-            dictionary of 'in' edges
+            dictionary of in edges
         """
-        return OrderedDict(sorted(self.backrefs_dict[self.label].items()))
+        return self.backrefs_dict[self.label]
 
     @property
     def edges_metadata(self) -> Dict[str, EdgeMetadata]:
@@ -181,7 +180,7 @@ class NodeMetadata:
 
         for name, back_ref in self.backrefs_metadata.items():
             edges_metadata[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
-        return OrderedDict(sorted(edges_metadata.items()))
+        return edges_metadata
 
     @property
     def links_metadata(self) -> Dict[str, LinkMetadata]:
@@ -197,7 +196,7 @@ class NodeMetadata:
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
             links_metadata[link["name"]] = LinkMetadata(edge_name, link["target_type"])
-        return OrderedDict(sorted(links_metadata.items()))
+        return links_metadata
 
     def _find_backref(self, link: LinkMetadata, label: str) -> str:
         for name, backref in self.backrefs_dict[link.dst_type].items():
