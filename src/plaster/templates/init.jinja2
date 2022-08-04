@@ -19,3 +19,5 @@ __all__ = [
 for __type in __all__:
     cls = sys.modules.get(__name__).__dict__.get(__type)
     cls.post_process()
+
+__all__.append("Node")
