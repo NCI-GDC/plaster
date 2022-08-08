@@ -97,7 +97,7 @@ class PropertyMeta:
         for meta in self.type_metas():
             f_types += meta.type
             if meta.enums:
-                f_enums = meta.enums
+                f_enums += meta.enums
         return f_types, f_enums
 
 
