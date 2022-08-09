@@ -49,7 +49,7 @@ TYPE_MAPPING = {
     "float": ["float"],
     "integer": ["int"],
     "string": ["str"],
-    "null": ["None"],
+    "null": ["type(None)"],
     "number": ["float", "int"],
 }
 EXCLUDED_PROPS = ["id", "type"]
@@ -97,7 +97,7 @@ class PropertyMeta:
         for meta in self.type_metas():
             f_types += meta.type
             if meta.enums:
-                f_enums = meta.enums
+                f_enums += meta.enums
         return f_types, f_enums
 
 
