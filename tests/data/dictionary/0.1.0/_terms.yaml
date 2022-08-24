@@ -90,6 +90,19 @@ consent_type:
       term_url:
 
 
+creation_datetime:
+  common:
+    description: >-
+      The datetime of portion creation encoded as seconds from epoch.
+    termDef:
+      term: >-
+        Biospecimen Portion Creation Seconds Date/Time
+      source: caDSR
+      cde_id: 5432592
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432592&version=1.0"
+
+
 current_weight:
   common:
     description: >-
@@ -360,6 +373,31 @@ passage_count:
       cde_id:
       cde_version:
       term_url:
+
+portion_number:
+  common:
+    description: >-
+      Numeric value that represents the sequential number assigned to a portion of
+      the sample.
+    termDef:
+      term: >-
+        Biospecimen Portion Sequence Number
+      source: caDSR
+      cde_id: 5432711
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432711&version=1.0"
+
+portion_weight:
+  common:
+    description: >-
+      Numeric value that represents the sample portion weight, measured in milligrams.
+    termDef:
+      term: >-
+        Biospecimen Portion Weight Milligram Value
+      source: caDSR
+      cde_id: 5432593
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432593&version=1.0"
 
 preservation_method:
   common:
