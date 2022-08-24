@@ -4,7 +4,7 @@ import psqlgraph
 from sqlalchemy import MetaData, engine
 from sqlalchemy import exc as sa_exc
 
-from src.plaster.templates import versioned_nodes
+from plaster.templates import versioned_nodes
 
 
 def tear_down_graph(graph: psqlgraph.PsqlGraphDriver) -> None:
