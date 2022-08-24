@@ -1,10 +1,14 @@
-from copy import copy
+from __future__ import annotations
 
+from copy import copy
+from typing import Any
+
+from psqlgraph import Node
 from sqlalchemy import BigInteger, Column, DateTime, Index, Text, text
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+Base: Any = declarative_base()
 
 
 class VersionedNode(Base):
@@ -15,7 +19,7 @@ class VersionedNode(Base):
         Index("submitted_node_gdc_versions_idx", "node_id"),
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<VersionedNode(key={}, label='{}', node_id='{}')>".format(
             self.key, self.label, self.node_id
         )
@@ -71,9 +75,9 @@ class VersionedNode(Base):
         ARRAY(Text),
     )
 
-    @staticmethod
-    def clone(node):
-        return VersionedNode(
+    @classmethod
+    def clone(cls, node: Node) -> VersionedNode:
+        return cls(
             label=copy(node.label),
             node_id=copy(node.node_id),
             project_id=copy(node._props.get("project_id")),
