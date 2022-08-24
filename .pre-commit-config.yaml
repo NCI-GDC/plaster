@@ -62,11 +62,6 @@ repos:
         entry: mdformat
         types: [markdown]
         args: [--wrap, '88']
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.2
-    hooks:
-      - id: markdown-toc
-        args: [--bullets, '-']    # mdformat use dash for bullets
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.1.1
     hooks:
