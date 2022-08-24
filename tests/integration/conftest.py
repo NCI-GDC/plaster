@@ -10,7 +10,11 @@ from click.testing import CliRunner
 from psqlgraph import ext
 
 from plaster import cli
-from tests.integration import tear_down_graph
+from tests.integration import (
+    create_versioned_nodes_tables,
+    tear_down_graph,
+    truncate_versioned_nodes_tables,
+)
 
 
 @pytest.fixture(scope="session")
@@ -53,5 +57,11 @@ def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     if graph_classes.namespace is not None:
         base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
+
+    create_versioned_nodes_tables(g.engine)
+
     yield g
+
+    truncate_versioned_nodes_tables(g.engine)
+
     tear_down_graph(g)
