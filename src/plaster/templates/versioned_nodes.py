@@ -1,5 +1,5 @@
 from copy import copy
-from typing import Any
+from typing import Any, Type, TypeVar
 
 from psqlgraph import Node
 from sqlalchemy import BigInteger, Column, DateTime, Index, Text, text
@@ -7,6 +7,8 @@ from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
 Base: Any = declarative_base()
+
+T = TypeVar("T", bound="VersionedNode")
 
 
 class VersionedNode(Base):
@@ -74,7 +76,7 @@ class VersionedNode(Base):
     )
 
     @classmethod
-    def clone(cls, node: Node):
+    def clone(cls: Type[T], node: Node) -> T:
         return cls(
             label=copy(node.label),
             node_id=copy(node.node_id),
