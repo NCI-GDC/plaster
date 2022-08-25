@@ -52,10 +52,10 @@ repos:
       - id: isort
         name: isort (pyi)
         types: [pyi]
-  - repo: https://github.com/qiaouchicago/markdown-toc
-    rev: master
-    hooks:
-      - id: markdown-toc
+#  - repo: https://github.com/qiaouchicago/markdown-toc
+#    rev: master
+#    hooks:
+#      - id: markdown-toc
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.14
     hooks:
