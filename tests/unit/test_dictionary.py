@@ -3,7 +3,7 @@ import psqlgml
 
 def test_dictionary_loading(test_dictionary: psqlgml.Dictionary) -> None:
     assert test_dictionary.schema
-    assert len(test_dictionary.schema) == 5
+    assert len(test_dictionary.schema) == 6
     program = test_dictionary.schema["program"]
 
     assert program.id == "program"
@@ -35,3 +35,11 @@ def test_sample_loading(test_dictionary: psqlgml.Dictionary) -> None:
     assert sample.id == "sample"
     assert sample.category == "biospecimen"
     assert sample.downloadable is False
+
+
+def test_annotation_loading(test_dictionary: psqlgml.Dictionary) -> None:
+    annotation = test_dictionary.schema["annotation"]
+
+    assert annotation.id == "annotation"
+    assert annotation.category == "notation"
+    assert annotation.downloadable is False

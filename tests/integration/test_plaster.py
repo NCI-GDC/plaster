@@ -44,6 +44,7 @@ def test_generation(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) 
     assert Path(f"{tmpdir}/project.py").exists()
     assert Path(f"{tmpdir}/case.py").exists()
     assert Path(f"{tmpdir}/sample.py").exists()
+    assert Path(f"{tmpdir}/annotationrelatestocase.py").exists()
 
 
 def test_back_refs(graph_classes: ModuleType) -> None:

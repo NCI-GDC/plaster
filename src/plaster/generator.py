@@ -77,9 +77,10 @@ def generate_relates_to_case_edges(
     """
     case_meta = node_metas["case"]
     for label, node_meta in node_metas.items():
-        if label == "annotation":
-            continue
-        if node_meta.dictionary["category"] in NOT_RELATED_CASES_CATEGORIES:
+        if (
+            node_meta.dictionary["category"] in NOT_RELATED_CASES_CATEGORIES
+            and label != "annotation"
+        ):
             continue
 
         association = psqlgml.Association(
