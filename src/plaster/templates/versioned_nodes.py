@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from copy import copy
 from typing import Any
 
@@ -76,7 +74,7 @@ class VersionedNode(Base):
     )
 
     @classmethod
-    def clone(cls, node: Node) -> VersionedNode:
+    def clone(cls, node: Node):
         return cls(
             label=copy(node.label),
             node_id=copy(node.node_id),
