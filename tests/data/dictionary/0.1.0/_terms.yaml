@@ -2,6 +2,20 @@
 id: _terms
 
 
+a260_a280_ratio:
+  common:
+    description: >-
+      Numeric value that represents the sample ratio of nucleic acid absorbance at
+      260 nm and 280 nm, used to determine a measure of DNA purity.
+    termDef:
+      term: >-
+        Nucleic Acid Absorbance at 260 And Absorbance at 280 DNA Purity Ratio Value
+      source: caDSR
+      cde_id: 5432595
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432595&version=1.0"
+
+
 aliquot_quantity:
   common:
     description: >-
@@ -34,6 +48,57 @@ amount:
       Weight in grams or volume in mL.
     termDef:
       term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+analyte_quantity:
+  common:
+    description: >-
+      The quantity in micrograms (ug) of the analyte(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Analyte Quantity
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+
+analyte_type:
+  common:
+    description: >-
+      Text term that represents the kind of molecular specimen analyte.
+    termDef:
+      term: >-
+        Molecular Specimen Type Text Name
+      source: caDSR
+      cde_id: 2513915
+      cde_version: 2.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=2513915&version=2.0"
+
+analyte_type_id:
+  common:
+    description: >-
+      A single letter code used to identify a type of molecular analyte.
+    termDef:
+      term: >-
+        Molecular Analyte Identification Code
+      source: caDSR
+      cde_id: 5432508
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432508&version=1.0"
+
+analyte_volume:
+  common:
+    description: >-
+      The volume in microliters (ul) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Analyte Volume
       source:
       cde_id:
       cde_version:
@@ -185,6 +250,17 @@ distributor_reference:
   common:
     description: >-
       Distributor reference number for cancer model.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+experimental_protocol_type:
+  common:
+    description: >-
+      The type of experiment used to extract the analyte.
     termDef:
       term:
       source:
@@ -350,6 +426,19 @@ no_matched_normal_wxs:
       cde_version:
       term_url:
 
+normal_tumor_genotype_snp_match:
+  common:
+    description: >-
+      Text term that represents whether or not the genotype of the normal tumor matches
+      or if the data is not available.
+    termDef:
+      term: >-
+        Normal Tumor Genotype Match Indicator
+      source: caDSR
+      cde_id: 4588156
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=4588156&version=1.0"
+
 oct_embedded:
   common:
     description: >-
@@ -423,6 +512,33 @@ project_id:
       cde_version:
       term_url:
 
+ribosomal_rna_28s_16s_ratio:
+  common:
+    description: >-
+      The 28S/18S ribosomal RNA band ratio used to assess the quality of total RNA.
+    termDef:
+      term: >-
+        28s/18s Ribosomal RNA Ratio
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+rna_integrity_number:
+  common:
+    description: >-
+      A numerical assessment of the integrity of RNA based on the entire electrophoretic
+      trace of the RNA sample, including the presence or absence of degradation products.
+    termDef:
+      term: >-
+        RNA Integrity Number
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C63637"
+      term_id: C63637
+      term_version: 20.10d
+
 sample_ordinal:
   common:
     description: >-
@@ -451,30 +567,6 @@ sample_type_id:
   common:
     description: >-
       The accompanying sample type id for the sample type.
-    termDef:
-      term:
-      source:
-      cde_id:
-      cde_version:
-      term_url:
-
-shortest_dimension:
-  common:
-    description: >-
-      Numeric value that represents the shortest dimension of the sample, measured
-      in millimeters.
-    termDef:
-      term: >-
-        Tissue Sample Short Dimension Millimeter Measurement
-      source: caDSR
-      cde_id: 5432603
-      cde_version: 1.0
-      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432603&version=1.0"
-
-source_center:
-  common:
-    description: >-
-      Name of the center that provided the item.
     termDef:
       term:
       source:
@@ -530,6 +622,43 @@ selected_normal_wxs:
       cde_id:
       cde_version:
       term_url:
+
+shortest_dimension:
+  common:
+    description: >-
+      Numeric value that represents the shortest dimension of the sample, measured
+      in millimeters.
+    termDef:
+      term: >-
+        Tissue Sample Short Dimension Millimeter Measurement
+      source: caDSR
+      cde_id: 5432603
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432603&version=1.0"
+
+source_center:
+  common:
+    description: >-
+      Name of the center that provided the item.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+spectrophotometer_method:
+  common:
+    description: >-
+      Name of the method used to determine the concentration of purified nucleic acid
+      within a solution.
+    termDef:
+      term: >-
+        Purification Nucleic Acid Solution Concentration Determination Method Type
+      source: caDSR
+      cde_id: 3008378
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3008378&version=1.0"
 
 time_between_clamping_and_freezing:
   common:
@@ -631,3 +760,16 @@ uuid:
       cde_id: C54100
       cde_version:
       term_url: https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&version=16.02d&ns=NCI_Thesaurus&code=C54100
+
+well_number:
+  common:
+    description: >-
+      Numeric value that represents the the well location within a plate for the analyte
+      or aliquot from the sample.
+    termDef:
+      term: >-
+        Biospecimen Analyte or Aliquot Plate Well Number
+      source: caDSR
+      cde_id: 5432613
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432613&version=1.0"
