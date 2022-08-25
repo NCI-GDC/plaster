@@ -183,7 +183,7 @@ class {{ meta.class_name }}(base.Node):
 
     @property
     def _versions(self) -> query.Query:
-        """Return a query to get node versions (node history)
+        """Return a query to get node versions (node history).
 
         Returns a query if the node is bound to a session. Raises an
             exception if the node is not bound to a session. This is different
@@ -209,7 +209,6 @@ class {{ meta.class_name }}(base.Node):
 
     def get_versions(self, session: Session) -> query.Query:
         """Return a query for node versions given a session."""
-
         return (
             session.query(versioned_nodes.VersionedNode)
             .filter(versioned_nodes.VersionedNode.node_id == self.node_id)
