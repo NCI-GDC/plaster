@@ -65,28 +65,27 @@ def test_round_trip(
     assert v_node.key is not None
 
 
-@pytest.mark.skip(reason="_version not implemented")
 def test_versions_property(
-    gdc_graph: psqlgraph.PsqlGraphDriver,
+    graph_driver: psqlgraph.PsqlGraphDriver,
     portion: psqlgraph.Node,
     analyte: psqlgraph.Node,
     graph_classes: ModuleType,
 ):
-    with gdc_graph.session_scope() as session:
+    with graph_driver.session_scope() as session:
         portion.analytes = [analyte]
         session.add(portion)
 
-    with gdc_graph.session_scope() as session:
-        portion = gdc_graph.nodes(graph_classes.Portion).one()
+    with graph_driver.session_scope() as session:
+        portion = graph_driver.nodes(graph_classes.Portion).one()
         v_node = versioned_nodes.VersionedNode.clone(portion)
         session.add(v_node)
 
-    with gdc_graph.session_scope():
-        portion = gdc_graph.nodes(graph_classes.Portion).one()
+    with graph_driver.session_scope():
+        portion = graph_driver.nodes(graph_classes.Portion).one()
         portion._versions.one()
 
     with pytest.raises(RuntimeError):
         portion._versions.one()
 
-    with gdc_graph.session_scope() as s:
+    with graph_driver.session_scope() as s:
         portion.get_versions(s).one()
