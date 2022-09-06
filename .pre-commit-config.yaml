@@ -1,4 +1,5 @@
 ---
+exclude: .svg$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.4.0
@@ -52,6 +53,10 @@ repos:
       - id: isort
         name: isort (pyi)
         types: [pyi]
+  - repo: https://github.com/qiaouchicago/markdown-toc
+    rev: 0.1.0
+    hooks:
+      - id: markdown-toc
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.14
     hooks:

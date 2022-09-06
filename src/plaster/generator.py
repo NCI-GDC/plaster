@@ -176,6 +176,7 @@ def generate(
     render_and_write_file(None, "datetime_hooks", helpers_dir, "datetime_hooks")
     render_and_write_file(None, "indexes", helpers_dir, "indexes")
     render_and_write_file(None, "related_cases", helpers_dir, "related_cases")
+    render_and_write_file(None, "versioned_nodes", helpers_dir, "versioned_nodes")
     render_and_write_file(None, "versioning", helpers_dir, "versioning")
 
 

@@ -4,7 +4,7 @@ import sys
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
 
-from .helpers import base, indexes, related_cases, versioning
+from .helpers import base, indexes, related_cases, versioned_nodes, versioning
 
 namespace = base.namespace
 Node = base.Node
