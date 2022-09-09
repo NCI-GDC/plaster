@@ -172,7 +172,8 @@ def generate(
 
     helpers_dir = output_dir + "/helpers"
     os.makedirs(helpers_dir, exist_ok=True)
-    render_and_write_file(namespace, "base", helpers_dir, "base")
+    base_meta = {"namespace": namespace, "dictionary": dictionary}
+    render_and_write_file(base_meta, "base", helpers_dir, "base")
     render_and_write_file(None, "datetime_hooks", helpers_dir, "datetime_hooks")
     render_and_write_file(None, "indexes", helpers_dir, "indexes")
     render_and_write_file(None, "related_cases", helpers_dir, "related_cases")
