@@ -10,9 +10,6 @@ def test_create_index_name_short_name(graph_classes: ModuleType) -> None:
 
     Args:
         graph_classes: all node and edge classes
-
-    Returns:
-        None
     """
     Case = graph_classes.Case
     description = "submitter_id"
@@ -31,9 +28,6 @@ def test_create_index_name_long_name(graph_classes: ModuleType) -> None:
 
     Args:
         graph_classes: all node and edge classes
-
-    Returns:
-        None
     """
     Case = graph_classes.Case
     description = "veryveryveryveryveryveryveryverylongdescription"
