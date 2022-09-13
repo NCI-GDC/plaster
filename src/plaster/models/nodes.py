@@ -104,6 +104,7 @@ class PropertyMeta:
 class LinkMetadata(NamedTuple):
     edges_out: str
     dst_type: str
+    backref: str
 
 
 class BackRefMetadata(NamedTuple):
@@ -175,9 +176,7 @@ class NodeMetadata:
         """
         edges_metadata: Dict[str, EdgeMetadata] = {}
         for name, link in self.links_metadata.items():
-            edges_metadata[name] = EdgeMetadata(
-                self._find_backref(link, self.label), link.dst_type
-            )
+            edges_metadata[name] = EdgeMetadata(link.backref, link.dst_type)
 
         for name, back_ref in self.backrefs_metadata.items():
             edges_metadata[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
@@ -196,14 +195,8 @@ class NodeMetadata:
         links_metadata: Dict[str, LinkMetadata] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
-            links_metadata[link["name"]] = LinkMetadata(edge_name, link["target_type"])
+            links_metadata[name] = LinkMetadata(edge_name, link["target_type"], link["backref"])
         return OrderedDict(sorted(links_metadata.items()))
-
-    def _find_backref(self, link: LinkMetadata, label: str) -> str:
-        for name, backref in self.backrefs_dict[link.dst_type].items():
-            if backref.src_type == label:
-                return name
-        return ""
 
     @property
     def tag_props(self) -> Optional[List[str]]:
