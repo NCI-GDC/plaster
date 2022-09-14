@@ -8,9 +8,7 @@ from .helpers import base, datetime_hooks, indexes, related_cases, versioning, v
 
 
 class {{ meta.class_name }}(base.Node):
-
     __tablename__: str = "{{ meta.table_name }}"
-    __table_args__ = {'extend_existing': True}
 
     # this field contains values of uniqueProperties
     __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
