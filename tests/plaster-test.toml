@@ -1,0 +1,22 @@
+title = "Data Model code generator test configuration"
+
+[environment]
+
+[logging]
+level = "DEBUG"
+log_file = "plaster.log"
+
+[profiles]
+
+[profiles.dictionary]
+version = "0.1.0"
+local_directory = "tests/data"
+
+[profiles.dictionary_bad_location]
+version = "0.1.0"
+local_directory = "bad_location"
+
+[profiles.version_dict]
+version = "0.1.0"
+local_directory = "tests/data"
+namespace = "version_dict"

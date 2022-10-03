@@ -1,0 +1,504 @@
+---
+$schema: "http://json-schema.org/draft-04/schema#"
+
+id: "sample"
+title: Sample
+type: object
+namespace: https://gdc.cancer.gov
+category: biospecimen
+project: '*'
+program: '*'
+description: >-
+  Any material sample taken from a biological entity for testing, diagnostic, propagation,
+  treatment or research purposes, including a sample obtained from a living organism
+  or taken from the biological object after halting of all its life functions. Biospecimen
+  can contain one or more components including but not limited to cellular molecules,
+  cells, tissues, organs, body fluids, embryos, and body excretory products.
+additionalProperties: false
+submittable: true
+downloadable: false
+previous_version_downloadable: false
+validators:
+
+systemProperties:
+  - id
+  - project_id
+  - created_datetime
+  - updated_datetime
+  - state
+
+links:
+  - name: cases
+    backref: samples
+    label: derived_from
+    target_type: case
+    multiplicity: many_to_one
+    required: true
+
+required:
+  - submitter_id
+  - sample_type
+  - tissue_type
+
+uniqueKeys:
+  - [id]
+  - [project_id, submitter_id]
+
+deprecated:
+  - is_ffpe
+  - oct_embeded
+
+properties:
+
+  $ref:
+    - "_definitions.yaml#/ubiquitous_properties"
+
+
+  biospecimen_laterality:
+    $ref:
+      - "_terms.yaml#/biospecimen_laterality/common"
+    enum:
+      - Bilateral
+      - Left
+      - Right
+      - Unknown
+      - Not Reported
+    enumDef:
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  catalog_reference:
+    $ref:
+      - "_terms.yaml#/catalog_reference/common"
+    type: string
+
+
+  current_weight:
+    $ref:
+      - "_terms.yaml#/current_weight/common"
+    type: number
+    minimum: 0
+
+  days_to_collection:
+    $ref:
+      - "_terms.yaml#/days_to_collection/common"
+    type: integer
+    maximum: 32872
+    minimum: -32872
+
+  days_to_sample_procurement:
+    $ref:
+      - "_terms.yaml#/days_to_sample_procurement/common"
+    type: integer
+    maximum: 32872
+    minimum: -32872
+
+  diagnosis_pathologically_confirmed:
+    $ref:
+      - "_terms.yaml#/diagnosis_pathologically_confirmed/common"
+    enum:
+      - Not Allowed To Collect
+      - "Yes"
+      - "No"
+      - Unknown
+      - Not Reported
+    deprecated_enum:
+      - Not Allowed To Collect
+    enumDef:
+      Not Allowed To Collect:
+        $ref:
+          - "_terms_enum.yaml#/not_allowed_to_collect/common"
+      "Yes":
+        $ref:
+          - "_terms_enum.yaml#/yes/common"
+      "No":
+        $ref:
+          - "_terms_enum.yaml#/no/common"
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  distance_normal_to_tumor:
+    $ref:
+      - "_terms.yaml#/distance_normal_to_tumor/common"
+    enum:
+      - Adjacent (< or = 2cm)
+      - Distal (>2cm)
+      - Unknown
+      - Not Reported
+    enumDef:
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  distributor_reference:
+    $ref:
+      - "_terms.yaml#/distributor_reference/common"
+    type: string
+
+  freezing_method:
+    $ref:
+      - "_terms.yaml#/freezing_method/common"
+    type: string
+
+  growth_rate:
+    $ref:
+      - "_terms.yaml#/growth_rate/common"
+    type: integer
+    minimum: 0
+
+  initial_weight:
+    $ref:
+      - "_terms.yaml#/initial_weight/common"
+    type: number
+    minimum: 0
+
+  intermediate_dimension:
+    $ref:
+      - "_terms.yaml#/intermediate_dimension/common"
+    type: number
+    minimum: 0
+
+  is_ffpe:
+    $ref:
+      - "_terms.yaml#/is_ffpe/common"
+    type: boolean
+
+  longest_dimension:
+    $ref:
+      - "_terms.yaml#/longest_dimension/common"
+    type: number
+    minimum: 0
+
+  oct_embedded:
+    $ref:
+      - "_terms.yaml#/oct_embedded/common"
+    type: string
+
+  pathology_report_uuid:
+    description: >-
+      UUID of the related pathology report.
+    type: string
+
+  preservation_method:
+    $ref:
+      - "_terms.yaml#/preservation_method/common"
+    enum:
+      - Cryopreserved
+      - FFPE
+      - Fresh
+      - Frozen
+      - Not Allowed To Collect
+      - OCT
+      - Snap Frozen
+      - Unknown
+      - Not Reported
+    deprecated_enum:
+      - Not Allowed To Collect
+    enumDef:
+      Not Allowed To Collect:
+        $ref:
+          - "_terms_enum.yaml#/not_allowed_to_collect/common"
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  passage_count:
+    $ref:
+      - "_terms.yaml#/passage_count/common"
+    type: integer
+    minimum: 0
+
+  sample_ordinal:
+    $ref:
+      - "_terms.yaml#/sample_ordinal/common"
+    type: integer
+    minimum: 1
+
+  sample_type:
+    $ref:
+      - "_terms.yaml#/sample_type/common"
+    enum:
+      - Additional - New Primary
+      - Additional Metastatic
+      - Benign Neoplasms
+      - Blood Derived Cancer - Bone Marrow
+      - Blood Derived Cancer - Bone Marrow, Post-treatment
+      - Blood Derived Cancer - Peripheral Blood
+      - Blood Derived Cancer - Peripheral Blood, Post-treatment
+      - Blood Derived Liquid Biopsy
+      - Blood Derived Normal
+      - Bone Marrow Normal
+      - Buccal Cell Normal
+      - Cell Line Derived Xenograft Tissue
+      - Cell Lines
+      - Control Analyte
+      - DNA
+      - EBV Immortalized Normal
+      - Expanded Next Generation Cancer Model
+      - FFPE Recurrent
+      - FFPE Scrolls
+      - Fibroblasts from Bone Marrow Normal
+      - GenomePlex (Rubicon) Amplified DNA
+      - Granulocytes
+      - Human Tumor Original Cells
+      - In Situ Neoplasms
+      - Lymphoid Normal
+      - Metastatic
+      - Mixed Adherent Suspension
+      - Mononuclear Cells from Bone Marrow Normal
+      - Neoplasms of Uncertain and Unknown Behavior
+      - Next Generation Cancer Model
+      - Next Generation Cancer Model Expanded Under Non-conforming Conditions
+      - Not Allowed To Collect
+      - Pleural Effusion
+      - Post neo-adjuvant therapy
+      - Primary Blood Derived Cancer - Bone Marrow
+      - Primary Blood Derived Cancer - Peripheral Blood
+      - Primary Tumor
+      - Primary Xenograft Tissue
+      - Recurrent Blood Derived Cancer - Bone Marrow
+      - Recurrent Blood Derived Cancer - Peripheral Blood
+      - Recurrent Tumor
+      - Repli-G (Qiagen) DNA
+      - Repli-G X (Qiagen) DNA
+      - RNA
+      - Saliva
+      - Slides
+      - Solid Tissue Normal
+      - Total RNA
+      - Tumor
+      - Tumor Adjacent Normal - Post Neo-adjuvant Therapy
+      - Xenograft Tissue
+      - Unknown
+      - Not Reported
+    enumDef:
+      DNA:
+        $ref:
+          - "_terms_enum.yaml#/dna/common"
+      Not Allowed To Collect:
+        $ref:
+          - "_terms_enum.yaml#/not_allowed_to_collect/common"
+      Saliva:
+        $ref:
+          - "_terms_enum.yaml#/saliva/common"
+      Total RNA:
+        $ref:
+          - "_terms_enum.yaml#/total_rna/common"
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  sample_type_id:
+    $ref:
+      - "_terms.yaml#/sample_type_id/common"
+    enum:
+      - "01"
+      - "02"
+      - "03"
+      - "04"
+      - "05"
+      - "06"
+      - "07"
+      - "08"
+      - "09"
+      - "10"
+      - "11"
+      - "12"
+      - "13"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+      - "18"
+      - "20"
+      - "30"
+      - "31"
+      - "32"
+      - "40"
+      - "41"
+      - "42"
+      - "50"
+      - "60"
+      - "61"
+      - "85"
+      - "86"
+      - "87"
+      - "99"
+
+  shortest_dimension:
+    $ref:
+      - "_terms.yaml#/shortest_dimension/common"
+    type: number
+    minimum: 0
+
+  time_between_clamping_and_freezing:
+    $ref:
+      - "_terms.yaml#/time_between_clamping_and_freezing/common"
+    type: number
+    minimum: 0
+
+  time_between_excision_and_freezing:
+    $ref:
+      - "_terms.yaml#/time_between_excision_and_freezing/common"
+    type: number
+    minimum: 0
+
+  tissue_collection_type:
+    $ref:
+      - "_terms.yaml#/tissue_collection_type/common"
+    enum:
+      - Prospective
+      - Retrospective
+
+  tissue_type:
+    $ref:
+      - "_terms.yaml#/tissue_type/common"
+    enum:
+      - Tumor
+      - Normal
+      - Abnormal
+      - Peritumoral
+      - Not Allowed To Collect
+      - Unknown
+      - Not Reported
+    deprecated_enum:
+      - Not Allowed To Collect
+    enumDef:
+      Normal:
+        $ref:
+          - "_terms_enum.yaml#/normal/common"
+      Not Allowed To Collect:
+        $ref:
+          - "_terms_enum.yaml#/not_allowed_to_collect/common"
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  tumor_code:
+    $ref:
+      - "_terms.yaml#/tumor_code/common"
+    enum:
+      - Acute Leukemia of Ambiguous Lineage (ALAL)
+      - Acute lymphoblastic leukemia (ALL)
+      - Acute myeloid leukemia (AML)
+      - Anal Cancer (all types)
+      - Cervical Cancer (all types)
+      - Clear cell sarcoma of the kidney (CCSK)
+      - CNS, ependymoma
+      - CNS, glioblastoma (GBM)
+      - CNS, low grade glioma (LGG)
+      - CNS, medulloblastoma
+      - CNS, other
+      - CNS, rhabdoid tumor
+      - Diffuse Large B-Cell Lymphoma (DLBCL)
+      - Ewing sarcoma
+      - Induction Failure AML (AML-IF)
+      - Lung Cancer (all types)
+      - Neuroblastoma (NBL)
+      - NHL, anaplastic large cell lymphoma
+      - NHL, Burkitt lymphoma (BL)
+      - Non cancerous tissue
+      - Osteosarcoma (OS)
+      - Rhabdoid tumor (kidney) (RT)
+      - Rhabdomyosarcoma
+      - Soft tissue sarcoma, non-rhabdomyosarcoma
+      - Wilms tumor (WT)
+    enumDef:
+      Ewing sarcoma:
+        $ref:
+          - "_terms_enum.yaml#/ewing_sarcoma/common"
+      Rhabdomyosarcoma:
+        $ref:
+          - "_terms_enum.yaml#/rhabdomyosarcoma/common"
+
+  tumor_code_id:
+    $ref:
+      - "_terms.yaml#/tumor_code_id/common"
+    enum:
+      - "00"
+      - "01"
+      - "02"
+      - "03"
+      - "04"
+      - "10"
+      - "15"
+      - "20"
+      - "21"
+      - "30"
+      - "40"
+      - "41"
+      - "50"
+      - "51"
+      - "52"
+      - "60"
+      - "61"
+      - "62"
+      - "63"
+      - "64"
+      - "65"
+      - "70"
+      - "71"
+      - "80"
+      - "81"
+
+  tumor_descriptor:
+    $ref:
+      - "_terms.yaml#/tumor_descriptor/common"
+    enum:
+      - Metastatic
+      - NOS
+      - Not Allowed To Collect
+      - Not Applicable
+      - Premalignant
+      - Primary
+      - Recurrence
+      - Xenograft
+      - Unknown
+      - Not Reported
+    deprecated_enum:
+      - Not Allowed To Collect
+    enumDef:
+      Not Allowed To Collect:
+        $ref:
+          - "_terms_enum.yaml#/not_allowed_to_collect/common"
+      Not Applicable:
+        $ref:
+          - "_terms_enum.yaml#/not_applicable/common"
+      Unknown:
+        $ref:
+          - "_terms_enum.yaml#/unknown/common"
+      Not Reported:
+        $ref:
+          - "_terms_enum.yaml#/not_reported/common"
+
+  cases:
+    $ref: "_definitions.yaml#/to_one"
+
+  tissue_source_sites:
+    $ref: "_definitions.yaml#/to_one"
+
+  diagnoses:
+    $ref: "_definitions.yaml#/to_one"
+
+  parent_samples:
+    $ref: "_definitions.yaml#/to_one"

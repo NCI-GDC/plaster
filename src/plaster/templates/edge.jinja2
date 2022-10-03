@@ -1,14 +1,34 @@
+from typing import List, Callable
+
 import psqlgraph
 
+from .helpers import base, related_cases
 
-class {{ meta.class_name }}(psqlgraph.Edge):
+
+class {{ meta.class_name }}(base.Edge):
     __tablename__: str = "{{ meta.table_name }}"
 
     __label__: str = "{{ meta.label }}"
-    __dst_class__ = "{{ meta.dst_class }}"
-    __dst_table__ = "{{ meta.dst_table }}"
-    __src_class__ = "{{ meta.src_class }}"
-    __src_table__ = "{{ meta.src_table }}"
+    __dst_class__: str = "{{ meta.dst_class }}"
+    __dst_table__: str = "{{ meta.dst_table }}"
+    __src_class__: str = "{{ meta.src_class }}"
+    __src_table__: str = "{{ meta.src_table }}"
 
-    __dst_src_assoc__ = "{{ meta.dst_src_assoc }}"
-    __src_dst_assoc__ = "{{ meta.src_dst_assoc }}"
+    __dst_src_assoc__: str = "{{ meta.dst_src_assoc }}"
+    __src_dst_assoc__: str = "{{ meta.src_dst_assoc }}"
+
+    _session_hooks_before_insert: List[Callable] = psqlgraph.Edge._session_hooks_before_insert + [
+        related_cases.cache_related_cases_on_insert
+    ]
+
+    _session_hooks_before_update: List[Callable] = psqlgraph.Edge._session_hooks_before_update + [
+        related_cases.cache_related_cases_on_update
+    ]
+
+    _session_hooks_before_delete: List[Callable] = psqlgraph.Edge._session_hooks_before_delete + [
+        related_cases.cache_related_cases_on_delete
+    ]
+
+    @classmethod
+    def post_process(cls) -> None:
+        pass

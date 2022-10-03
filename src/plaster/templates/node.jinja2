@@ -1,24 +1,220 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union, Optional
 
 import psqlgraph
+from sqlalchemy.ext import hybrid
+from sqlalchemy.orm import query, Session
+
+from .helpers import base, datetime_hooks, indexes, related_cases, versioning, versioned_nodes
 
 
-class {{ meta.class_name }}(psqlgraph.Node):
+class {{ meta.class_name }}(base.Node):
     __tablename__: str = "{{ meta.table_name }}"
 
-    _pg_backrefs: Dict[str, str] = {}
-    _pg_edges: Dict[str, str] = {}
-    _pg_links: Dict[str, str] = {}
+    # this field contains values of uniqueProperties
+    __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
 
-    _dictionary: Dict[bool, Union[bool, str, List[str]]] = {{ meta.dictionary }}
+    # _defaults: default value for specified fields in the dictionary
+    _defaults:  Dict[str, Union[bool, float, int, str]] = {{ meta.defaults }}
+    _dictionary: Dict[str, Union[bool, str, List[str]]] = {{ meta.dictionary }}
 
-    @property
-    def _default(self) -> Dict[str, Union[bool, float, int, str]]:
-        return {{ meta.defaults }}
+    _pg_backrefs: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+    _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
+    _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
 
-    @property
-    def label(self) -> str:
+    @classmethod
+    def get_label(cls) -> str:
         return "{{ meta.label }}"
+
+{% if meta.tag_props %}
+    tag_properties: List[str] = {{ meta.tag_props }}
+    # Tagging configuration instance used for checking if node instance participates in versioning
+    tag_builder_config: versioning.TagBuilderConfig = versioning.TagBuilderConfig(cfg={{ meta.tag_config }})
+
+    @property
+    def tag(self) -> str:
+        """Add unique identifier for a group of nodes that are part of the same version family.
+
+        Tags are generated when a node is saved.
+        They can be manually created using an external script
+
+        Returns:
+            str: tag value
+        """
+        return self._sysan.get(versioning.TagKeys.tag)
+
+    @property
+    def ver(self) -> int:
+        """Add node version number based on tagging.
+
+        versions are computed during save or via an external script
+
+        Returns:
+            int: version number
+        """
+        return self._sysan.get(versioning.TagKeys.version)
+
+    @property
+    def is_latest(self) -> bool:
+        """Check whether this is the latest version of the node based on tagging.
+
+        Returns:
+            bool: True if it's the latest version otherwise false
+        """
+        return self._sysan.get(versioning.TagKeys.latest, False)
+
+    def is_taggable(self) -> bool:
+        """Return True if a node instance can be tagged and versioned.
+
+        Returns:
+            bool: True if node can be tagged
+        """
+        return self.tag_builder_config.is_taggable(self)
+
+    def get_tag_property_values(self) -> List[str]:
+        """Get values that are used for computing the node's tag.
+
+        Returns:
+            list[str]: List of property values
+        """
+        keys = []
+        for prop in self.tag_properties:
+            property_val = self[prop]
+
+            if not property_val:
+                raise ValueError(
+                    "Property {0} must have a value on instance {1} for tagging to proceed".format(
+                        prop, self
+                    )
+                )
+            keys.append(property_val)
+        return keys
+
+{% endif %}
+    @property
+    def id(self):
+        return self.node_id
+
+    @id.setter
+    def id(self, value):
+        self.node_id = value
+
+    @classmethod
+    def post_process(cls) -> None:
+        cls.add_secondary_key_indexes()
+        cls.populate_pg_backrefs()
+        cls.populate_pg_links()
+        cls.populate_pg_edges()
+
+    @classmethod
+    def add_secondary_key_indexes(cls) -> None:
+        secondary_key_indexes = indexes.get_secondary_key_indexes(cls)
+        for index in secondary_key_indexes:
+            cls.__table__.append_constraint(index)
+
+    @classmethod
+    def populate_pg_backrefs(cls) -> None:
+        """_pg_backrefs are in_edges, links FROM other types."""
+        cls._pg_backrefs = {
+            {% for key, value in meta.backrefs_metadata.items() %}
+                "{{ key }}": {
+                    "name": "{{ value.name }}",
+                    "src_type": base.Node.get_subclass("{{ value.src_type }}"),
+                },
+            {% endfor %}
+        }
+
+    @classmethod
+    def populate_pg_edges(cls) -> None:
+        """_pg_edges are all edges, links to AND from other types."""
+        cls._pg_edges = {
+            {% for key, value in meta.edges_metadata.items() %}
+                "{{ key }}": {
+                    "backref": "{{ value.backref }}",
+                    "type": base.Node.get_subclass("{{ value.type }}"),
+                },
+            {% endfor %}
+        }
+
+    @classmethod
+    def populate_pg_links(cls) -> None:
+        """_pg_links are out_edges, links TO other types."""
+        cls._pg_links = {
+            {% for key, value in meta.links_metadata.items() %}
+                "{{ key }}": {
+                    "edge_out": "{{ value.edges_out }}",
+                    "dst_type": base.Node.get_subclass("{{ value.dst_type }}"),
+                },
+            {% endfor %}
+        }
+
+
+    @property
+    def _related_cases_from_cache(self) -> List[psqlgraph.Node]:
+        return related_cases.get_related_cases_from_cache(self)
+
+    @property
+    def _related_cases_from_parents(self) -> List[psqlgraph.Node]:
+        return related_cases.get_related_cases_from_parents(self)
+
+    @property
+    def _secondary_keys_dicts(self) -> List[Dict[str, Any]]:
+        vals = []
+        secondary_keys = self.__pg_secondary_keys
+        for keys in secondary_keys:
+            if "id" in keys:
+                continue
+            vals.append({key: getattr(self, key, None) for key in keys})
+        return vals
+
+    @hybrid.hybrid_property
+    def _secondary_keys(self) -> Tuple[Tuple[Any]]:
+        vals = []
+        for keys in self.__pg_secondary_keys:
+            vals.append(tuple(getattr(self, key) for key in keys))
+        return tuple(vals)
+
+    @_secondary_keys.comparator
+    def _secondary_keys(cls):
+        return indexes.SecondaryKeyComparator(cls)
+
+    # Set this attribute so psqlgraph doesn't treat it as a property
+    _secondary_keys._is_pg_property = False
+
+
+    @property
+    def _versions(self) -> query.Query:
+        """Return a query to get node versions (node history).
+
+        Returns a query if the node is bound to a session. Raises an
+            exception if the node is not bound to a session. This is different
+            from node tagging and versioning. This is used by sheepdog to save
+            node history when a node is updated. But the data seems never read by
+            any repo.
+
+        Args:
+            self: Psqlgraph Node
+
+        Returns:
+            A SQLAlchemy query for node versions.
+
+        Raises:
+            RuntimeError if the node is not bound to a session.
+        """
+        session = self.get_session()
+        if not session:
+            raise RuntimeError(
+                "{} not bound to a session. Try .get_versions(session).".format(self)
+            )
+        return self.get_versions(session)
+
+    def get_versions(self, session: Session) -> query.Query:
+        """Return a query for node versions given a session."""
+        return (
+            session.query(versioned_nodes.VersionedNode)
+            .filter(versioned_nodes.VersionedNode.node_id == self.node_id)
+            .filter(versioned_nodes.VersionedNode.label == self.label)
+            .order_by(versioned_nodes.VersionedNode.key.desc())
+        )
 
     {% for prop in meta.properties %}
 
@@ -27,3 +223,11 @@ class {{ meta.class_name }}(psqlgraph.Node):
         self._set_property("{{ prop.name }}", value)  # type: ignore  # inherited from CommonBase
 
     {% endfor %}
+
+
+datetime_hooks.cls_inject_created_datetime_hook({{ meta.class_name }})
+datetime_hooks.cls_inject_updated_datetime_hook({{ meta.class_name }})
+
+{% if meta.tag_props %}
+versioning.inject_set_tag_after_insert({{ meta.class_name }})
+{% endif %}

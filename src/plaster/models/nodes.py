@@ -1,8 +1,22 @@
 import logging
-from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
+from collections import OrderedDict
+from typing import (
+    Any,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    NamedTuple,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
 
 import attr
 import psqlgml
+
+from plaster import utils
 
 DICTIONARY_KEY_LITERAL = Literal[
     "title",
@@ -35,7 +49,7 @@ TYPE_MAPPING = {
     "float": ["float"],
     "integer": ["int"],
     "string": ["str"],
-    "null": ["None"],
+    "null": ["type(None)"],
     "number": ["float", "int"],
 }
 EXCLUDED_PROPS = ["id", "type"]
@@ -83,15 +97,32 @@ class PropertyMeta:
         for meta in self.type_metas():
             f_types += meta.type
             if meta.enums:
-                f_enums = meta.enums
+                f_enums += meta.enums
         return f_types, f_enums
 
 
+class LinkMetadata(NamedTuple):
+    edges_out: str
+    dst_type: str
+    backref: str
+
+
+class BackRefMetadata(NamedTuple):
+    name: str
+    src_type: str
+
+
+class EdgeMetadata(NamedTuple):
+    backref: str
+    type: str
+
+
 @attr.s(auto_attribs=True)
-class NodeMeta:
+class NodeMetadata:
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
+    backrefs_dict: Dict[str, Dict[str, BackRefMetadata]]
 
     @property
     def class_name(self) -> str:
@@ -120,3 +151,67 @@ class NodeMeta:
             if key in EXCLUDED_PROPS or key in self.associations:
                 continue
             yield PropertyMeta(key, schema)
+
+    @property
+    def backrefs_metadata(self) -> Dict[str, BackRefMetadata]:
+        """Generate data for _pg_backrefs -- in_edges(links from other types).
+
+        _pg_backrefs is not required for Nodes and Edges to work correctly. it's
+        used by some repo to get in_edges types.
+
+        Returns:
+            dictionary of 'in' edges
+        """
+        return OrderedDict(sorted(self.backrefs_dict[self.label].items()))
+
+    @property
+    def edges_metadata(self) -> Dict[str, EdgeMetadata]:
+        """Generate data for _pg_edges -- all edges(links to and from other types).
+
+        _pg_edges is not required for Nodes and Edges to work correctly. It's used by
+        some repo to get all edges types.
+
+        Returns:
+            dictionary of all edges
+        """
+        edges_metadata: Dict[str, EdgeMetadata] = {}
+        for name, link in self.links_metadata.items():
+            edges_metadata[name] = EdgeMetadata(link.backref, link.dst_type)
+
+        for name, back_ref in self.backrefs_metadata.items():
+            edges_metadata[name] = EdgeMetadata(back_ref.name, back_ref.src_type)
+        return OrderedDict(sorted(edges_metadata.items()))
+
+    @property
+    def links_metadata(self) -> Dict[str, LinkMetadata]:
+        """Generate data for _pg_links -- out_edges(links to other types).
+
+        _pg_links is not required for Nodes and Edges to work correctly, It's used by
+        some repo to get out edges types.
+
+        Returns:
+            dictionary of out edges
+        """
+        links_metadata: Dict[str, LinkMetadata] = {}
+        for name, link in utils.get_links(self.schema).items():
+            edge_name = utils.parse_edge(self.schema, link)
+            links_metadata[name] = LinkMetadata(edge_name, link["target_type"], link["backref"])
+        return OrderedDict(sorted(links_metadata.items()))
+
+    @property
+    def tag_props(self) -> Optional[List[str]]:
+        """Keys specified in the dictionary, used for generation of tags.
+
+        Returns:
+            list of keys used to generate tags
+        """
+        return self.schema.get("tagProperties")
+
+    @property
+    def tag_config(self) -> Dict[str, Any]:
+        return self.schema.get("tagBuilderConfig", {})  # type: ignore
+
+    @property
+    def secondary_keys(self) -> List[List[str]]:
+        unique_keys = self.schema.get("uniqueKeys", [])
+        return [keys for keys in unique_keys if "id" not in keys]

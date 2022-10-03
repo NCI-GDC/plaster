@@ -1,4 +1,6 @@
+---
 id: _terms_enum
+
 "yes":
   common:
     description: >-
@@ -26,6 +28,144 @@ id: _terms_enum
       term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C49487"
       term_id: C49487
       term_version: 19.12e
+
+dna:
+  common:
+    description: >-
+      A long linear double-stranded polymer formed from nucleotides attached to a
+      deoxyribose backbone and found in the nucleus of a cell; associated with the
+      transmission of genetic information.
+    termDef:
+      term: >-
+        DNA
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C449"
+      term_id: C449
+      term_version: 20.10d
+
+ewing_sarcoma:
+  common:
+    description: >-
+      A small round cell tumor that lacks morphologic, immunohistochemical, and electron
+      microscopic evidence of neuroectodermal differentiation. It represents one of
+      the two ends of the spectrum called Ewing sarcoma/peripheral neuroectodermal
+      tumor. It affects mostly males under age 20, and it can occur in soft tissue
+      or bone. Pain and the presence of a mass are the most common clinical symptoms.
+    termDef:
+      term: >-
+        Ewing Sarcoma
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C4817"
+      term_id: C4817
+      term_version: 20.05a
+
+normal:
+  common:
+    description: >-
+      Being approximately average or within certain limits; conforming with or constituting
+      a norm or standard or level or type or social norm.
+    termDef:
+      term: >-
+        Normal
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C14165"
+      term_id: C14165
+      term_version: 20.10d
+
+not_allowed_to_collect:
+  common:
+    description: >-
+      An indicator that specifies that a collection event was not permitted.
+    termDef:
+      term: >-
+        Not Allowed To Collect
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C141478"
+      term_id: C141478
+      term_version: 19.12e
+
+not_applicable:
+  common:
+    description: >-
+      Determination of a value is not relevant in the current context.
+    termDef:
+      term: >-
+        Not Applicable
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C48660"
+      term_id: C48660
+      term_version: 20.10d
+
+not_reported:
+  common:
+    description: >-
+      Not provided or available.
+    termDef:
+      term: >-
+        Not Reported
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C43234"
+      term_id: C43234
+      term_version: 20.05a
+
+rhabdomyosarcoma:
+  common:
+    description: >-
+      A rare aggressive malignant mesenchymal neoplasm arising from skeletal muscle.
+      It usually occurs in children and young adults. Only a small percentage of tumors
+      arise in the skeletal muscle of the extremities. The majority arise in other
+      anatomical sites.
+    termDef:
+      term: >-
+        Rhabdomyosarcoma
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C3359"
+      term_id: C3359
+      term_version: 19.12e
+
+saliva:
+  common:
+    description: >-
+      The watery fluid in the mouth made by the salivary glands. Saliva moistens food
+      to help digestion and it helps protect the mouth against infections.
+    termDef:
+      term: >-
+        Saliva
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C13275"
+      term_id: C13275
+      term_version: 20.10d
+
+total_rna:
+  common:
+    description: >-
+      A biological sample comprised of all of the RNA collected from an experimental
+      subject.
+    termDef:
+      term: >-
+        Total RNA
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C163995"
+      term_id: C163995
+      term_version: 20.10d
 
 unknown:
   common:

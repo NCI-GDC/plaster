@@ -1,16 +1,47 @@
+---
+exclude: .svg$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v3.4.0
     hooks:
-      - id: trailing-whitespace
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+        exclude: ^helm/templates/
       - id: end-of-file-fixer
+        exclude: ^images/
       - id: fix-encoding-pragma
         args: [--remove]
-      - id: check-yaml
+      - id: no-commit-to-branch
+        args: [--branch, develop, --branch, master, --pattern, release/.*]
+      - id: pretty-format-json
+        args: [--autofix]
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.15
+    hooks:
+      - id: forbid-crlf
+      - id: remove-crlf
+      - id: forbid-tabs
+        exclude: .(py|yaml|yml|tsv)$
+      - id: remove-tabs
+        exclude: .(py|yaml|yml|tsv)$
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        args: [--skip, 'B101,B106,B303,B324,B404,B405,B607,B603', --exclude, tests,
+          --exclude, examples/tests]
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
       - id: black
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.1.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
   - repo: https://github.com/pycqa/isort
     rev: 5.9.3
     hooks:
@@ -18,28 +49,37 @@ repos:
         name: isort (python)
       - id: isort
         name: isort (cython)
-        types: [ cython ]
+        types: [cython]
       - id: isort
         name: isort (pyi)
-        types: [ pyi ]
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.1.0
+        types: [pyi]
+  - repo: https://github.com/qiaouchicago/markdown-toc
+    rev: 0.1.0
     hooks:
-      - id: detect-secrets
-        args: [ '--baseline', '.secrets.baseline' ]
+      - id: markdown-toc
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.14
     hooks:
       - id: mdformat
         additional_dependencies:
           - mdformat-gfm
-          - mdformat-black
         name: mdformat
         entry: mdformat
-        types: [ markdown ]
+        types: [markdown]
         args: [--wrap, '88']
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.2
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.1.1
     hooks:
-      - id: markdown-toc
-        args: [--bullets, "-"]    # mdformat use dash for bullets
+      - id: pydocstyle
+        args: [convention=google, --add-ignore, 'D100,D101,D102,D103,D104,D105,D106,D107']
+        exclude: ^(tests|unit_tests)/
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.18.0
+    hooks:
+      - id: toml-sort
+        args: [--in-place]
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.1
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, "2", --sequence, "4", --offset, "2", --width, "80", "--preserve-quotes"]

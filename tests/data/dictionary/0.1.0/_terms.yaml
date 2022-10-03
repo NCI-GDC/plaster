@@ -1,4 +1,145 @@
+---
 id: _terms
+
+
+a260_a280_ratio:
+  common:
+    description: >-
+      Numeric value that represents the sample ratio of nucleic acid absorbance at
+      260 nm and 280 nm, used to determine a measure of DNA purity.
+    termDef:
+      term: >-
+        Nucleic Acid Absorbance at 260 And Absorbance at 280 DNA Purity Ratio Value
+      source: caDSR
+      cde_id: 5432595
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432595&version=1.0"
+
+
+aliquot_quantity:
+  common:
+    description: >-
+      The quantity in micrograms (ug) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Aliquot Quantity
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+aliquot_volume:
+  common:
+    description: >-
+      The volume in microliters (ul) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Aliquot Volume
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+amount:
+  common:
+    description: >-
+      Weight in grams or volume in mL.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+analyte_quantity:
+  common:
+    description: >-
+      The quantity in micrograms (ug) of the analyte(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Analyte Quantity
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+
+analyte_type:
+  common:
+    description: >-
+      Text term that represents the kind of molecular specimen analyte.
+    termDef:
+      term: >-
+        Molecular Specimen Type Text Name
+      source: caDSR
+      cde_id: 2513915
+      cde_version: 2.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=2513915&version=2.0"
+
+analyte_type_id:
+  common:
+    description: >-
+      A single letter code used to identify a type of molecular analyte.
+    termDef:
+      term: >-
+        Molecular Analyte Identification Code
+      source: caDSR
+      cde_id: 5432508
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432508&version=1.0"
+
+analyte_volume:
+  common:
+    description: >-
+      The volume in microliters (ul) of the aliquot(s) derived from the analyte(s)
+      shipped for sequencing and characterization.
+    termDef:
+      term: >-
+        Biospecimen Analyte Volume
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+biospecimen_laterality:
+  common:
+    description: >-
+      For tumors in paired organs, designates the side on which the specimen was obtained.
+    termDef:
+      term: >-
+        Specimen Laterality
+      source: caDSR
+      cde_id: 2007875
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=2007875&version=1.0"
+
+catalog_reference:
+  common:
+    description: >-
+      HCMI catalog reference number for cancer model.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+concentration:
+  common:
+    description: >-
+      Numeric value that represents the concentration of an analyte or aliquot extracted
+      from the sample or sample portion, measured in milligrams per milliliter.
+    termDef:
+      term: >-
+        Biospecimen Analyte or Aliquot Extracted Concentration Milligram per Milliliter
+        Value
+      source: caDSR
+      cde_id: 5432594
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432594&version=1.0"
 
 consent_type:
   common:
@@ -13,10 +154,113 @@ consent_type:
       cde_version:
       term_url:
 
+
+creation_datetime:
+  common:
+    description: >-
+      The datetime of portion creation encoded as seconds from epoch.
+    termDef:
+      term: >-
+        Biospecimen Portion Creation Seconds Date/Time
+      source: caDSR
+      cde_id: 5432592
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432592&version=1.0"
+
+
+current_weight:
+  common:
+    description: >-
+      Numeric value that represents the current weight of the sample, measured  in
+      milligrams.
+    termDef:
+      term: >-
+        Tissue Sample Current Weight Milligram Value
+      source: caDSR
+      cde_id: 5432606
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432606&version=1.0"
+
 datetime:
   common:
     description: >-
       A combination of date and time of day in the form [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+days_to_collection:
+  common:
+    description: >-
+      The number of days from the index date to the date a sample was collected for
+      a specific study or project.
+    termDef:
+      term: >-
+        Biospecimen Collection Date Less Initial Pathologic Diagnosis Date Calculated
+        Day Value
+      source: caDSR
+      cde_id: 3008340
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3008340&version=1.0"
+
+days_to_sample_procurement:
+  common:
+    description: >-
+      The number of days from the index date to the date a patient underwent a procedure
+      (e.g. surgical resection) yielding a sample that was eventually used for research.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+
+diagnosis_pathologically_confirmed:
+  common:
+    description: >-
+      The histologic description of tissue or cells confirmed by a pathology review
+      of frozen or formalin fixed slide(s) completed after the diagnostic pathology
+      review of the tumor sample used to extract analyte(s).
+    termDef:
+      term: >-
+        Post-Diagnostic Pathology Review Confirmation
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+distance_normal_to_tumor:
+  common:
+    description: >-
+      Text term to signify the distance between the tumor tissue and the normal control
+      tissue that was procured for matching normal DNA.
+    termDef:
+      term: >-
+        Tumor To Normal Control Tissue DNA Distance Category
+      source: caDSR
+      cde_id: 3088708
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3088708&version=1.0"
+
+distributor_reference:
+  common:
+    description: >-
+      Distributor reference number for cancer model.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+experimental_protocol_type:
+  common:
+    description: >-
+      The type of experiment used to extract the analyte.
     termDef:
       term:
       source:
@@ -57,6 +301,205 @@ file_state:
       cde_version:
       term_url:
 
+freezing_method:
+  common:
+    description: >-
+      Text term that represents the method used for freezing the sample.
+    termDef:
+      term: >-
+        Tissue Sample Freezing Method Type
+      source: caDSR
+      cde_id: 5432607
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432607&version=1.0"
+
+growth_rate:
+  common:
+    description: >-
+      Rate at which the model grows, measured as hours to time to split.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+initial_weight:
+  common:
+    description: >-
+      Numeric value that represents the initial weight of the sample, measured in
+      milligrams.
+    termDef:
+      term: >-
+        Tissue Sample Initial Weight Milligram Value
+      source: caDSR
+      cde_id: 5432605
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432605&version=1.0"
+
+intermediate_dimension:
+  common:
+    description: >-
+      Intermediate dimension of the sample, in millimeters.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+is_ffpe:
+  common:
+    description: >-
+      Indicator to signify whether or not the tissue sample was fixed in formalin
+      and embedded in paraffin (FFPE).
+    termDef:
+      term: >-
+        Specimen Processing Formalin Fixed Paraffin Embedded Tissue Indicator
+      source: caDSR
+      cde_id: 4170557
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=4170557&version=1.0"
+
+longest_dimension:
+  common:
+    description: >-
+      Numeric value that represents the longest dimension of the sample, measured
+      in millimeters.
+    termDef:
+      term: >-
+        Tissue Sample Longest Dimension Millimeter Measurement
+      source: caDSR
+      cde_id: 5432602
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432602&version=1.0"
+
+no_matched_normal_low_pass_wgs:
+  common:
+    description: >-
+      There will be no matched normal low pass WGS aliquots for this case that can
+      be used for variant calling purposes. The GDC may elect to use a single tumor
+      calling pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_targeted_sequencing:
+  common:
+    description: >-
+      There will be no matched normal Targeted Sequencing aliquots for this case that
+      can be used for variant calling purposes. The GDC may elect to use a single
+      tumor calling pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_wgs:
+  common:
+    description: >-
+      There will be no matched normal WGS aliquots for this case that can be used
+      for variant calling purposes. The GDC may elect to use a single tumor calling
+      pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+no_matched_normal_wxs:
+  common:
+    description: >-
+      There will be no matched normal WXS aliquots for this case that can be used
+      for variant calling purposes. The GDC may elect to use a single tumor calling
+      pipeline to process this data.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+normal_tumor_genotype_snp_match:
+  common:
+    description: >-
+      Text term that represents whether or not the genotype of the normal tumor matches
+      or if the data is not available.
+    termDef:
+      term: >-
+        Normal Tumor Genotype Match Indicator
+      source: caDSR
+      cde_id: 4588156
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=4588156&version=1.0"
+
+oct_embedded:
+  common:
+    description: >-
+      Indicator of whether or not the sample was embedded in Optimal Cutting Temperature
+      (OCT) compound.
+    termDef:
+      term: >-
+        Tissue Sample Optimal Cutting Temperature Compound Embedding Indicator
+      source: caDSR
+      cde_id: 5432538
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432538&version=1.0"
+
+passage_count:
+  common:
+    description: >-
+      Number of passages (splits) between the original tissue and this model.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+portion_number:
+  common:
+    description: >-
+      Numeric value that represents the sequential number assigned to a portion of
+      the sample.
+    termDef:
+      term: >-
+        Biospecimen Portion Sequence Number
+      source: caDSR
+      cde_id: 5432711
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432711&version=1.0"
+
+portion_weight:
+  common:
+    description: >-
+      Numeric value that represents the sample portion weight, measured in milligrams.
+    termDef:
+      term: >-
+        Biospecimen Portion Weight Milligram Value
+      source: caDSR
+      cde_id: 5432593
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432593&version=1.0"
+
+preservation_method:
+  common:
+    description: >-
+      Text term that represents the method used to preserve the sample.
+    termDef:
+      term: >-
+        Tissue Sample Preservation Method Type
+      source: caDSR
+      cde_id: 5432521
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432521&version=1.0"
+
 project_id:
   common:
     description: >-
@@ -68,6 +511,239 @@ project_id:
       cde_id:
       cde_version:
       term_url:
+
+ribosomal_rna_28s_16s_ratio:
+  common:
+    description: >-
+      The 28S/18S ribosomal RNA band ratio used to assess the quality of total RNA.
+    termDef:
+      term: >-
+        28s/18s Ribosomal RNA Ratio
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+rna_integrity_number:
+  common:
+    description: >-
+      A numerical assessment of the integrity of RNA based on the entire electrophoretic
+      trace of the RNA sample, including the presence or absence of degradation products.
+    termDef:
+      term: >-
+        RNA Integrity Number
+      source: NCIt
+      cde_id:
+      cde_version:
+      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C63637"
+      term_id: C63637
+      term_version: 20.10d
+
+sample_ordinal:
+  common:
+    description: >-
+      A number describing the samples place in an ordered sequence.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+
+sample_type:
+  common:
+    description: >-
+      Text term to describe the source of a biospecimen used for a laboratory test.
+    termDef:
+      term: >-
+        Specimen Type Collection Biospecimen Type
+      source: caDSR
+      cde_id: 3111302
+      cde_version: 2.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3111302&version=2.0"
+
+sample_type_id:
+  common:
+    description: >-
+      The accompanying sample type id for the sample type.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_low_pass_wgs:
+  common:
+    description: >-
+      Denotes which low-pass WGS normal aliquot the submitter prefers to use for variant
+      calling. Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_targeted_sequencing:
+  common:
+    description: >-
+      Denotes which targeted_sequencing normal aliquot the submitter prefers to use
+      for variant calling. Only one normal per experimental strategy per case can
+      be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_wgs:
+  common:
+    description: >-
+      Denotes which WGS normal aliquot the submitter prefers to use for variant calling.
+      Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+selected_normal_wxs:
+  common:
+    description: >-
+      Denotes which WXS normal aliquot the submitter prefers to use for variant calling.
+      Only one normal per experimental strategy per case can be selected.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+shortest_dimension:
+  common:
+    description: >-
+      Numeric value that represents the shortest dimension of the sample, measured
+      in millimeters.
+    termDef:
+      term: >-
+        Tissue Sample Short Dimension Millimeter Measurement
+      source: caDSR
+      cde_id: 5432603
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432603&version=1.0"
+
+source_center:
+  common:
+    description: >-
+      Name of the center that provided the item.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+spectrophotometer_method:
+  common:
+    description: >-
+      Name of the method used to determine the concentration of purified nucleic acid
+      within a solution.
+    termDef:
+      term: >-
+        Purification Nucleic Acid Solution Concentration Determination Method Type
+      source: caDSR
+      cde_id: 3008378
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3008378&version=1.0"
+
+time_between_clamping_and_freezing:
+  common:
+    description: >-
+      Numeric representation of the elapsed time between the surgical clamping of
+      blood supply and freezing of the sample, measured in minutes.
+    termDef:
+      term: >-
+        Tissue Sample Clamping and Freezing Elapsed Minute Time
+      source: caDSR
+      cde_id: 5432611
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432611&version=1.0"
+
+time_between_excision_and_freezing:
+  common:
+    description: >-
+      Numeric representation of the elapsed time between the excision and freezing
+      of the sample, measured in minutes.
+    termDef:
+      term: >-
+        Tissue Sample Excision and Freezing Elapsed Minute Time
+      source: caDSR
+      cde_id: 5432612
+      cde_version: 1.0
+
+tissue_collection_type:
+  common:
+    description: >-
+      The text term used to describe the tyoe of collection used to obtain tissue.
+    termDef:
+      term: >-
+        Tissue Collection Type
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+tissue_type:
+  common:
+    description: >-
+      Text term that represents a description of the kind of tissue collected with
+      respect to disease status or proximity to tumor tissue.
+    termDef:
+      term: >-
+        Tissue Sample Description Type
+      source: caDSR
+      cde_id: 5432687
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432687&version=1.0"
+
+tumor_code:
+  common:
+    description: >-
+      Diagnostic tumor code of the tissue sample source.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+tumor_code_id:
+  common:
+    description: >-
+      BCR-defined id code for the tumor sample.
+    termDef:
+      term:
+      source:
+      cde_id:
+      cde_version:
+      term_url:
+
+tumor_descriptor:
+  common:
+    description: >-
+      Text that describes the kind of disease present in the tumor specimen as related
+      to a specific timepoint.
+    termDef:
+      term: >-
+        Tumor Tissue Disease Description Type
+      source: caDSR
+      cde_id: 3288124
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=3288124&version=1.0"
 
 uuid:
   common:
@@ -83,4 +759,17 @@ uuid:
       source: NCIt
       cde_id: C54100
       cde_version:
-      term_url: "https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&version=16.02d&ns=NCI_Thesaurus&code=C54100"
+      term_url: https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&version=16.02d&ns=NCI_Thesaurus&code=C54100
+
+well_number:
+  common:
+    description: >-
+      Numeric value that represents the the well location within a plate for the analyte
+      or aliquot from the sample.
+    termDef:
+      term: >-
+        Biospecimen Analyte or Aliquot Plate Well Number
+      source: caDSR
+      cde_id: 5432613
+      cde_version: 1.0
+      term_url: "https://cdebrowser.nci.nih.gov/cdebrowserClient/cdeBrowser.html#/search?publicId=5432613&version=1.0"

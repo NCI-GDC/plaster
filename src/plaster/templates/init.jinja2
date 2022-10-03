@@ -1,3 +1,29 @@
-{% for imp in imports | sort %}
+import sys
+
+{% for imp in meta | sort %}
 from .{{ imp.package }} import {{ imp.class_name }}
 {% endfor %}
+
+from .helpers import base, indexes, related_cases, versioned_nodes, versioning
+
+namespace = base.namespace
+Node = base.Node
+Edge = base.Edge
+
+__all__ = [
+{% for imp in meta | sort %}
+    "{{ imp.class_name }}",
+{% endfor %}
+]
+
+
+for __type in __all__:
+    cls = sys.modules.get(__name__).__dict__.get(__type)
+    cls.post_process()
+
+__all__.append("Node")
+__all__.append("Edge")
+
+from sqlalchemy import orm
+
+orm.configure_mappers()

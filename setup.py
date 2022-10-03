@@ -38,16 +38,19 @@ setup(
         "jsonschema",
         "PyYaml~=5.4",
         "toml~=0.10",
-        "psqlgml>=0.1.3",
-        "psqlgraph",
+        "psqlgml>=0.2.0",
+        "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={
         "dev": [
             "coverage[toml]~=5.5",
+            "deepdiff~=5.8.1",
             "mypy==0.910",
             "pre-commit~=2.13",
             "pytest~=6.2",
             "pytest-cov~=2.12",
+            "pytest-env~=0.6.2",
+            "pytest-psqlgraph~=0.1",
         ],
         "docs": [
             "sphinx~=4.1",

@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import click
 import psqlgml
@@ -19,7 +20,7 @@ logger: logging.Logger
     help="Path to config file",
 )
 def app(ctx: click.Context, config_file: str) -> None:
-    """Entry script"""
+    """Entry script."""
     global logger
 
     # pass context
@@ -40,8 +41,9 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
     profile_cfg = cfg.get_profile(profile)
     if not profile_cfg:
         raise ValueError(f"Unrecognized profile {profile} entered")
+    namespace = profile_cfg.get("namespace")
 
-    if profile_cfg.get("type", "local"):
+    if profile_cfg.get("type", "local") == "local":
         dictionary = psqlgml.load_local(
             name=profile,
             version=profile_cfg.get("version", "master"),
@@ -58,6 +60,10 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
 
     if dictionary is None:
         logger.error(f"Could not load dictionary for {profile_cfg}")
-        return
+        sys.exit("Dictionary not loaded")
 
-    generator.generate(dictionary, output_dir)
+    generator.generate(dictionary, output_dir, namespace=namespace)
+
+
+if __name__ == "__main__":
+    app()

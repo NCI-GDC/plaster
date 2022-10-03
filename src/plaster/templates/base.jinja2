@@ -1,0 +1,9 @@
+import os
+
+from psqlgraph import ext
+
+# namespace needed for multiple dictionaries to work at same time(graphmanager)
+namespace = os.getenv("{{ meta['dictionary'].name.upper() }}_NAMESPACE") or {% if meta["namespace"] %}"{{ meta["namespace"] }}"{% else %}None{% endif %}
+
+# the register_base_class is needed for edge.get_node_class to work
+Node, Edge = ext.register_base_class(namespace)

@@ -1,27 +1,31 @@
 title = "Data Model code generator configuration"
 
 [environment]
-# git_home  = "/tmp/.plaster/git"
 
 [logging]
 level = "INFO"
 log_file = "plaster.log"
 
 [profiles]
-# source code generation profiles
 
-[profiles.dictionary]
-version = "0.1.0"
-local_directory = "tests/data"
+[profiles.biodictionary]
+url = "ssh://git@github.com/NCI-GDC/biodictionary.git"
+path = "biodictionary/schemas"
+version = "0.15.1"
+overwrite = false
+type = "remote"
+namespace = "gpas"
 
 [profiles.gdcdictionary]
 url = "https://github.com/NCI-GDC/gdcdictionary.git"
 path = "gdcdictionary/schemas"
 version = "2.4.1"
 overwrite = false
+type = "remote"
 
-[profiles.biodictionary]
-url = "ssh://git@github.com/NCI-GDC/biodictionary.git"
-path = "biodictionary/schemas"
-version = "0.7.0"
+[profiles.midrc_dictionary]
+url = "https://github.com/uc-cdis/midrc_dictionary.git"     # need to skip _settings.yaml
+path = "gdcdictionary/schemas"
+version = "0.7.6"
 overwrite = false
+type = "remote"

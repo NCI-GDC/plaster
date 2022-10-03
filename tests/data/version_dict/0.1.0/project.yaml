@@ -1,0 +1,19 @@
+---
+id: project
+category: administrative
+tagProperties:
+  - code
+required:
+  - code
+properties:
+  code:
+    type: string
+  name:
+    type: string
+links:
+  - name: programs
+    backref: projects
+    label: member_of
+    target_type: program
+    multiplicity: many_to_one
+    required: true
