@@ -1,10 +1,5 @@
-"""This file only contains helper functions about related cases.
-
-This file should be renamed to related cases when refactored.
-TODO: DEV-1271
-"""
 import itertools
-from typing import Collection, Dict, Generator, List, Optional, Set, Union
+from typing import Collection, Dict, Generator, Optional, Set, Union
 
 import psqlgraph
 from sqlalchemy import orm
