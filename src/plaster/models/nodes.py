@@ -91,13 +91,13 @@ class PropertyMeta:
         return ty
 
     @property
-    def types(self) -> Tuple[List[str], List[str]]:
-        f_types: List[str] = []
-        f_enums: List[str] = []
+    def types(self) -> Tuple[Set[str], Set[str]]:
+        f_types: Set[str] = set()
+        f_enums: Set[str] = set()
         for meta in self.type_metas():
-            f_types += meta.type
+            f_types |= set(meta.type)
             if meta.enums:
-                f_enums += meta.enums
+                f_enums |= set(meta.enums)
         return f_types, f_enums
 
 
