@@ -40,6 +40,7 @@ coverage.xml
 *.mo
 *.pot
 *.log
+*.log.*
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -55,6 +56,7 @@ ipython_config.py
 celerybeat-schedule
 *.sage.py
 .env
+venv
 .venv
 env/
 venv/

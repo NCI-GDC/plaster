@@ -3,7 +3,8 @@
 This file should be renamed to related cases when refactored.
 TODO: DEV-1271
 """
-from typing import Collection, Dict, List, Optional, Set, Union
+import itertools
+from typing import Collection, Dict, Generator, List, Optional, Set, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -59,16 +60,18 @@ def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[ps
     return dst
 
 
-def get_related_cases_from_cache(node: psqlgraph.Node) -> List[psqlgraph.Node]:
+def get_related_cases_from_cache(node: psqlgraph.Node) -> Generator[psqlgraph.Node, None, None]:
     """Get the cached related case ids from this node's case shortcut edges.
 
     Args:
         node: The Node instance
 
-    Returns:
-        List of Case nodes
+    Yields:
+        case node
     """
-    return [case for case in getattr(node, RELATED_CASES_LINK_NAME, []) if case is not None]
+    for case in getattr(node, RELATED_CASES_LINK_NAME, []):
+        if case is not None:
+            yield case
 
 
 def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
@@ -83,7 +86,7 @@ def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
     return f"{node.__class__.__name__}RelatesToCase"
 
 
-def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]:
+def get_related_cases_from_parents(node: psqlgraph.Node) -> Generator[psqlgraph.Node, None, None]:
     """Get the cached related case ids from the parents of this node.
 
     Get the cached related case ids from the parents of this node from
@@ -93,10 +96,8 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
     Args:
         node: The Node instance
 
-    Returns:
-        List of Case nodes
-
-    TODO: DEV-1261 DEV-1262
+    Yields:
+        case node
     """
     skip_edges_named = [get_related_case_edge_cls_name(node)]
 
@@ -106,8 +107,8 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
     # Get the cached ids from parents
     edges_out_filtered = (e for e in edges_out if e.__class__.__name__ not in skip_edges_named)
     dsts = (e.dst for e in edges_out_filtered if e.dst)
-    cases_list: List[psqlgraph.Node] = sum((dst._related_cases_from_cache for dst in dsts), [])
-    cases = set(cases_list)
+    cases_chain = itertools.chain(*(dst._related_cases_from_cache for dst in dsts))
+    cases = set(cases_chain)
 
     # Are any parents cases?
     for edge in edges_out:
@@ -118,7 +119,9 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> List[psqlgraph.Node]
         if dst_class.label == "case" and edge.dst:
             cases.add(edge.dst)
 
-    return [case for case in cases if case is not None]
+    for case in cases:
+        if case is not None:
+            yield case
 
 
 def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]) -> None:
