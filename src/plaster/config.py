@@ -1,9 +1,8 @@
 import os
 import uuid
 from logging.config import dictConfig
-from typing import Dict, Final, List, Literal, Optional, TypedDict, cast
+from typing import Dict, Final, Literal, Optional, TypedDict, cast
 
-import attr
 import toml
 import yaml
 
