@@ -99,7 +99,7 @@ def test_exist_related_cases_from_cache_property(graph_classes: ModuleType) -> N
         None
     """
     sample = graph_classes.Sample("sample_1")
-    assert len(list(sample._related_cases_from_cache)) == 0
+    assert len(tuple(sample._related_cases_from_cache)) == 0
 
 
 def test_exist_related_cases_from_parents_property(graph_classes: ModuleType) -> None:
