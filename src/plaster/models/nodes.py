@@ -88,7 +88,7 @@ class PropertyMeta(NamedTuple):
         return ty
 
     @property
-    def types(self) -> Tuple[Set[str], Set[str]]:
+    def types(self) -> Tuple[AbstractSet[str], AbstractSet[str]]:
         f_types: Set[str] = set()
         f_enums: Set[str] = set()
         for meta in self.type_metas():
