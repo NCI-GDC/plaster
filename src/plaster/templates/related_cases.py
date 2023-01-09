@@ -103,7 +103,7 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     # Get the cached ids from parents
     edges_out_filtered = (e for e in edges_out if e.__class__.__name__ not in skip_edges_named)
     dsts = (e.dst for e in edges_out_filtered if e.dst)
-    cases_chain = itertools.chain(*(dst._related_cases_from_cache for dst in dsts))
+    cases_chain = itertools.chain.from_iterable(dst._related_cases_from_cache for dst in dsts)
     cases = set(cases_chain)
 
     # Are any parents cases?
