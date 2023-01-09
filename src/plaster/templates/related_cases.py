@@ -82,7 +82,7 @@ def get_related_case_edge_cls_name(node: psqlgraph.Node) -> str:
     return f"{node.__class__.__name__}RelatesToCase"
 
 
-def get_related_cases_from_parents(node: psqlgraph.Node) -> Generator[psqlgraph.Node, None, None]:
+def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.Node]:
     """Get the cached related case ids from the parents of this node.
 
     Get the cached related case ids from the parents of this node from
