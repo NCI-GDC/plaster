@@ -1,6 +1,6 @@
 """This file only contains helper functions about related cases."""
 import itertools
-from typing import Collection, Dict, Generator, Optional, Set, Union
+from typing import Collection, Dict, Generator, Iterator, Optional, Set, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -92,8 +92,8 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     Args:
         node: The Node instance
 
-    Yields:
-        case node
+    Returns:
+        iterator of case nodes
     """
     skip_edges_named = [get_related_case_edge_cls_name(node)]
 
@@ -115,9 +115,7 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
         if dst_class.label == "case" and edge.dst:
             cases.add(edge.dst)
 
-    for case in cases:
-        if case is not None:
-            yield case
+    return filter(None, cases)
 
 
 def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]) -> None:
