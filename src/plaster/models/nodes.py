@@ -1,6 +1,7 @@
 import logging
 from collections import OrderedDict
 from typing import (
+    AbstractSet,
     Any,
     Dict,
     Iterable,
@@ -13,7 +14,6 @@ from typing import (
     Union,
 )
 
-import attr
 import psqlgml
 
 from plaster import utils
@@ -58,8 +58,7 @@ EXCLUDED_PROPS = ["id", "type"]
 logger = logging.getLogger(__name__)
 
 
-@attr.s(auto_attribs=True)
-class PropertyTypeMeta:
+class PropertyTypeMeta(NamedTuple):
     schema: Dict[str, Any]
 
     @property
@@ -77,8 +76,7 @@ class PropertyTypeMeta:
         return TYPE_MAPPING[_type]
 
 
-@attr.s(auto_attribs=True)
-class PropertyMeta:
+class PropertyMeta(NamedTuple):
     name: str
     schema: Dict[str, Any]
 
@@ -91,13 +89,13 @@ class PropertyMeta:
         return ty
 
     @property
-    def types(self) -> Tuple[List[str], List[str]]:
-        f_types: List[str] = []
-        f_enums: List[str] = []
+    def types(self) -> Tuple[AbstractSet[str], AbstractSet[str]]:
+        f_types: Set[str] = set()
+        f_enums: Set[str] = set()
         for meta in self.type_metas():
-            f_types += meta.type
+            f_types |= set(meta.type)
             if meta.enums:
-                f_enums += meta.enums
+                f_enums |= set(meta.enums)
         return f_types, f_enums
 
 
@@ -117,8 +115,7 @@ class EdgeMetadata(NamedTuple):
     type: str
 
 
-@attr.s(auto_attribs=True)
-class NodeMetadata:
+class NodeMetadata(NamedTuple):
     label: str
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict

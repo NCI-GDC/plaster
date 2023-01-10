@@ -1,8 +1,7 @@
 import hashlib
 import logging
-from typing import Optional
+from typing import NamedTuple, Optional
 
-import attr
 import psqlgml
 
 from plaster.models.nodes import NodeMetadata
@@ -50,8 +49,7 @@ def sentence_case(item: str) -> str:
     return "".join([a.capitalize() for a in item.split("_")])
 
 
-@attr.s(auto_attribs=True)
-class EdgeMetadata:
+class EdgeMetadata(NamedTuple):
     association: psqlgml.Association
     src: NodeMetadata
     dst: NodeMetadata
