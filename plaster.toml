@@ -19,7 +19,7 @@ namespace = "gpas"
 [profiles.gdcdictionary]
 url = "https://github.com/NCI-GDC/gdcdictionary.git"
 path = "gdcdictionary/schemas"
-version = "2.4.1"
+version = "2.6.0"
 overwrite = false
 type = "remote"
 
