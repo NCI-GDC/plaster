@@ -89,14 +89,14 @@ class PropertyMeta(NamedTuple):
         return ty
 
     @property
-    def types(self) -> Tuple[AbstractSet[str], AbstractSet[str]]:
+    def types(self) -> Tuple[List[str], List[str]]:
         f_types: Set[str] = set()
         f_enums: Set[str] = set()
         for meta in self.type_metas():
             f_types |= set(meta.type)
             if meta.enums:
                 f_enums |= set(meta.enums)
-        return f_types, f_enums
+        return sorted(f_types), sorted(f_enums)
 
 
 class LinkMetadata(NamedTuple):
