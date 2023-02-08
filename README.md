@@ -21,6 +21,7 @@ GDC internship project for generating data model source code.
   - [Install plaster](#Install-plaster)
   - [Generate gdcdictionary](#Generate-gdcdictionary)
   - [Generate biodictionary](#Generate-biodictionary)
+- [Known Issues](#Known-Issues)
 - [Associated Projects](#Associated-Projects)
 - [Repo Visualizer](#Repo-Visualizer)
 
@@ -123,6 +124,19 @@ plaster generate -p gdcdictionary -o "example/gdcdictionary"
 ```bash
 plaster generate -p biodictionary -o "example/biodictionary"
 ```
+
+# Known Issues
+
+If you met
+
+```bash
+  File "/Users/qiaoqiao/gdc/gdcdatamodel2/venv_plaster/lib/python3.8/site-packages/dulwich/refs.py", line 337, in __getitem__
+    raise KeyError(name)
+KeyError: b'refs/tags/2.6.3'
+
+```
+
+Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdictionary.
 
 # Associated Projects
 
