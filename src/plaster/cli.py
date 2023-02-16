@@ -56,7 +56,7 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
             overwrite=profile_cfg.get("overwrite", False),
             schema_path=profile_cfg.get("path", f"{profile}/schemas"),
             version=profile_cfg.get("version", "master"),
-            is_tag=profile_cfg.get("is_tag", True),
+            is_tag=profile_cfg.get("is_git_tag", True),
         )
 
     if dictionary is None:
