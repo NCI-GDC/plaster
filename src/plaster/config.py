@@ -23,6 +23,7 @@ class Profile(TypedDict):
     path: str
     type: Literal["local", "remote"]
     version: str
+    is_git_tag: bool
     overwrite: bool
     local_directory: str
     namespace: str
