@@ -130,7 +130,7 @@ plaster generate -p biodictionary -o "example/biodictionary"
 If you met
 
 ```bash
-  File "/Users/qiaoqiao/gdc/gdcdatamodel2/venv_plaster/lib/python3.8/site-packages/dulwich/refs.py", line 337, in __getitem__
+  File "/<path_to_gdcdatamodel2>/gdcdatamodel2/venv_plaster/lib/python3.8/site-packages/dulwich/refs.py", line 337, in __getitem__
     raise KeyError(name)
 KeyError: b'refs/tags/2.6.3'
 
