@@ -127,7 +127,7 @@ plaster generate -p biodictionary -o "example/biodictionary"
 
 # Known Issues
 
-If you met
+If you encounter a stacktrace similar to this
 
 ```bash
   File "/<path_to_gdcdatamodel2>/gdcdatamodel2/venv_plaster/lib/python3.8/site-packages/dulwich/refs.py", line 337, in __getitem__
