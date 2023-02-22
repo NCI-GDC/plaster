@@ -31,7 +31,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     install_requires=[
-        "black",
+        "black==22.3.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "click~=8.0",
         "dulwich",
         "Jinja2~=3.0",
@@ -39,7 +39,7 @@ setup(
         "PyYaml~=5.4",
         "toml~=0.10",
         "psqlgml>=0.2.0",
-        "psqlgraph @ git+https://github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
+        "psqlgraph @ git+ssh://git@github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
     ],
     extras_require={
         "dev": [
