@@ -12,7 +12,7 @@ attrs==21.2.0
     #   pytest-psqlgraph
 backports.entry-points-selectable==1.1.0
     # via virtualenv
-black==21.9b0
+black==22.3.0
     # via plaster (setup.py)
 certifi==2021.5.30
     # via dulwich
@@ -111,8 +111,6 @@ pyyaml==5.4.1
     #   pre-commit
     #   psqlgml
     #   pytest-psqlgraph
-regex==2021.9.24
-    # via black
 rstr==2.2.6
     # via
     #   psqlgraph
