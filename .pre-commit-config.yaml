@@ -17,6 +17,7 @@ repos:
       - id: pretty-format-json
         args: [--autofix]
       - id: trailing-whitespace
+        exclude_types: [yaml]    # conflict with yaml format
         args: [--markdown-linebreak-ext=md]
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.15
