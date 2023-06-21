@@ -29,6 +29,8 @@ DICTIONARY_KEY_LITERAL = Literal[
     "project",
     "program",
     "previous_version_downloadable",
+    "links",
+    "properties",
 ]
 
 DICTIONARY_KEYS: List[DICTIONARY_KEY_LITERAL] = [
@@ -42,6 +44,8 @@ DICTIONARY_KEYS: List[DICTIONARY_KEY_LITERAL] = [
     "project",
     "program",
     "previous_version_downloadable",
+    "links",
+    "properties",
 ]
 TYPE_MAPPING = {
     "array": ["list"],
