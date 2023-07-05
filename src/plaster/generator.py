@@ -131,7 +131,7 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict)
+        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict, dic.version)
         node_metas[label] = meta
     return node_metas
 
@@ -155,9 +155,9 @@ def generate(
     import_metas: Set["ImportMeta"] = set()
 
     node_metas = generate_nodes(dictionary)
-    for meta in node_metas.values():
-        render_and_write_file(meta, "node", output_dir, meta.label)
-        import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
+    for node_meta in node_metas.values():
+        render_and_write_file(node_meta, "node", output_dir, node_meta.label)
+        import_metas.add(ImportMeta(package=node_meta.label, class_name=node_meta.class_name))
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
     relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
