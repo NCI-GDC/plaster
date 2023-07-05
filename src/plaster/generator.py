@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 import black
 import jinja2 as j
 import psqlgml
+import yaml
 
 from plaster.models import edges, nodes
 
@@ -232,3 +233,19 @@ def render_template(meta: Any, template_base_name: str) -> str:
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
     return rendered
+
+
+def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str):
+    partial_dictionary = {"schema": {}}
+
+    for node_label, value in dictionary.schema.items():
+        partial_dictionary["schema"][node_label] = {
+            "links": value.links,
+            "properties": value.properties,
+        }
+
+    os.makedirs(schema_dir, exist_ok=True)
+
+    with open(f"{schema_dir}/partial_dictionary.yml", "w") as fp:
+        fp.write(f"# partial dictionary schema for test for dictionary {dictionary.version}")
+        yaml.safe_dump(data=partial_dictionary, stream=fp)
