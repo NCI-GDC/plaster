@@ -235,8 +235,8 @@ def render_template(meta: Any, template_base_name: str) -> str:
     return rendered
 
 
-def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str):
-    partial_dictionary = {"schema": {}}
+def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> None:
+    partial_dictionary: Dict[str, Dict] = {"schema": {}}
 
     for node_label, value in dictionary.schema.items():
         partial_dictionary["schema"][node_label] = {
