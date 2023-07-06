@@ -236,7 +236,8 @@ def render_template(meta: Any, template_base_name: str) -> str:
 
 
 def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> None:
-    partial_dictionary: Dict[str, Dict] = {"schema": {}}
+    logger.info("dump partial schema")
+    partial_dictionary: Dict[str, Dict] = {"schema": {}, "version": dictionary.version}
 
     for node_label, value in dictionary.schema.items():
         partial_dictionary["schema"][node_label] = {
@@ -247,5 +248,4 @@ def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> Non
     os.makedirs(schema_dir, exist_ok=True)
 
     with open(f"{schema_dir}/partial_dictionary.yml", "w") as fp:
-        fp.write(f"# partial dictionary schema for test for dictionary {dictionary.version}")
         yaml.safe_dump(data=partial_dictionary, stream=fp)
