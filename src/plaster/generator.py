@@ -243,6 +243,7 @@ def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> Non
         partial_dictionary["schema"][node_label] = {
             "links": value.links,
             "properties": value.properties,
+            "required": value.required,
         }
 
     os.makedirs(schema_dir, exist_ok=True)
