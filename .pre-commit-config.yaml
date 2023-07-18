@@ -7,7 +7,7 @@ repos:
       - id: check-json
       - id: check-toml
       - id: check-yaml
-        exclude: ^helm/templates/
+        exclude: ^\.gitlab-ci.yml
       - id: end-of-file-fixer
         exclude: ^images/
       - id: fix-encoding-pragma
@@ -38,11 +38,6 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.1.0
-    hooks:
-      - id: detect-secrets
-        args: [--baseline, .secrets.baseline]
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
@@ -84,3 +79,8 @@ repos:
     hooks:
       - id: yamlfmt
         args: [--mapping, "2", --sequence, "4", --offset, "2", --width, "80", "--preserve-quotes"]
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
