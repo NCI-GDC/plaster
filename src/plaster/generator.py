@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 import black
 import jinja2 as j
 import psqlgml
+import yaml
 
 from plaster.models import edges, nodes
 
@@ -131,7 +132,7 @@ def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
 
     for label, schema in dic.schema.items():
         associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict)
+        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict, dic.version)
         node_metas[label] = meta
     return node_metas
 
@@ -155,9 +156,9 @@ def generate(
     import_metas: Set["ImportMeta"] = set()
 
     node_metas = generate_nodes(dictionary)
-    for meta in node_metas.values():
-        render_and_write_file(meta, "node", output_dir, meta.label)
-        import_metas.add(ImportMeta(package=meta.label, class_name=meta.class_name))
+    for node_meta in node_metas.values():
+        render_and_write_file(node_meta, "node", output_dir, node_meta.label)
+        import_metas.add(ImportMeta(package=node_meta.label, class_name=node_meta.class_name))
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
     relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
@@ -232,3 +233,20 @@ def render_template(meta: Any, template_base_name: str) -> str:
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
     return rendered
+
+
+def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> None:
+    logger.info("dump partial schema")
+    partial_dictionary: Dict[str, Dict] = {"schema": {}, "version": dictionary.version}
+
+    for node_label, value in dictionary.schema.items():
+        partial_dictionary["schema"][node_label] = {
+            "links": value.links,
+            "properties": value.properties,
+            "required": value.required,
+        }
+
+    os.makedirs(schema_dir, exist_ok=True)
+
+    with open(f"{schema_dir}/partial_dictionary.yml", "w") as fp:
+        yaml.safe_dump(data=partial_dictionary, stream=fp)

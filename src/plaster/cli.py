@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import Optional
 
 import click
 import psqlgml
@@ -36,8 +37,17 @@ def echo() -> None:
 @app.command(name="generate", help="Generate source code")
 @click.option("-p", "--profile", type=str, help="Name of the profile to generate")
 @click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-s",
+    "--schema-dir",
+    type=click.Path(),
+    default=None,
+    help="Output directory for partial schema",
+)
 @click.pass_obj
-def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
+def generate(
+    cfg: config.PlasterConfig, profile: str, output_dir: str, schema_dir: Optional[str]
+) -> None:
     profile_cfg = cfg.get_profile(profile)
     if not profile_cfg:
         raise ValueError(f"Unrecognized profile {profile} entered")
@@ -64,6 +74,9 @@ def generate(cfg: config.PlasterConfig, profile: str, output_dir: str) -> None:
         sys.exit("Dictionary not loaded")
 
     generator.generate(dictionary, output_dir, namespace=namespace)
+
+    if schema_dir is not None:
+        generator.write_partial_schema(dictionary, schema_dir)
 
 
 if __name__ == "__main__":
