@@ -1,4 +1,3 @@
-import os
 import sys
 from types import ModuleType
 
@@ -14,6 +13,7 @@ from tests.integration import (
     create_versioned_nodes_tables,
     tear_down_graph,
     truncate_versioned_nodes_tables,
+    utils,
 )
 
 
@@ -46,13 +46,7 @@ def graph_classes(
 
 @pytest.fixture
 def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
-    g = psqlgraph.PsqlGraphDriver(
-        host=os.getenv("DB_HOST"),
-        password=os.getenv("DB_PASS"),
-        user=os.getenv("DB_USER"),
-        database=os.getenv("DB_NAME"),
-        package_namespace=graph_classes.namespace,
-    )
+    g = utils.get_graph_driver(graph_classes.namespace)
     base = psqlgraph.base.ORMBase
     if graph_classes.namespace is not None:
         base = ext.get_orm_base(graph_classes.namespace)
