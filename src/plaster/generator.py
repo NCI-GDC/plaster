@@ -2,6 +2,7 @@ import itertools
 import logging
 import os
 from collections import defaultdict
+from importlib import resources
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
@@ -227,9 +228,13 @@ def render_template(meta: Any, template_base_name: str) -> str:
         rendered content
     """
     try:
-        template = env.get_template(f"{template_base_name}.jinja2")
+        template = env.get_template(
+            resources.path("plaster", f"templates/{template_base_name}.jinja2")
+        )
     except j.exceptions.TemplateNotFound:
-        template = env.get_template(f"{template_base_name}.py")
+        template = env.get_template(
+            resources.path("plaster", f"templates/{template_base_name}.py")
+        )
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
     return rendered
