@@ -227,14 +227,12 @@ def render_template(meta: Any, template_base_name: str) -> str:
     Returns:
         rendered content
     """
-    try:
-        template = env.get_template(
-            resources.path("plaster", f"templates/{template_base_name}.jinja2")
-        )
-    except j.exceptions.TemplateNotFound:
-        template = env.get_template(
-            resources.path("plaster", f"templates/{template_base_name}.py")
-        )
+    with resources.path("plaster", "templates") as p:
+
+        try:
+            template = env.get_template(str(p / f"{template_base_name}.jinja2"))
+        except j.exceptions.TemplateNotFound:
+            template = env.get_template(str(p / f"{template_base_name}.py"))
     rendered = template.render(meta=meta)
     rendered = black.format_str(rendered, mode=black.FileMode())
     return rendered
