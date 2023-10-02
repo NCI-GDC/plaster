@@ -1,2 +1,6 @@
+graft sheepdog
+prune tests
+
+global-exclude *.py[cod]
+
 include LICENSE
-global-exclude *.pyc
