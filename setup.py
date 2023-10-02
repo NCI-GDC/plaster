@@ -39,7 +39,7 @@ setup(
         "PyYaml~=5.4",
         "toml~=0.10",
         "psqlgml>=0.2.4",
-        "psqlgraph @ git+ssh://git@github.com/NCI-GDC/psqlgraph.git@3.4.0#egg=psqlgraph",
+        "psqlgraph",
     ],
     extras_require={
         "dev": [
