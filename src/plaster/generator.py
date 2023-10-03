@@ -2,7 +2,6 @@ import itertools
 import logging
 import os
 from collections import defaultdict
-from importlib import resources
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
