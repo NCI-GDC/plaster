@@ -23,7 +23,7 @@ tox:
     POSTGRES_HOST_AUTH_METHOD: trust
     PG_HOST: postgres
   script:
-    - pip install "tox<4"
+#    - pip install "tox<4"
     - tox -r -e py
 
 
