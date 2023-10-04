@@ -29,6 +29,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     install_requires=[
         "black==22.3.0",  # this should be the same with gdcdatamodel2's pre-commit-config file

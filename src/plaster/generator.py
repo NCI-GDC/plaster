@@ -2,6 +2,7 @@ import itertools
 import logging
 import os
 from collections import defaultdict
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
@@ -117,22 +118,30 @@ def process_dictionary_for_backrefs(
     return backrefs_dict
 
 
-def generate_nodes(dic: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
+def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
-        dic: dictionary to read, gdcdictionary or biodictionary
+        dictionary: dictionary to read, gdcdictionary or biodictionary
 
     Returns:
         metadata for nodes
     """
-    backrefs_dict = process_dictionary_for_backrefs(dic)
+    plaster_version = version("plaster")
+    backrefs_dict = process_dictionary_for_backrefs(dictionary)
 
     node_metas: Dict[str, nodes.NodeMetadata] = {}
 
-    for label, schema in dic.schema.items():
-        associations = {a.name for a in dic.associations(label)}
-        meta = nodes.NodeMetadata(label, associations, schema.raw, backrefs_dict, dic.version)
+    for label, schema in dictionary.schema.items():
+        associations = {a.name for a in dictionary.associations(label)}
+        meta = nodes.NodeMetadata(
+            label=label,
+            associations=associations,
+            schema=schema.raw,
+            backrefs_dict=backrefs_dict,
+            dictionary_version=dictionary.version,
+            plaster_version=plaster_version,
+        )
         node_metas[label] = meta
     return node_metas
 
