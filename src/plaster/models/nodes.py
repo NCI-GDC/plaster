@@ -121,6 +121,7 @@ class NodeMetadata(NamedTuple):
     schema: psqlgml.DictionarySchemaDict
     backrefs_dict: Dict[str, Dict[str, BackRefMetadata]]
     dictionary_version: str
+    plaster_version: str
 
     @property
     def class_name(self) -> str:
