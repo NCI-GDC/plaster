@@ -129,7 +129,7 @@ class NodeMetadata(NamedTuple):
 
     @property
     def table_name(self) -> str:
-        return "node_{}".format(self.label.replace("_", ""))
+        return f'node_{self.label.replace("_", "")}'
 
     @property
     def defaults(self) -> Dict[str, Union[bool, float, int, str]]:
