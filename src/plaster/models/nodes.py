@@ -120,7 +120,7 @@ class NodeMetadata(NamedTuple):
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
     backrefs_dict: Dict[str, Dict[str, BackRefMetadata]]
-    version: str
+    dictionary_version: str
 
     @property
     def class_name(self) -> str:
