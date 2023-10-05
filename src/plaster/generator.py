@@ -240,7 +240,12 @@ def render_template(meta: Any, template_base_name: str) -> str:
     except j.exceptions.TemplateNotFound:
         template = env.get_template(f"{template_base_name}.py")
     rendered = template.render(meta=meta)
-    rendered = black.format_str(rendered, mode=black.FileMode())
+    rendered = black.format_str(
+        rendered,
+        mode=black.Mode(
+            line_length=98,
+        ),
+    )
     return rendered
 
 
