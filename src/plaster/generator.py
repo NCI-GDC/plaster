@@ -11,6 +11,7 @@ import isort
 import jinja2 as j
 import psqlgml
 import yaml
+from isort.settings import Config
 
 from plaster.models import edges, nodes
 
@@ -247,7 +248,7 @@ def render_template(meta: Any, template_base_name: str) -> str:
             line_length=98,
         ),
     )
-    rendered = isort.code(rendered)
+    rendered = isort.code(rendered, config=Config(profile="black", line_length=98))
     return rendered
 
 
