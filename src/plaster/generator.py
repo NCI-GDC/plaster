@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
 import black
+import isort
 import jinja2 as j
 import psqlgml
 import yaml
@@ -246,6 +247,7 @@ def render_template(meta: Any, template_base_name: str) -> str:
             line_length=98,
         ),
     )
+    rendered = isort.code(rendered)
     return rendered
 
 

@@ -213,9 +213,7 @@ class {{ meta.class_name }}(base.Node):
         """
         session = self.get_session()
         if not session:
-            raise RuntimeError(
-                f"{self} not bound to a session. Try .get_versions(session)."
-            )
+            raise RuntimeError(f"{self} not bound to a session. Try .get_versions(session).")
         return self.get_versions(session)
 
     def get_versions(self, session: Session) -> query.Query:

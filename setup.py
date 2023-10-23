@@ -35,6 +35,7 @@ setup(
         "black==22.3.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "click~=8.0",
         "dulwich",
+        "isort==5.11.5",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "Jinja2~=3.0",
         "jsonschema",
         "pyyaml==5.3.1",  #  https://github.com/yaml/pyyaml/issues/724
