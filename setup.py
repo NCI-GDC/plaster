@@ -32,10 +32,10 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     install_requires=[
-        "black==22.3.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
+        "black==23.10.1",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "click~=8.0",
         "dulwich",
-        "isort==5.11.5",  # this should be the same with gdcdatamodel2's pre-commit-config file
+        "isort==5.12.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "Jinja2~=3.0",
         "jsonschema",
         "pyyaml==5.3.1",  #  https://github.com/yaml/pyyaml/issues/724
