@@ -35,7 +35,7 @@ repos:
         args: [--skip, 'B101,B106,B303,B324,B404,B405,B607,B603', --exclude, tests,
           --exclude, examples/tests]
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 23.10.1
     hooks:
       - id: black
   - repo: https://github.com/pycqa/isort

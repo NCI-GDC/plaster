@@ -47,7 +47,6 @@ def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[ps
     if edge.dst:
         dst = edge.dst
     elif edge.dst_id is not None and allow_query:
-
         dst_class = node_cls.get_subclass_named(edge.__dst_class__)
         dst = edge.get_session().query(dst_class).filter(dst_class.node_id == edge.dst_id).first()
     else:

@@ -70,7 +70,6 @@ def create_samples(
     sample_data: List[psqlgraph.Node], graph_driver_versioning: ModuleType
 ) -> None:
     with graph_driver_versioning.session_scope() as s:
-
         version_2s = []
         for node in sample_data:
             # delay adding version 2

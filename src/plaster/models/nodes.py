@@ -67,7 +67,6 @@ class PropertyTypeMeta(NamedTuple):
 
     @property
     def type(self) -> List[str]:
-
         if "enum" in self.schema and "type" not in self.schema:
             return TYPE_MAPPING["string"]
 
