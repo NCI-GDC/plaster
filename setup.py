@@ -41,7 +41,7 @@ setup(
         "pyyaml==5.3.1",  #  https://github.com/yaml/pyyaml/issues/724
         "toml~=0.10",
         "psqlgml>=0.2.4",
-        "psqlgraph",
+        "psqlgraph~=3",
     ],
     extras_require={
         "dev": [
