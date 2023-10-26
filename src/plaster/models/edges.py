@@ -56,7 +56,6 @@ class EdgeMetadata(NamedTuple):
 
     @property
     def class_name(self) -> str:
-
         src = sentence_case(self.association.src)
         label = sentence_case(self.association.label)
         dst = sentence_case(self.association.dst)

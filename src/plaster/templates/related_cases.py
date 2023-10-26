@@ -47,7 +47,6 @@ def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[ps
     if edge.dst:
         dst = edge.dst
     elif edge.dst_id is not None and allow_query:
-
         dst_class = node_cls.get_subclass_named(edge.__dst_class__)
         dst = edge.get_session().query(dst_class).filter(dst_class.node_id == edge.dst_id).first()
     else:
@@ -134,7 +133,7 @@ def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.
 
     # Get information about the existing edges
     edge_name = get_related_case_edge_cls_name(node)
-    existing_edges = getattr(node, "_{}_out".format(edge_name))
+    existing_edges = getattr(node, f"_{edge_name}_out")
 
     existing_edge_dst_case_dict = {e.dst_id: e.dst for e in existing_edges}
 

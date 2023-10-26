@@ -103,7 +103,6 @@ class PlasterConfig:
 
 
 def load_config(file_name: str = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
-
     with open(file_name) as f:
         raw_cfg = toml.load(f)
         cfg = PlasterConfig(cfg=cast(Config, raw_cfg))

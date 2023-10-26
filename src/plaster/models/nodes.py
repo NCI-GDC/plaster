@@ -67,7 +67,6 @@ class PropertyTypeMeta(NamedTuple):
 
     @property
     def type(self) -> List[str]:
-
         if "enum" in self.schema and "type" not in self.schema:
             return TYPE_MAPPING["string"]
 
@@ -120,7 +119,8 @@ class NodeMetadata(NamedTuple):
     associations: Set[str]
     schema: psqlgml.DictionarySchemaDict
     backrefs_dict: Dict[str, Dict[str, BackRefMetadata]]
-    version: str
+    dictionary_version: str
+    plaster_version: str
 
     @property
     def class_name(self) -> str:
@@ -128,7 +128,7 @@ class NodeMetadata(NamedTuple):
 
     @property
     def table_name(self) -> str:
-        return "node_{}".format(self.label.replace("_", ""))
+        return f'node_{self.label.replace("_", "")}'
 
     @property
     def defaults(self) -> Dict[str, Union[bool, float, int, str]]:

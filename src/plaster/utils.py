@@ -37,4 +37,4 @@ def parse_edge(
     src_label = subschema["id"]
     edge_name = "".join(map(get_class_name_from_id, (src_label, edge_label, dst_label)))
 
-    return "_{}_out".format(edge_name)
+    return f"_{edge_name}_out"

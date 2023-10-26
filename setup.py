@@ -29,17 +29,19 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     install_requires=[
-        "black==22.3.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
+        "black==23.10.1",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "click~=8.0",
         "dulwich",
+        "isort==5.12.0",  # this should be the same with gdcdatamodel2's pre-commit-config file
         "Jinja2~=3.0",
         "jsonschema",
-        "PyYaml~=5.4",
+        "pyyaml==5.3.1",  #  https://github.com/yaml/pyyaml/issues/724
         "toml~=0.10",
         "psqlgml>=0.2.4",
-        "psqlgraph",
+        "psqlgraph>=3",
     ],
     extras_require={
         "dev": [

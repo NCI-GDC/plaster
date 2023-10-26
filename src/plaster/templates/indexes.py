@@ -46,20 +46,21 @@ def index_name(cls: Type[psqlgraph.Node], description: str) -> str:
     Returns:
         index name
     """
-    name = "index_{}_{}".format(cls.__tablename__, description)
+    name = f"index_{cls.__tablename__}_{description}"
 
     # If the name is too long, prepend it with the first 8 hex of it's hash
     # truncate the each part of the name
     if len(name) > 40:
         old_name = name
         logger.debug(f"index name '{old_name}' too long, shortening")
-        name = "index_{}_{}_{}".format(
-            hashlib.md5(cls.__tablename__.encode("utf-8")).hexdigest()[:8],
-            "".join([a[:4] for a in cls.get_label().split("_")])[:20],
-            "_".join([a[:8] for a in description.split("_")])[:25],
-        )
 
-        logger.debug("Shortening {} -> {}".format(old_name, name))
+        short_md5 = hashlib.md5(cls.__tablename__.encode("utf-8")).hexdigest()[:8]
+        short_label = "".join([a[:4] for a in cls.get_label().split("_")])[:20]
+        short_description = "_".join([a[:8] for a in description.split("_")])[:25]
+
+        name = f"index_{short_md5}_{short_label}_{short_description}"
+
+        logger.debug(f"Shortening {old_name} -> {name}")
 
     return name
 
