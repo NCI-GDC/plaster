@@ -2,7 +2,7 @@ import itertools
 import logging
 import os
 from collections import defaultdict
-from importlib.metadata import version
+from importlib import metadata
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
@@ -129,7 +129,7 @@ def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetada
     Returns:
         metadata for nodes
     """
-    plaster_version = version("plaster")
+    plaster_version = metadata.version("plaster")
     backrefs_dict = process_dictionary_for_backrefs(dictionary)
 
     node_metas: Dict[str, nodes.NodeMetadata] = {}
