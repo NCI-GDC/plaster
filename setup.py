@@ -1,11 +1,32 @@
+import re
 from os import path
 
 from setuptools import find_packages, setup
+from setuptools_scm import ScmVersion
 
 here = path.abspath(path.dirname(__file__))
 
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
+
+
+def get_version(version: ScmVersion):
+    if version.distance == 0:
+        return str(version.tag)
+
+    from setuptools_scm.version import guess_next_version
+
+    branch = version.branch
+    if branch.startswith("release"):
+        format = "{guessed}.rc{distance}"
+    elif branch.startswith("develop"):
+        format = "{guessed}.a{distance}"
+    else:
+        local = re.sub("[^0-9a-zA-Z]+", ".", branch)
+        format = f"{{guessed}}.dev{{distance}}+{local}"
+
+    return version.format_next_version(guess_next_version, format)
+
 
 setup(
     name="plaster",
@@ -22,6 +43,7 @@ setup(
     zip_safe=True,
     include_package_data=True,
     python_requires=">=3.8",
+    use_scm_version={"version_scheme": get_version, "local_scheme": "no-local-version"},
     classifiers=[
         "Development Status :: 2 - Alpha",
         "Intended Audience :: Developers",
