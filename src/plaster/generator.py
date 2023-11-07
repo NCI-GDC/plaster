@@ -6,8 +6,6 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 
-import black
-import isort
 import jinja2 as j
 import psqlgml
 import yaml
@@ -242,13 +240,6 @@ def render_template(meta: Any, template_base_name: str) -> str:
     except j.exceptions.TemplateNotFound:
         template = env.get_template(f"{template_base_name}.py")
     rendered = template.render(meta=meta)
-    rendered = black.format_str(
-        rendered,
-        mode=black.Mode(
-            line_length=98,
-        ),
-    )
-    rendered = isort.code(rendered, config=Config(profile="black", line_length=98))
     return rendered
 
 
