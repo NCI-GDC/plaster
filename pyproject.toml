@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4"]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
@@ -37,4 +37,5 @@ ignore_missing_imports = true
 ignore_missing_imports = true
 
 [tool.setuptools_scm]
-local_scheme = "dirty-tag"
+local_scheme = "no-local-version"
+version_scheme = "versioning:get_version"
