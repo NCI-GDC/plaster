@@ -9,7 +9,6 @@ from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
 import jinja2 as j
 import psqlgml
 import yaml
-from isort.settings import Config
 
 from plaster.models import edges, nodes
 
