@@ -18,6 +18,7 @@ source = ["plaster"]
 
 [tool.isort]
 profile = "black"
+line_length = 98
 known_first_party = ["plaster"]
 
 [tool.mypy]
