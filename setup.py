@@ -21,14 +21,6 @@ def get_version():
     from setuptools_scm.version import guess_next_version
 
     branch = os.getenv("CI_COMMIT_REF_NAME", version.branch)
-    print(branch)
-    print(version)
-    print(os.getenv("CI_COMMIT_REF_NAME"))
-    import logging
-
-    logging.warning(branch)
-    logging.warning(version)
-    logging.warning(os.getenv("CI_COMMIT_REF_NAME"))
     if branch.startswith("release"):
         fmt = "{guessed}rc{distance}"
     elif branch.startswith("develop"):
