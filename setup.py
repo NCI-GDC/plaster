@@ -1,3 +1,4 @@
+import os
 import re
 from os import path
 
@@ -19,11 +20,11 @@ def get_version():
 
     from setuptools_scm.version import guess_next_version
 
-    branch = version.branch
+    branch = os.getenv("CI_COMMIT_REF_NAME", version.branch)
     if branch.startswith("release"):
-        fmt = "{guessed}.rc{distance}"
+        fmt = "{guessed}rc{distance}"
     elif branch.startswith("develop"):
-        fmt = "{guessed}.a{distance}"
+        fmt = "{guessed}a{distance}"
     else:
         local = re.sub("[^0-9a-zA-Z]+", ".", branch)
         fmt = f"{{guessed}}.dev{{distance}}+{local}"
