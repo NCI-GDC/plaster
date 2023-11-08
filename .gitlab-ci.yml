@@ -32,5 +32,4 @@ tox:
 release:
   variables:
     RELEASE_PY_VERSION: python3.8
-  before_script:
-    - git fetch --unshallow || true
+    GIT_DEPTH: 0
