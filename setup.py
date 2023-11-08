@@ -21,14 +21,14 @@ def get_version():
 
     branch = version.branch
     if branch.startswith("release"):
-        format = "{guessed}.rc{distance}"
+        fmt = "{guessed}.rc{distance}"
     elif branch.startswith("develop"):
-        format = "{guessed}.a{distance}"
+        fmt = "{guessed}.a{distance}"
     else:
         local = re.sub("[^0-9a-zA-Z]+", ".", branch)
-        format = f"{{guessed}}.dev{{distance}}+{local}"
+        fmt = f"{{guessed}}.dev{{distance}}+{local}"
 
-    return version.format_next_version(guess_next_version, format)
+    return version.format_next_version(guess_next_version, fmt)
 
 
 setup(
