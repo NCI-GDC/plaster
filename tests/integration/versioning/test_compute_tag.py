@@ -7,7 +7,7 @@ import psqlgml
 import psqlgraph
 import pytest
 import yaml
-from psqlgraph import ext, mocks
+from psqlgraph import ext, hydrator
 
 from tests.integration import tear_down_graph, utils
 
@@ -22,7 +22,7 @@ def sample_data(
     raw_schemas = {key: value.raw for key, value in test_dictionary_versioning.schema.items()}
     RawDictionary = namedtuple("RawDictionary", "schema")
     raw_dictionary = RawDictionary(schema=raw_schemas)
-    f = mocks.GraphFactory(graph_classes_versioning, raw_dictionary)
+    f = hydrator.GraphFactory(graph_classes_versioning, raw_dictionary)
     nodes = f.create_from_nodes_and_edges(
         nodes=graph["nodes"],
         edges=graph["edges"],
