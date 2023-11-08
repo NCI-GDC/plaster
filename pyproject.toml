@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4"]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]==8.0.4", "setuptools-git-versioning<2"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
@@ -18,6 +18,7 @@ source = ["plaster"]
 
 [tool.isort]
 profile = "black"
+line_length = 98
 known_first_party = ["plaster"]
 
 [tool.mypy]
@@ -35,6 +36,3 @@ ignore_missing_imports = true
 
 [tool.mypy-jsonschema]
 ignore_missing_imports = true
-
-[tool.setuptools_scm]
-local_scheme = "dirty-tag"
