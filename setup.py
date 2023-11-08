@@ -2,7 +2,8 @@ import re
 from os import path
 
 from setuptools import find_packages, setup
-from setuptools_scm import ScmVersion
+from setuptools_scm import Configuration
+from setuptools_scm._get_version_impl import parse_version
 
 here = path.abspath(path.dirname(__file__))
 
@@ -10,7 +11,9 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 
-def get_version(version: ScmVersion):
+def get_version():
+    config = Configuration()
+    version = parse_version(config)
     if version.distance == 0:
         return str(version.tag)
 
@@ -43,7 +46,10 @@ setup(
     zip_safe=True,
     include_package_data=True,
     python_requires=">=3.8",
-    use_scm_version={"version_scheme": get_version, "local_scheme": "no-local-version"},
+    setuptools_git_versioning={
+        "enabled": True,
+        "version_callback": get_version,
+    },
     classifiers=[
         "Development Status :: 2 - Alpha",
         "Intended Audience :: Developers",

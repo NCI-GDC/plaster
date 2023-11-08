@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=8"]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=8", "setuptools-git-versioning<2"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
@@ -35,5 +35,3 @@ ignore_missing_imports = true
 
 [tool.mypy-jsonschema]
 ignore_missing_imports = true
-
-[tool.setuptools_scm]
