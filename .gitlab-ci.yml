@@ -39,3 +39,4 @@ rebuild_gdcdatamodel2:
       - project: 'NCI-GDC/Development/gdcdictionary'
         ref: 'develop'
         file: '.gitlab-ci.yml'
+    needs: ["build:release"]
