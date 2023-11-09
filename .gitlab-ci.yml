@@ -46,5 +46,4 @@ rebuild_gdcdatamodel2:
     - echo $$CI_COMMIT_REF_NAME
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
-    - if: '$CI_COMMIT_REF_NAME == "feat/dev-2303-downstream-pipeline"'
     - when: manual
