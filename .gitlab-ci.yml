@@ -44,5 +44,5 @@ rebuild_gdcdatamodel2:
     - apk add --no-cache curl
     - curl --fail --request POST --form token=$CI_JOB_TOKEN --form ref=develop "https://gitlab.datacommons.io/api/v4/projects/22/trigger/pipeline"
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
     - when: manual
