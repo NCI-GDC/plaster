@@ -32,3 +32,10 @@ release:
   variables:
     RELEASE_PY_VERSION: python3.8
     GIT_DEPTH: 0
+
+microservice_a:
+  trigger:
+    include:
+      - project: 'NCI-GDC/Development/gdcdictionary'
+        ref: 'develop'
+        file: '.gitlab-ci.yml'
