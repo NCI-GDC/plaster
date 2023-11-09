@@ -1,4 +1,9 @@
 ---
+stages:
+  - .pre
+  - test
+  - build
+  - .trigger_gdcdictionary
 
 include:
   - project: nci-gdc/gitlab-templates
@@ -32,7 +37,10 @@ release:
   variables:
     RELEASE_PY_VERSION: python3.8
     GIT_DEPTH: 0
-  after_script:
+
+rebuild_gdcdatamodel2:
+  stage: .trigger_gdcdictionary
+  script:
     - curl --fail --request POST --form token=$CI_JOB_TOKEN --form ref=develop "https://gitlab.datacommons.io/api/v4/projects/22/trigger/pipeline"
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
