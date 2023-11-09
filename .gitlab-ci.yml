@@ -33,7 +33,7 @@ release:
     RELEASE_PY_VERSION: python3.8
     GIT_DEPTH: 0
 
-microservice_a:
+rebuild_gdcdatamodel2:
   trigger:
     include:
       - project: 'NCI-GDC/Development/gdcdictionary'
