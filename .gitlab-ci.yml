@@ -45,4 +45,5 @@ rebuild_gdcdatamodel2:
     - curl --fail --request POST --form token=$CI_JOB_TOKEN --form ref=develop "https://gitlab.datacommons.io/api/v4/projects/22/trigger/pipeline"
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
+    - if: '$CI_COMMIT_REF_NAME == "feat/dev-230…eam-pipeline"'
     - when: manual
