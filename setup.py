@@ -65,7 +65,7 @@ setup(
         "dulwich",
         "Jinja2~=3.0",
         "jsonschema",
-        "pyyaml==5.3.1",  #  https://github.com/yaml/pyyaml/issues/724
+        "pyyaml>=6.0.1",  #  https://github.com/yaml/pyyaml/issues/724
         "toml~=0.10",
         "psqlgml>=0.2.4",
         "psqlgraph>=3",
