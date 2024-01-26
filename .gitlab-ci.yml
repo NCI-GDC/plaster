@@ -1,13 +1,7 @@
 ---
-stages:
-  - .pre
-  - test
-  - build
-  - .trigger_gdcdictionary
-
 include:
   - project: nci-gdc/gitlab-templates
-    ref: 0.3.1
+    ref: feat/dev-2441-add-python-wheel-release
     file:
       - templates/global/full.yaml
       - templates/python/full.yaml
@@ -36,10 +30,9 @@ tox:
 release:
   variables:
     RELEASE_PY_VERSION: python3.8
-    GIT_DEPTH: 0
 
 rebuild_gdcdatamodel2:
-  stage: .trigger_gdcdictionary
+  stage: .post
   script:
     - apk add --no-cache curl
     - >
