@@ -1,3 +1,7 @@
-from pkg_resources import get_distribution
+from importlib.metadata import PackageNotFoundError, version
 
-VERSION = get_distribution(__name__).version
+try:
+    VERSION = version("gdc-plaster")
+except PackageNotFoundError:
+    # package is not installed
+    pass
