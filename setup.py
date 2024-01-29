@@ -33,7 +33,7 @@ def get_version():
 
 
 setup(
-    name="plaster",
+    name="gdc-plaster",
     author="Rowland Ogwara",
     author_email="rogwara@uchicago.edu",
     keywords="GDC,datamodels,generator",
