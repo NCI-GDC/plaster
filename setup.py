@@ -6,9 +6,9 @@ from setuptools import find_packages, setup
 from setuptools_scm import Configuration
 from setuptools_scm._get_version_impl import parse_version
 
-here = path.abspath(path.dirname(__file__))
+current_dir = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, "README.md"), encoding="utf-8") as f:
+with open(path.join(current_dir, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 
