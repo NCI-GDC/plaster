@@ -1,7 +1,7 @@
 ---
 include:
   - project: nci-gdc/gitlab-templates
-    ref: feat/dev-2441-add-python-wheel-release
+    ref: 0.6.2
     file:
       - templates/global/full.yaml
       - templates/python/full.yaml
