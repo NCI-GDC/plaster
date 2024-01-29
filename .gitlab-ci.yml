@@ -5,8 +5,7 @@ include:
     file:
       - templates/global/full.yaml
       - templates/python/full.yaml
-      - templates/common/python/tox.yaml
-      - templates/common/python/release.yaml
+      - templates/common/python.yaml
 
 tox:
   parallel:
