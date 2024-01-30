@@ -10,6 +10,7 @@ import jinja2 as j
 import psqlgml
 import yaml
 
+from plaster import VERSION
 from plaster.models import edges, nodes
 
 NOT_RELATED_CASES_CATEGORIES = {
@@ -126,7 +127,7 @@ def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetada
     Returns:
         metadata for nodes
     """
-    plaster_version = metadata.version("plaster")
+    plaster_version = VERSION
     backrefs_dict = process_dictionary_for_backrefs(dictionary)
 
     node_metas: Dict[str, nodes.NodeMetadata] = {}
