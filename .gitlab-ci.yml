@@ -50,7 +50,7 @@ rebuild_gdcdatamodel2:
   script:
     - apk add --no-cache curl
     - echo $CI_TRIGGERED_BRANCH
-    - export $VERSION=$(cat VERSION.txt)
+    - export VERSION=$(cat VERSION.txt)
     - echo $VERSION
     - >
       curl --fail --request POST
