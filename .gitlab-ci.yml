@@ -56,7 +56,7 @@ rebuild_gdcdatamodel2:
       curl --fail --request POST
       --form token=$CI_JOB_TOKEN
       --form ref=${CI_TRIGGERED_BRANCH:=develop}
-      --form variables[CI_TRIGGER_BRANCH]=$VERSION
+      --form variables[CI_TRIGGER_BRANCH]=${CI_TRIGGER_BRANCH:-$VERSION}
       "https://gitlab.datacommons.io/api/v4/projects/22/trigger/pipeline"
   rules:
     - if: $CI_COMMIT_TAG
