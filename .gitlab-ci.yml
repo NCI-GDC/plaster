@@ -38,7 +38,7 @@ release:
   variables:
     RELEASE_PY_VERSION: python3.8
   after_script:
-    - pip install "setuptools_scm>=6.2,<8" "setuptools-git-versioning<2"
+    - pip install "setuptools_scm==8.0.4" "setuptools-git-versioning<2"
     - python -m setuptools_git_versioning | tee VERSION.txt
   artifacts:
     paths:
