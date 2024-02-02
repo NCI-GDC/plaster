@@ -89,7 +89,7 @@ def generate(
     "--input-dir",
     help="dictionary base location, used by psqlgml",
     type=click.Path(),
-    default=None,
+    default=os.getcwd(),
 )
 @click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
 @click.option(
@@ -107,8 +107,6 @@ def generate(
     schema_dir: Optional[str],
     namespace=Optional[str],
 ) -> None:
-    if input_dir is None:
-        input_dir = os.getcwd()
     dictionary = psqlgml.load_local(
         name=dict_name,
         version=dict_version,
