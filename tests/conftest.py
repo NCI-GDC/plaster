@@ -1,4 +1,5 @@
 from importlib import resources
+from os import PathLike
 
 import psqlgml
 import pytest
@@ -7,19 +8,19 @@ from plaster import config
 
 
 @pytest.fixture(scope="session")
-def app_settings() -> str:
-    with resources.path("tests", "plaster-test.toml") as p:
+def app_settings() -> PathLike:
+    with resources.as_file(resources.files("tests").joinpath("plaster-test.toml")) as p:
         yield p
 
 
 @pytest.fixture(scope="session")
-def plaster_config(app_settings: str) -> config.PlasterConfig:
+def plaster_config(app_settings: PathLike) -> config.PlasterConfig:
     yield config.load_config(app_settings)
 
 
 @pytest.fixture(scope="session")
-def test_data_location() -> str:
-    with resources.path("tests", "data") as p:
+def test_data_location() -> PathLike:
+    with resources.as_file(resources.files("tests").joinpath("data")) as p:
         yield p
 
 

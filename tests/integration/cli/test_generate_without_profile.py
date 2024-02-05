@@ -26,7 +26,7 @@ def test_dict_bad_location(cli_runner: CliRunner, tmpdir: PathLike) -> None:
 
 
 def test_dict_bad_dictionary(
-    cli_runner: CliRunner, test_data_location: str, tmpdir: PathLike
+    cli_runner: CliRunner, test_data_location: PathLike, tmpdir: PathLike
 ) -> None:
     result = cli_runner.invoke(
         cli.app,
@@ -46,7 +46,7 @@ def test_dict_bad_dictionary(
 
 
 def test_dict_bad_version(
-    cli_runner: CliRunner, test_data_location: str, tmpdir: PathLike
+    cli_runner: CliRunner, test_data_location: PathLike, tmpdir: PathLike
 ) -> None:
     result = cli_runner.invoke(
         cli.app,
@@ -65,7 +65,9 @@ def test_dict_bad_version(
     assert result.exit_code != 0
 
 
-def test_generation(cli_runner: CliRunner, test_data_location: str, tmpdir: PathLike) -> None:
+def test_generation(
+    cli_runner: CliRunner, test_data_location: PathLike, tmpdir: PathLike
+) -> None:
     result = cli_runner.invoke(
         cli.app,
         [

@@ -16,7 +16,7 @@ from tests.integration import tear_down_graph, utils
 def sample_data(
     graph_classes_versioning: ModuleType, test_dictionary_versioning: psqlgml.Dictionary
 ) -> List[psqlgraph.Node]:
-    with resources.path("tests", "data/sample.yaml") as f:
+    with resources.as_file(resources.files("tests").joinpath("data/sample.yaml")) as f:
         graph = yaml.safe_load(f)
 
     raw_schemas = {key: value.raw for key, value in test_dictionary_versioning.schema.items()}
