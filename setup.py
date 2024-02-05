@@ -46,7 +46,7 @@ setup(
     packages=find_packages(where="src"),
     zip_safe=True,
     include_package_data=True,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     setuptools_git_versioning={
         "enabled": True,
         "version_callback": get_version,
@@ -55,7 +55,6 @@ setup(
         "Development Status :: 2 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
