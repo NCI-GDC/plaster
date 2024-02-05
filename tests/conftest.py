@@ -1,4 +1,4 @@
-from os import path
+from importlib import resources
 
 import psqlgml
 import pytest
@@ -8,8 +8,8 @@ from plaster import config
 
 @pytest.fixture(scope="session")
 def app_settings() -> str:
-    current_dir = path.abspath(path.dirname(__file__))
-    return path.join(current_dir, "plaster-test.toml")
+    with resources.path("tests", "plaster-test.toml") as p:
+        yield p
 
 
 @pytest.fixture(scope="session")
@@ -19,8 +19,8 @@ def plaster_config(app_settings: str) -> config.PlasterConfig:
 
 @pytest.fixture(scope="session")
 def test_data_location() -> str:
-    current_dir = path.abspath(path.dirname(__file__))
-    return path.join(current_dir, "data")
+    with resources.path("tests", "data") as p:
+        yield p
 
 
 @pytest.fixture(scope="session")
