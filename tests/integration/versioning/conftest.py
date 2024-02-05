@@ -1,6 +1,5 @@
 import sys
 
-import pkg_resources
 import psqlgml
 import pytest
 from _pytest import tmpdir
@@ -10,9 +9,12 @@ from plaster import cli, config
 
 
 @pytest.fixture(scope="session")
-def test_dictionary_versioning(plaster_config: config.PlasterConfig) -> psqlgml.Dictionary:
-    dict_dir = pkg_resources.resource_filename("tests", "data")
-    return psqlgml.load_local(version="0.1.0", name="version_dict", dictionary_location=dict_dir)
+def test_dictionary_versioning(
+    plaster_config: config.PlasterConfig, test_data_location: str
+) -> psqlgml.Dictionary:
+    return psqlgml.load_local(
+        version="0.1.0", name="version_dict", dictionary_location=test_data_location
+    )
 
 
 @pytest.fixture(scope="session")
