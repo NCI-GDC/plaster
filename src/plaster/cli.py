@@ -99,7 +99,7 @@ def generate(
     default=None,
     help="Output directory for partial schema",
 )
-def generate(
+def generate_without_profile(
     dict_name: str,
     dict_version: str,
     input_dir: Optional[str],
