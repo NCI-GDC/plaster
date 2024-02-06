@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 from typing import Optional
 
@@ -71,6 +72,51 @@ def generate(
 
     if dictionary is None:
         logger.error(f"Could not load dictionary for {profile_cfg}")
+        sys.exit("Dictionary not loaded")
+
+    generator.generate(dictionary, output_dir, namespace=namespace)
+
+    if schema_dir is not None:
+        generator.write_partial_schema(dictionary, schema_dir)
+
+
+@app.command(name="generate-no-profile", help="Generate source code")
+@click.option("--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary")
+@click.option("--dict-version", help="dictionary version, used by psqlgml", required=True)
+@click.option("-n", "--namespace", help="dicitonary namespace, used by plaster", default=None)
+@click.option(
+    "-i",
+    "--input-dir",
+    help="dictionary base location, used by psqlgml",
+    type=click.Path(),
+    default=os.getcwd(),
+)
+@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-s",
+    "--schema-dir",
+    type=click.Path(),
+    default=None,
+    help="Output directory for partial schema",
+)
+def generate_without_profile(
+    dict_name: str,
+    dict_version: str,
+    input_dir: Optional[str],
+    output_dir: str,
+    schema_dir: Optional[str],
+    namespace=Optional[str],
+) -> None:
+    dictionary = psqlgml.load_local(
+        name=dict_name,
+        version=dict_version,
+        dictionary_location=input_dir,
+    )
+
+    if dictionary is None:
+        logger.error(
+            f"Could not load dictionary for name={dict_name}, version={dict_version}, path={input_dir}"
+        )
         sys.exit("Dictionary not loaded")
 
     generator.generate(dictionary, output_dir, namespace=namespace)

@@ -1,8 +1,8 @@
 from collections import namedtuple
+from importlib import resources
 from types import ModuleType
 from typing import List
 
-import pkg_resources
 import psqlgml
 import psqlgraph
 import pytest
@@ -16,8 +16,9 @@ from tests.integration import tear_down_graph, utils
 def sample_data(
     graph_classes_versioning: ModuleType, test_dictionary_versioning: psqlgml.Dictionary
 ) -> List[psqlgraph.Node]:
-    with pkg_resources.resource_stream("tests", "data/sample.yaml") as f:
-        graph = yaml.safe_load(f)
+    with resources.as_file(resources.files("tests").joinpath("data/sample.yaml")) as f:
+        with open(f) as fp:
+            graph = yaml.safe_load(fp)
 
     raw_schemas = {key: value.raw for key, value in test_dictionary_versioning.schema.items()}
     RawDictionary = namedtuple("RawDictionary", "schema")

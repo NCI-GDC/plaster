@@ -102,7 +102,7 @@ class PlasterConfig:
         return self.cfg.get("profiles", {}).get(name)
 
 
-def load_config(file_name: str = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
+def load_config(file_name: os.PathLike = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
     with open(file_name) as f:
         raw_cfg = toml.load(f)
         cfg = PlasterConfig(cfg=cast(Config, raw_cfg))
