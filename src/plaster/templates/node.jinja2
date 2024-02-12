@@ -110,6 +110,10 @@ class {{ meta.class_name }}(base.Node):
         self.node_id = value
 
     @classmethod
+    def pg_secondary_keys(cls) -> List[List[str]]:
+        return cls.__pg_secondary_keys
+
+    @classmethod
     def post_process(cls) -> None:
         cls.add_secondary_key_indexes()
         cls.populate_pg_backrefs()

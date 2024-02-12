@@ -7,6 +7,7 @@ from deepdiff import DeepDiff
 def test_pg_secondary_keys(graph_classes: ModuleType) -> None:
     Case = graph_classes.Case
     assert DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
+    assert DeepDiff(Case.pg_secondary_keys(), [["project_id", "submitter_id"]]) == {}
 
 
 def test_secondary_keys_dict(graph_classes: ModuleType) -> None:
