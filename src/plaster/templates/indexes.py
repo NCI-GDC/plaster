@@ -17,6 +17,7 @@ To speed up the query, indexes are built based on secondary keys.
 """
 import hashlib
 import logging
+import sys
 from typing import Any, Iterable, Tuple, Type
 
 import psqlgraph
@@ -54,7 +55,8 @@ def index_name(cls: Type[psqlgraph.Node], description: str) -> str:
         old_name = name
         logger.debug(f"index name '{old_name}' too long, shortening")
 
-        short_md5 = hashlib.md5(cls.__tablename__.encode("utf-8")).hexdigest()[:8]
+        extras = {} if sys.version_info < (3, 9) else {"usedforsecurity": False}
+        short_md5 = hashlib.md5(cls.__tablename__.encode("utf-8"), **extras).hexdigest()[:8]
         short_label = "".join([a[:4] for a in cls.get_label().split("_")])[:20]
         short_description = "_".join([a[:8] for a in description.split("_")])[:25]
 
