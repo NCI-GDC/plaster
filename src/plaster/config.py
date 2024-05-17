@@ -1,7 +1,7 @@
 import os
 import uuid
 from logging.config import dictConfig
-from typing import Dict, Final, Literal, Optional, TypedDict, cast
+from typing import Dict, Final, Literal, Optional, TypedDict, Union, cast
 
 import toml
 import yaml
@@ -102,7 +102,7 @@ class PlasterConfig:
         return self.cfg.get("profiles", {}).get(name)
 
 
-def load_config(file_name: os.PathLike = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
+def load_config(file_name: Union[os.PathLike, str] = DEFAULT_SETTINGS_FILE) -> PlasterConfig:
     with open(file_name) as f:
         raw_cfg = toml.load(f)
         cfg = PlasterConfig(cfg=cast(Config, raw_cfg))

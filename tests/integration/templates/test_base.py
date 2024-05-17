@@ -2,16 +2,13 @@ import sys
 from types import ModuleType
 
 import pytest
-from _pytest import fixtures, tmpdir
 from click.testing import CliRunner
 
 from plaster import cli
 
 
 @pytest.fixture(scope="session")
-def graph_classes_versioning(
-    cli_runner: CliRunner, app_settings: str, tmpdir_factory: tmpdir.TempdirFactory
-) -> None:
+def graph_classes_versioning(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> None:
     tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,
@@ -56,8 +53,8 @@ def test_get_namespace_from_toml(graph_classes_versioning: ModuleType) -> None:
 def test_env_namespace_overwrite_default(
     cli_runner: CliRunner,
     app_settings: str,
-    tmpdir_factory: tmpdir.TempdirFactory,
-    monkeypatch: fixtures.fixture,
+    tmpdir_factory,
+    monkeypatch,
 ) -> None:
     """Test get namespace from env overwrite default.
 
@@ -90,8 +87,8 @@ def test_env_namespace_overwrite_default(
 def test_env_namespace_overwrite_toml(
     cli_runner: CliRunner,
     app_settings: str,
-    tmpdir_factory: tmpdir.TempdirFactory,
-    monkeypatch: fixtures.fixture,
+    tmpdir_factory,
+    monkeypatch,
 ) -> None:
     """Test get namespace from env overwrite toml.
 

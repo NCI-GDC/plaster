@@ -83,7 +83,7 @@ def generate(
 @app.command(name="generate-no-profile", help="Generate source code")
 @click.option("--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary")
 @click.option("--dict-version", help="dictionary version, used by psqlgml", required=True)
-@click.option("-n", "--namespace", help="dicitonary namespace, used by plaster", default=None)
+@click.option("-n", "--namespace", help="dictionary namespace, used by plaster", default=None)
 @click.option(
     "-i",
     "--input-dir",
@@ -105,7 +105,7 @@ def generate_without_profile(
     input_dir: Optional[str],
     output_dir: str,
     schema_dir: Optional[str],
-    namespace=Optional[str],
+    namespace: Optional[str],
 ) -> None:
     dictionary = psqlgml.load_local(
         name=dict_name,

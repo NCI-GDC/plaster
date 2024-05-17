@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import sys
 from typing import NamedTuple, Optional
 
 import psqlgml
