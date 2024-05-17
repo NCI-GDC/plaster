@@ -34,7 +34,7 @@ rebuild_gdcdatamodel2:
   extends: .job-with-ssh-keys
   image: ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
   script:
-    - apk add --no-cache curl
+    - dnf install curl-minimal
     - echo $CI_TRIGGERED_BRANCH
     - export VERSION=$(python -m setuptools_scm)
     - echo $VERSION
