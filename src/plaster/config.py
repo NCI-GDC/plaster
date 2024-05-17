@@ -75,7 +75,7 @@ class PlasterConfig:
                 level: {level}
                 formatter: simple
                 filename: {log_file}
-                maxBytes: 4096
+                maxBytes: 409600000
                 backupCount: 10
             loggers:
               plaster:

@@ -10,7 +10,7 @@ variables:
 
 pre-commit:
   script:
-    - python -m pip install tox >= 4.5.0
+    - python -m pip install tox>=4.5
     - tox -re lint
 
 tox:
