@@ -4,7 +4,6 @@ from types import ModuleType
 import psqlgml
 import psqlgraph
 import pytest
-from _pytest import tmpdir
 from click.testing import CliRunner
 from psqlgraph import ext
 
@@ -28,9 +27,7 @@ def test_dict() -> psqlgml.Dictionary:
 
 
 @pytest.fixture(scope="session")
-def graph_classes(
-    cli_runner: CliRunner, app_settings: str, tmpdir_factory: tmpdir.TempdirFactory
-) -> None:
+def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> None:
     tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,

@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import sys
 from typing import NamedTuple, Optional
 
 import psqlgml
@@ -32,7 +33,8 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
         return table_name
 
     logger.debug(f"Edge table_name {table_name} too long, shortening")
-    shortened_name = hashlib.md5(table_name.encode()).hexdigest()[:8]
+    extras = {} if sys.version_info < (3, 9) else {"usedforsecurity": False}
+    shortened_name = hashlib.md5(table_name.encode(), **extras).hexdigest()[:8]
     shortened_label = "".join([a[:2] for a in label.split("_")])[:7]
     shortened_dst_label = "".join([a[:2] for a in dst_label.split("_")])[:10]
     shortened_src_label = "".join([a[:2] for a in src_label.split("_")])[:10]

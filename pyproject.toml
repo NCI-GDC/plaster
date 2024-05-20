@@ -1,6 +1,26 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]==8.0.4", "setuptools-git-versioning<2"]
+requires = ["setuptools>=66", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "gdc-plaster"
+dynamic = [
+  "version",
+  "description",
+  "readme",
+  "requires-python",
+  "license",
+  "authors",
+  "maintainers",
+  "keywords",
+  "classifiers",
+  "urls",
+  "scripts",
+  "gui-scripts",
+  "entry-points",
+  "dependencies",
+  "optional-dependencies"
+]
 
 [tool.black]
 line-length = 98
@@ -36,3 +56,29 @@ ignore_missing_imports = true
 
 [tool.mypy-jsonschema]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = 6.2
+python_files = "test_*.py"
+python_functions = "test_*"
+junit_family = "xunit2"
+junit_logging = "system-out"
+console_output_style = "classic"
+log_cli_level = "INFO"
+log_cli = "true"
+filterwarnings = ["ignore::DeprecationWarning"]
+addopts = "-rfE --color=yes --cov=plaster --cov-report term"
+norecursedirs = [
+  ".git",
+  ".tox",
+  "dist",
+  "build"
+]
+testpaths = [
+  "tests/unit",
+  "tests/integration"
+]
+
+[tool.setuptools_scm]
+local_scheme = "versionista-local-format"
+version_scheme = "versionista-format"

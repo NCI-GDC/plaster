@@ -130,3 +130,4 @@ fabric.properties
 .idea
 .project
 .pydevproject
+report.xml

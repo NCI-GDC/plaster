@@ -2,7 +2,6 @@ import sys
 
 import psqlgml
 import pytest
-from _pytest import tmpdir
 from click.testing import CliRunner
 
 from plaster import cli, config
@@ -18,9 +17,7 @@ def test_dictionary_versioning(
 
 
 @pytest.fixture(scope="session")
-def graph_classes_versioning(
-    cli_runner: CliRunner, app_settings: str, tmpdir_factory: tmpdir.TempdirFactory
-) -> None:
+def graph_classes_versioning(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> None:
     tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,
