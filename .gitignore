@@ -131,3 +131,4 @@ fabric.properties
 .project
 .pydevproject
 report.xml
+**/.env
