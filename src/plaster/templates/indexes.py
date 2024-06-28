@@ -56,11 +56,14 @@ def index_name(cls: Type[psqlgraph.Node], description: str) -> str:
         logger.debug(f"index name '{old_name}' too long, shortening")
 
         __name = cls.__tablename__.encode("utf-8")
-        extras = {} if sys.version_info < (3, 9) else {"usedforsecurity": False}
-
         # hash is not used for security, only used to generate unique names,
         # and all data used are internally generated.
-        short_md5 = hashlib.md5(__name, **extras).hexdigest()[:8]  # nosec
+        if sys.version_info < (3, 9):
+            md5_hash = hashlib.md5(__name)  # nosec
+        else:
+            md5_hash = hashlib.md5(__name, usedforsecurity=False)
+
+        short_md5 = md5_hash.hexdigest()[:8]
         short_label = "".join([a[:4] for a in cls.get_label().split("_")])[:20]
         short_description = "_".join([a[:8] for a in description.split("_")])[:25]
 
