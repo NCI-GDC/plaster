@@ -22,6 +22,7 @@ from .helpers import (
 
 class {{ meta.class_name }}(base.Node):
     __tablename__: str = "{{ meta.table_name }}"
+    __label__: str = "{{ meta.label }}"
 
     # this field contains values of uniqueProperties
     __pg_secondary_keys: List[List[str]] = {{ meta.secondary_keys }}
@@ -33,10 +34,6 @@ class {{ meta.class_name }}(base.Node):
     _pg_backrefs: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_edges: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
     _pg_links: Optional[Dict[str, Dict[str, Union[str, psqlgraph.Node]]]] = None
-
-    @classmethod
-    def get_label(cls) -> str:
-        return "{{ meta.label }}"
 
 {% if meta.tag_props %}
     tag_properties: List[str] = {{ meta.tag_props }}
