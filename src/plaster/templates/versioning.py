@@ -14,14 +14,17 @@ Rules:
 """
 import os
 import uuid
-from functools import lru_cache
-from typing import Any, Dict, Iterator, List
+from collections.abc import Iterator
+from functools import cache
+from typing import Any, Dict, List
 
 import psqlgraph
 import sqlalchemy
 from sqlalchemy import engine, event, orm
 
-UUID_NAMESPACE_SEED = os.getenv("UUID_NAMESPACE_SEED", "86bb916a-24c5-48e4-8a46-5ea73a379d47")
+UUID_NAMESPACE_SEED = os.getenv(
+    "UUID_NAMESPACE_SEED", "86bb916a-24c5-48e4-8a46-5ea73a379d47"
+)
 UUID_NAMESPACE = uuid.UUID(f"urn:uuid:{UUID_NAMESPACE_SEED}", version=4)
 
 
@@ -123,7 +126,7 @@ def __generate_hash(seed: List[str], label: str) -> str:
     return str(uuid.uuid5(namespace, name))
 
 
-@lru_cache(maxsize=None)
+@cache
 def compute_tag(node: psqlgraph.Node) -> str:
     """Compute unique tag for given node.
 
@@ -156,7 +159,9 @@ def __get_tagged_version(
         int: appropriate version number to use. 1 greater than the current max
     """
     query = sqlalchemy.select([table]).where(
-        sqlalchemy.and_(table.c._sysan[TagKeys.tag].astext == tag, table.c.node_id != node_id)
+        sqlalchemy.and_(
+            table.c._sysan[TagKeys.tag].astext == tag, table.c.node_id != node_id
+        )
     )
     max_version = 0
     for r in conn.execute(query):
@@ -164,7 +169,9 @@ def __get_tagged_version(
 
         # reset latest
         r._sysan[TagKeys.latest] = False
-        conn.execute(table.update().where(table.c.node_id == r.node_id).values(_sysan=r._sysan))
+        conn.execute(
+            table.update().where(table.c.node_id == r.node_id).values(_sysan=r._sysan)
+        )
     return max_version + 1
 
 
@@ -197,5 +204,7 @@ def inject_set_tag_after_insert(cls: psqlgraph.Node) -> None:
 
         # update tag and version
         conn.execute(
-            table.update().where(table.c.node_id == node.node_id).values(_sysan=node._sysan)
+            table.update()
+            .where(table.c.node_id == node.node_id)
+            .values(_sysan=node._sysan)
         )

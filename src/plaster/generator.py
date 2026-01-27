@@ -2,9 +2,9 @@ import itertools
 import logging
 import os
 from collections import defaultdict
-from importlib import metadata
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, Iterable, NamedTuple, Optional, Set
+from typing import Any, Dict, NamedTuple, Optional, Set
 
 import jinja2 as j
 import psqlgml
@@ -114,7 +114,9 @@ def process_dictionary_for_backrefs(
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(assoc.name, assoc.src)
+        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(
+            assoc.name, assoc.src
+        )
     return backrefs_dict
 
 
@@ -162,20 +164,28 @@ def generate(
         None
     """
     os.makedirs(output_dir, exist_ok=True)
-    import_metas: Set["ImportMeta"] = set()
+    import_metas: Set[ImportMeta] = set()
 
     node_metas = generate_nodes(dictionary)
     for node_meta in node_metas.values():
         render_and_write_file(node_meta, "node", output_dir, node_meta.label)
-        import_metas.add(ImportMeta(package=node_meta.label, class_name=node_meta.class_name))
+        import_metas.add(
+            ImportMeta(package=node_meta.label, class_name=node_meta.class_name)
+        )
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
     relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
 
-    for edge_meta in itertools.chain(edges_meta_generator, relates_to_case_edge_meta_generator):
-        render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
+    for edge_meta in itertools.chain(
+        edges_meta_generator, relates_to_case_edge_meta_generator
+    ):
+        render_and_write_file(
+            edge_meta, "edge", output_dir, edge_meta.class_name.lower()
+        )
         import_metas.add(
-            ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
+            ImportMeta(
+                package=edge_meta.class_name.lower(), class_name=edge_meta.class_name
+            )
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")

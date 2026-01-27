@@ -18,7 +18,8 @@ To speed up the query, indexes are built based on secondary keys.
 import hashlib
 import logging
 import sys
-from typing import Any, Iterable, Tuple, Type
+from collections.abc import Iterable
+from typing import Any, Tuple, Type
 
 import psqlgraph
 import sqlalchemy
@@ -140,7 +141,9 @@ class SecondaryKeyComparator(hybrid.Comparator):
         cls = self.__clause_element__()
         secondary_keys = cls.pg_secondary_keys()
         key_pairs = (
-            (keys, values) for keys, values in zip(secondary_keys, other) if "id" not in keys
+            (keys, values)
+            for keys, values in zip(secondary_keys, other)
+            if "id" not in keys
         )
         for keys, values in key_pairs:
             other_dict = {key: val for key, val in zip(keys, values)}

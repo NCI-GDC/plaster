@@ -1,6 +1,7 @@
 """This file only contains helper functions about related cases."""
 import itertools
-from typing import Collection, Dict, Generator, Iterator, Optional, Set, Union
+from collections.abc import Collection, Generator, Iterator
+from typing import Dict, Optional, Set, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -26,13 +27,20 @@ def get_edge_src(edge: psqlgraph.Edge) -> Optional[psqlgraph.Node]:
         src = edge.src
     elif edge.src_id is not None:
         src_class = node_cls.get_subclass_named(edge.__src_class__)
-        src = edge.get_session().query(src_class).filter(src_class.node_id == edge.src_id).first()
+        src = (
+            edge.get_session()
+            .query(src_class)
+            .filter(src_class.node_id == edge.src_id)
+            .first()
+        )
     else:
         src = None
     return src
 
 
-def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[psqlgraph.Node]:
+def get_edge_dst(
+    edge: psqlgraph.Edge, allow_query: bool = False
+) -> Optional[psqlgraph.Node]:
     """Look up edge destination node.
 
     Args:
@@ -48,14 +56,21 @@ def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[ps
         dst = edge.dst
     elif edge.dst_id is not None and allow_query:
         dst_class = node_cls.get_subclass_named(edge.__dst_class__)
-        dst = edge.get_session().query(dst_class).filter(dst_class.node_id == edge.dst_id).first()
+        dst = (
+            edge.get_session()
+            .query(dst_class)
+            .filter(dst_class.node_id == edge.dst_id)
+            .first()
+        )
     else:
         dst = None
 
     return dst
 
 
-def get_related_cases_from_cache(node: psqlgraph.Node) -> Generator[psqlgraph.Node, None, None]:
+def get_related_cases_from_cache(
+    node: psqlgraph.Node,
+) -> Generator[psqlgraph.Node, None, None]:
     """Get the cached related case ids from this node's case shortcut edges.
 
     Args:
@@ -100,9 +115,13 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     edges_out = [e for e in node.edges_out if e in node.get_session()]
 
     # Get the cached ids from parents
-    edges_out_filtered = (e for e in edges_out if e.__class__.__name__ not in skip_edges_named)
+    edges_out_filtered = (
+        e for e in edges_out if e.__class__.__name__ not in skip_edges_named
+    )
     dsts = (e.dst for e in edges_out_filtered if e.dst)
-    cases_chain = itertools.chain.from_iterable(dst._related_cases_from_cache for dst in dsts)
+    cases_chain = itertools.chain.from_iterable(
+        dst._related_cases_from_cache for dst in dsts
+    )
     cases = set(cases_chain)
 
     # Are any parents cases?
@@ -117,7 +136,9 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     return filter(None, cases)
 
 
-def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]) -> None:
+def update_cache_edges(
+    node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]
+) -> None:
     """Create new edges or deletes old edges.
 
         Given node and a dictionary of correct_cases

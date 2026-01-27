@@ -3,7 +3,6 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-import plaster
 from plaster import cli
 
 
