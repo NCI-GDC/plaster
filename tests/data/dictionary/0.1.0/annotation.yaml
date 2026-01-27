@@ -72,8 +72,10 @@ properties:
       - Duplicate item
       - General
       - Genotype mismatch
-      - History of acceptable prior treatment related to a prior/other malignancy
-      - History of unacceptable prior treatment related to a prior/other malignancy
+      - History of acceptable prior treatment related to a prior/other 
+        malignancy
+      - History of unacceptable prior treatment related to a prior/other 
+        malignancy
       - Inadvertently shipped
       - Item does not meet study protocol
       - Item flagged DNU

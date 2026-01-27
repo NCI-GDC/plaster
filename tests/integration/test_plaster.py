@@ -2,9 +2,9 @@ from types import ModuleType
 
 
 def test_back_refs(graph_classes: ModuleType) -> None:
-    Project = graph_classes.Project
-    assert Project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
-    assert Project._pg_backrefs["cases"]["name"] == "projects"
+    project = graph_classes.Project
+    assert project._pg_backrefs["cases"]["src_type"] == graph_classes.Case
+    assert project._pg_backrefs["cases"]["name"] == "projects"
 
 
 def test_pg_links(graph_classes: ModuleType) -> None:

@@ -1,7 +1,7 @@
 import os
 import uuid
 from logging.config import dictConfig
-from typing import Dict, Final, Literal, Optional, TypedDict, Union, cast
+from typing import Final, Literal, Optional, TypedDict, Union, cast
 
 import toml
 import yaml
@@ -31,7 +31,7 @@ class Profile(TypedDict):
 
 class Config(TypedDict):
     title: str
-    profiles: Dict[str, Profile]
+    profiles: dict[str, Profile]
     environment: EnvironmentVars
     logging: LoggingConfig
 

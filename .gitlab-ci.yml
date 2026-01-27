@@ -32,7 +32,8 @@ tox:
 rebuild_gdcdatamodel2:
   stage: .post
   extends: .job-with-ssh-keys
-  image: ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
+  image: 
+    ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
   script:
     - dnf install curl-minimal
     - pip install setuptools_scm versionista

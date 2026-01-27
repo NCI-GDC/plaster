@@ -11,10 +11,10 @@ def test_create_index_name_short_name(graph_classes: ModuleType) -> None:
     Args:
         graph_classes: all node and edge classes
     """
-    Case = graph_classes.Case
+    case = graph_classes.Case
     description = "submitter_id"
 
-    index_name = graph_classes.indexes.index_name(Case, description)
+    index_name = graph_classes.indexes.index_name(case, description)
 
     assert index_name == "index_node_case_submitter_id"
 
@@ -29,9 +29,9 @@ def test_create_index_name_long_name(graph_classes: ModuleType) -> None:
     Args:
         graph_classes: all node and edge classes
     """
-    Case = graph_classes.Case
+    case = graph_classes.Case
     description = "veryveryveryveryveryveryveryverylongdescription"
 
-    index_name = graph_classes.indexes.index_name(Case, description)
+    index_name = graph_classes.indexes.index_name(case, description)
 
     assert index_name == "index_2271f5c5_case_veryvery"

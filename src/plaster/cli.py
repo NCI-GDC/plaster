@@ -37,7 +37,9 @@ def echo() -> None:
 
 @app.command(name="generate", help="Generate source code")
 @click.option("-p", "--profile", type=str, help="Name of the profile to generate")
-@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-o", "--output-dir", type=click.Path(), help="Output directory to generate source"
+)
 @click.option(
     "-s",
     "--schema-dir",
@@ -91,7 +93,9 @@ def generate(
     type=click.Path(),
     default=os.getcwd(),
 )
-@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-o", "--output-dir", type=click.Path(), help="Output directory to generate source"
+)
 @click.option(
     "-s",
     "--schema-dir",

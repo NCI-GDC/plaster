@@ -4,7 +4,7 @@ import os
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, NamedTuple, Optional, Set
+from typing import Any, NamedTuple, Optional
 
 import jinja2 as j
 import psqlgml
@@ -37,8 +37,8 @@ class ImportMeta(NamedTuple):
 
 
 def generate_edges(
-    associations: Set[psqlgml.Association],
-    node_metas: Dict[str, nodes.NodeMetadata],
+    associations: set[psqlgml.Association],
+    node_metas: dict[str, nodes.NodeMetadata],
 ) -> Iterable[edges.EdgeMetadata]:
     """Read dictionary associations and generate metadata for edges.
 
@@ -62,7 +62,7 @@ def generate_edges(
 
 
 def generate_relates_to_case_edges(
-    node_metas: Dict[str, nodes.NodeMetadata]
+    node_metas: dict[str, nodes.NodeMetadata],
 ) -> Iterable[edges.EdgeMetadata]:
     """Generate relates to case edge metadata.
 
@@ -100,7 +100,7 @@ def generate_relates_to_case_edges(
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, nodes.BackRefMetadata]]:
+) -> dict[str, dict[str, nodes.BackRefMetadata]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
@@ -109,18 +109,16 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backrefs_dict: Dict[str, Dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
+    backrefs_dict: dict[str, dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
             continue
-        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(
-            assoc.name, assoc.src
-        )
+        backrefs_dict[assoc.dst][assoc.backref] = nodes.BackRefMetadata(assoc.name, assoc.src)
     return backrefs_dict
 
 
-def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
+def generate_nodes(dictionary: psqlgml.Dictionary) -> dict[str, nodes.NodeMetadata]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
@@ -132,7 +130,7 @@ def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetada
     plaster_version = VERSION
     backrefs_dict = process_dictionary_for_backrefs(dictionary)
 
-    node_metas: Dict[str, nodes.NodeMetadata] = {}
+    node_metas: dict[str, nodes.NodeMetadata] = {}
 
     for label, schema in dictionary.schema.items():
         associations = {a.name for a in dictionary.associations(label)}
@@ -164,14 +162,12 @@ def generate(
         None
     """
     os.makedirs(output_dir, exist_ok=True)
-    import_metas: Set[ImportMeta] = set()
+    import_metas: set[ImportMeta] = set()
 
     node_metas = generate_nodes(dictionary)
     for node_meta in node_metas.values():
         render_and_write_file(node_meta, "node", output_dir, node_meta.label)
-        import_metas.add(
-            ImportMeta(package=node_meta.label, class_name=node_meta.class_name)
-        )
+        import_metas.add(ImportMeta(package=node_meta.label, class_name=node_meta.class_name))
 
     edges_meta_generator = generate_edges(dictionary.all_associations(), node_metas)
     relates_to_case_edge_meta_generator = generate_relates_to_case_edges(node_metas)
@@ -179,13 +175,9 @@ def generate(
     for edge_meta in itertools.chain(
         edges_meta_generator, relates_to_case_edge_meta_generator
     ):
-        render_and_write_file(
-            edge_meta, "edge", output_dir, edge_meta.class_name.lower()
-        )
+        render_and_write_file(edge_meta, "edge", output_dir, edge_meta.class_name.lower())
         import_metas.add(
-            ImportMeta(
-                package=edge_meta.class_name.lower(), class_name=edge_meta.class_name
-            )
+            ImportMeta(package=edge_meta.class_name.lower(), class_name=edge_meta.class_name)
         )
 
     render_and_write_file(import_metas, "init", output_dir, "__init__")
@@ -255,7 +247,7 @@ def render_template(meta: Any, template_base_name: str) -> str:
 
 def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> None:
     logger.info("dump partial schema")
-    partial_dictionary: Dict[str, Dict] = {"schema": {}, "version": dictionary.version}
+    partial_dictionary: dict[str, dict] = {"schema": {}, "version": dictionary.version}
 
     for node_label, value in dictionary.schema.items():
         partial_dictionary["schema"][node_label] = {

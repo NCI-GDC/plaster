@@ -43,7 +43,9 @@ def test_add_out_edges(
         assert case.edges_out[0].dst_id == "project_1"
 
 
-def test_add_in_edges(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver) -> None:
+def test_add_in_edges(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
     """Make sure that the in edges could be added correctly.
 
         Given a project node and a case node

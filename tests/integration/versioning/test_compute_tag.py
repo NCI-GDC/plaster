@@ -1,21 +1,19 @@
 from collections import namedtuple
 from importlib import resources
 from types import ModuleType
-from typing import List
 
 import psqlgml
 import psqlgraph
 import pytest
 import yaml
 from psqlgraph import ext, hydrator
-
 from tests.integration import tear_down_graph, utils
 
 
 @pytest.fixture(scope="module")
 def sample_data(
     graph_classes_versioning: ModuleType, test_dictionary_versioning: psqlgml.Dictionary
-) -> List[psqlgraph.Node]:
+) -> list[psqlgraph.Node]:
     with resources.as_file(resources.files("tests").joinpath("data/sample.yaml")) as f:
         with open(f) as fp:
             graph = yaml.safe_load(fp)
@@ -56,7 +54,7 @@ EXPECTED_TAGS = {
 
 
 def test_compute_tag(
-    graph_classes_versioning: ModuleType, sample_data: List[psqlgraph.Node]
+    graph_classes_versioning: ModuleType, sample_data: list[psqlgraph.Node]
 ) -> None:
     """Tests version tags are computed correctly per node"""
 
@@ -68,7 +66,7 @@ def test_compute_tag(
 
 @pytest.fixture(scope="module")
 def create_samples(
-    sample_data: List[psqlgraph.Node], graph_driver_versioning: ModuleType
+    sample_data: list[psqlgraph.Node], graph_driver_versioning: ModuleType
 ) -> None:
     with graph_driver_versioning.session_scope() as s:
         version_2s = []
@@ -135,7 +133,7 @@ def test_set_tag_after_insert_hook(
 
 
 def test_multi_parent(
-    sample_data: List[psqlgraph.Node], graph_classes_versioning: ModuleType
+    sample_data: list[psqlgraph.Node], graph_classes_versioning: ModuleType
 ) -> None:
     """Test compute tag for multi parent
 

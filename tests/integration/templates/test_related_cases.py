@@ -25,7 +25,9 @@ def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
     assert edge_name == "SampleRelatesToCase"
 
 
-def test_get_edge_src(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver) -> None:
+def test_get_edge_src(
+    graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
+) -> None:
     """test get edge src.
 
         Given an edge between 2 nodes
@@ -55,7 +57,9 @@ def test_get_edge_src(graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGra
         assert src.node_id == "case_1"
 
 
-def test_get_edge_dst(graph_driver: psqlgraph.PsqlGraphDriver, graph_classes: ModuleType) -> None:
+def test_get_edge_dst(
+    graph_driver: psqlgraph.PsqlGraphDriver, graph_classes: ModuleType
+) -> None:
     """test get edge dst.
 
         Given an edge between 2 nodes
