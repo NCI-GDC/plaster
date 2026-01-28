@@ -88,7 +88,7 @@ select = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["plaster"]
+known-first-party = ["plaster", "tests"]
 
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
