@@ -60,8 +60,8 @@ def test_secondary_keys_comparator(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case = case("case_1")
+        case_cls = graph_classes.Case
+        case = case_cls("case_1")
         case.project_id = "project_1"
         case.submitter_id = "submitter_1"
         s.add(case)
@@ -70,8 +70,8 @@ def test_secondary_keys_comparator(
         secondary_keys = (("project_1", "submitter_1"),)
 
         case = (
-            graph_driver.nodes(case)
-            .filter(case._secondary_keys == secondary_keys)
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
             .one_or_none()
         )
         assert case.node_id == "case_1"
@@ -94,8 +94,8 @@ def test_secondary_keys_comparator_wrong_values_return_none(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case = case("case_1")
+        case_cls = graph_classes.Case
+        case = case_cls("case_1")
         case.project_id = "project_1"
         case.submitter_id = "submitter_1"
         s.add(case)
@@ -104,8 +104,8 @@ def test_secondary_keys_comparator_wrong_values_return_none(
         secondary_keys = (("project_1", "wrong_id"),)
 
         case = (
-            graph_driver.nodes(case)
-            .filter(case._secondary_keys == secondary_keys)
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
             .one_or_none()
         )
         assert case is None
@@ -128,8 +128,8 @@ def test_secondary_keys_comparator__match_when_first_value_match(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case = case("case_1")
+        case_cls = graph_classes.Case
+        case = case_cls("case_1")
         case.project_id = "project_1"
         case.submitter_id = "submitter_1"
         s.add(case)
@@ -138,8 +138,8 @@ def test_secondary_keys_comparator__match_when_first_value_match(
         secondary_keys = (("project_1",),)
 
         case = (
-            graph_driver.nodes(case)
-            .filter(case._secondary_keys == secondary_keys)
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
             .one_or_none()
         )
         assert case.node_id == "case_1"
@@ -162,8 +162,8 @@ def test_secondary_keys_comparator__miss_when_second_value_match(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case = case("case_1")
+        case_cls = graph_classes.Case
+        case = case_cls("case_1")
         case.project_id = "project_1"
         case.submitter_id = "submitter_1"
         s.add(case)
@@ -172,8 +172,8 @@ def test_secondary_keys_comparator__miss_when_second_value_match(
         secondary_keys = (("submitter_1",),)
 
         case = (
-            graph_driver.nodes(case)
-            .filter(case._secondary_keys == secondary_keys)
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
             .one_or_none()
         )
         assert case is None
@@ -196,22 +196,26 @@ def test_secondary_keys_comparator__match_when_empty_search_value(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case1 = case("case_1")
+        case_cls = graph_classes.Case
+        case1 = case_cls("case_1")
         case1.project_id = "project_1"
         case1.submitter_id = "submitter_1"
-        case2 = case("case_2")
+        case2 = case_cls("case_2")
         case2.project_id = "project_2"
-        case3 = case("case_3")
+        case3 = case_cls("case_3")
         case3.submitter_id = "submitter_3"
-        case4 = case("case_4")
+        case4 = case_cls("case_4")
 
         s.add_all([case1, case2, case3, case4])
         s.commit()
 
         secondary_keys = ((),)
 
-        cases = graph_driver.nodes(case).filter(case._secondary_keys == secondary_keys).all()
+        cases = (
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
+            .all()
+        )
         assert len(cases) == 4
 
 
@@ -232,8 +236,8 @@ def test_secondary_keys_comparator__match_with_extra_value(
         None
     """
     with graph_driver.session_scope() as s:
-        case = graph_classes.Case
-        case = case("case_1")
+        case_cls = graph_classes.Case
+        case = case_cls("case_1")
         case.project_id = "project_1"
         case.submitter_id = "submitter_1"
         s.add(case)
@@ -242,8 +246,8 @@ def test_secondary_keys_comparator__match_with_extra_value(
         secondary_keys = (("project_1", "submitter_1", "any_1"),)
 
         case = (
-            graph_driver.nodes(case)
-            .filter(case._secondary_keys == secondary_keys)
+            graph_driver.nodes(case_cls)
+            .filter(case_cls._secondary_keys == secondary_keys)
             .one_or_none()
         )
         assert case.node_id == "case_1"

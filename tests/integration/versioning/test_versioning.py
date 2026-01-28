@@ -14,10 +14,10 @@ def test_tag(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning:  all node and edge classes.
     """
-    aliquot_level_maf = graph_classes_versioning.AliquotLevelMaf
-    assert hasattr(aliquot_level_maf, "tag")
+    aliquot_level_maf_cls = graph_classes_versioning.AliquotLevelMaf
+    assert hasattr(aliquot_level_maf_cls, "tag")
 
-    aliquot_level_maf = aliquot_level_maf("aliquot_level_maf_1")
+    aliquot_level_maf = aliquot_level_maf_cls("aliquot_level_maf_1")
     assert aliquot_level_maf.tag is None
     aliquot_level_maf._sysan["tag"] = "tag_1"
     assert aliquot_level_maf.tag == "tag_1"
@@ -47,10 +47,10 @@ def test_ver(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning:  all nodes and edges classes.
     """
-    aliquot_level_maf = graph_classes_versioning.AliquotLevelMaf
-    assert hasattr(aliquot_level_maf, "ver")
+    aliquot_level_maf_cls = graph_classes_versioning.AliquotLevelMaf
+    assert hasattr(aliquot_level_maf_cls, "ver")
 
-    aliquot_level_maf = aliquot_level_maf("aliquot_level_maf_1")
+    aliquot_level_maf = aliquot_level_maf_cls("aliquot_level_maf_1")
     assert aliquot_level_maf.ver is None
     aliquot_level_maf._sysan["ver"] = 1
     assert aliquot_level_maf.ver == 1
@@ -62,8 +62,8 @@ def test_tag_properties(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning: all nodes and edges classes
     """
-    aliquot_level_maf = graph_classes_versioning.AliquotLevelMaf
-    assert aliquot_level_maf.tag_properties == ["data_type"]
+    aliquot_level_maf_cls = graph_classes_versioning.AliquotLevelMaf
+    assert aliquot_level_maf_cls.tag_properties == ["data_type"]
 
 
 def test_is_latest(graph_classes_versioning: ModuleType) -> None:
@@ -72,10 +72,10 @@ def test_is_latest(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning:  all nodes and edges classes
     """
-    aliquot_level_maf = graph_classes_versioning.AliquotLevelMaf
-    assert hasattr(aliquot_level_maf, "is_latest")
+    aliquot_level_maf_cls = graph_classes_versioning.AliquotLevelMaf
+    assert hasattr(aliquot_level_maf_cls, "is_latest")
 
-    aliquot_level_maf = aliquot_level_maf("aliquot_level_maf_1")
+    aliquot_level_maf = aliquot_level_maf_cls("aliquot_level_maf_1")
     assert aliquot_level_maf.is_latest is False
     aliquot_level_maf._sysan["latest"] = True
     assert aliquot_level_maf.is_latest is True
@@ -91,10 +91,10 @@ def test_is_taggable__no_path(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning: all nodes and edges classes
     """
-    vcf_2_maf_workflow = graph_classes_versioning.Vcf2mafWorkflow
-    assert hasattr(vcf_2_maf_workflow, "tag_builder_config")
+    vcf_2_maf_workflow_cls = graph_classes_versioning.Vcf2mafWorkflow
+    assert hasattr(vcf_2_maf_workflow_cls, "tag_builder_config")
 
-    vcf_2_maf_workflow = vcf_2_maf_workflow("vcf_2_maf_workflow_1")
+    vcf_2_maf_workflow = vcf_2_maf_workflow_cls("vcf_2_maf_workflow_1")
     assert vcf_2_maf_workflow.is_taggable() is True
 
     vcf_2_maf_workflow.workflow_type = "SomaticSniper"
@@ -111,13 +111,13 @@ def test_is_taggable__with_path(graph_classes_versioning: ModuleType) -> None:
     Args:
         graph_classes_versioning: all nodes and edges classes
     """
-    aliquot_level_maf = graph_classes_versioning.AliquotLevelMaf
-    assert hasattr(aliquot_level_maf, "tag_builder_config")
+    aliquot_level_maf_cls = graph_classes_versioning.AliquotLevelMaf
+    assert hasattr(aliquot_level_maf_cls, "tag_builder_config")
 
     vcf_2_maf_workflow = graph_classes_versioning.Vcf2mafWorkflow("vcf_2_maf_workflow_1")
     vcf_2_maf_workflow.workflow_type = "SomaticSniper"
 
-    aliquot_level_maf = aliquot_level_maf("aliquot_level_maf_1")
+    aliquot_level_maf = aliquot_level_maf_cls("aliquot_level_maf_1")
     assert aliquot_level_maf.is_taggable() is True
     aliquot_level_maf["vcf2maf_workflows"] = [vcf_2_maf_workflow]
     assert aliquot_level_maf.is_taggable() is False
