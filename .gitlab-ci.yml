@@ -42,7 +42,7 @@ rebuild_gdcdatamodel2:
     - echo $VERSION
     - >
       curl --fail --request POST
-      --form token=$CI_JOB_TOKEN
+      --header "JOB-TOKEN: $CI_JOB_TOKEN"
       --form ref=${CI_TRIGGERED_BRANCH:=develop}
       --form variables[CI_TRIGGER_BRANCH]=${CI_TRIGGER_BRANCH:-$VERSION}
       --form variables[PIP_INDEX_URL]="https://nexus.osdc.io/repository/pypi-all/simple"
