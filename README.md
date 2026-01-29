@@ -24,7 +24,7 @@ GDC internship project for generating data model source code.
 - [Known Issues](#Known-Issues)
 - [Associated Projects](#Associated-Projects)
 - [Repo Visualizer](#Repo-Visualizer)
-- [CI/CD: Plaster](#CI/CD:-Plaster)
+- [CI-CD](#CI-CD)
   - [`rebuild_gdcdatamodel2` Workflow](#`rebuild_gdcdatamodel2`-Workflow)
 
 <!-- tocstop -->
@@ -152,7 +152,7 @@ Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdicti
 
 ![Visualization of this repo](images/diagram.svg)
 
-# CI/CD: Plaster
+# CI-CD
 
 ## `rebuild_gdcdatamodel2` Workflow
 
