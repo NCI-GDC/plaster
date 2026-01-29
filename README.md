@@ -25,7 +25,7 @@ GDC internship project for generating data model source code.
 - [Associated Projects](#Associated-Projects)
 - [Repo Visualizer](#Repo-Visualizer)
 - [CI-CD](#CI-CD)
-  - [`rebuild_gdcdatamodel2` Workflow](#`rebuild_gdcdatamodel2`-Workflow)
+  - [rebuild_gdcdatamodel2 Workflow](#rebuild_gdcdatamodel2-Workflow)
 
 <!-- tocstop -->
 
@@ -154,7 +154,7 @@ Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdicti
 
 # CI-CD
 
-## `rebuild_gdcdatamodel2` Workflow
+## rebuild_gdcdatamodel2 Workflow
 
 The `rebuild_gdcdatamodel2` pipeline is designed to verify that Plaster can successfully
 integrate with and build the GDC dictionary. This job requires a **manual trigger** to
