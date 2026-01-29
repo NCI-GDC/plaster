@@ -44,16 +44,6 @@ repos:
     rev: 0.1.0
     hooks:
       - id: markdown-toc
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 1.0.0
-    hooks:
-      - id: mdformat
-        additional_dependencies:
-          - mdformat-gfm
-        name: mdformat
-        entry: mdformat
-        types: [markdown]
-        args: [--wrap, '88']
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.1.1
     hooks:
