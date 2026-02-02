@@ -29,21 +29,28 @@ tox:
     POSTGRES_HOST_AUTH_METHOD: trust
     PG_HOST: postgres
 
+publish:
+  script:
+    - git fetch --unshallow || true
+    - echo "Publishing '$CI_COMMIT_TAG' to $TWINE_REPOSITORY with 
+      $TWINE_USERNAME"
+    - pip install setuptools_scm==8.1.0 versionista build twine
+    - python -m setuptools_scm
+    - python -m build
+    - python -m twine check dist/*
+    - python -m twine upload dist/* --repository-url $TWINE_REPOSITORY
+
 rebuild_gdcdatamodel2:
   stage: .post
   extends: .job-with-ssh-keys
   image: 
     ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
-  variables:
-    GIT_DEPTH: 0
   script:
-    - dnf install curl-minimal git
+    - dnf install curl-minimal
     - pip install setuptools_scm==8.1.0 versionista
-    - git fetch --unshallow || git fetch --tags
     - echo $CI_TRIGGERED_BRANCH
     - echo $CI_COMMIT_REF_NAME
-    - git describe --tags
-    - export VERSION=$(CI_COMMIT_REF_NAME="" python -m setuptools_scm)
+    - export VERSION=$(python -m setuptools_scm)
     - echo $VERSION
     - >
       curl --fail --request POST
