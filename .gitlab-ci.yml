@@ -46,7 +46,8 @@ rebuild_gdcdatamodel2:
   image: 
     ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
   script:
-    - dnf install curl-minimal
+    - dnf install curl-minimal git
+    - git fetch --unshallow || git fetch --all
     - pip install setuptools_scm==8.1.0 versionista
     - echo $CI_TRIGGERED_BRANCH
     - echo $CI_COMMIT_REF_NAME
