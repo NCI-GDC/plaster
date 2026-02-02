@@ -34,12 +34,17 @@ rebuild_gdcdatamodel2:
   extends: .job-with-ssh-keys
   image: 
     ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
+  variables:
+    GIT_DEPTH: 0
   script:
-    - dnf install curl-minimal
+    - dnf install curl-minimal git
     - pip install setuptools_scm==8.1.0 versionista
+    - git fetch --tags
     - echo $CI_TRIGGERED_BRANCH
+    - echo "Branch is $CI_COMMIT_REF_NAME"
+    - git describe --tags || echo "No tags found"
     - export VERSION=$(python -m setuptools_scm)
-    - echo $VERSION
+    - echo "Calculated Version: $VERSION"
     - >
       curl --fail --request POST
       --form token=$CI_JOB_TOKEN
