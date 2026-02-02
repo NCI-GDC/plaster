@@ -39,11 +39,11 @@ rebuild_gdcdatamodel2:
   script:
     - dnf install curl-minimal git
     - pip install setuptools_scm==8.1.0 versionista
-    - git fetch --tags
+    - git fetch --unshallow || git fetch --tags
     - echo $CI_TRIGGERED_BRANCH
     - echo $CI_COMMIT_REF_NAME
     - git describe --tags
-    - export VERSION=$(python -m setuptools_scm)
+    - export VERSION=$(CI_COMMIT_REF_NAME="" python -m setuptools_scm)
     - echo $VERSION
     - >
       curl --fail --request POST
