@@ -44,7 +44,7 @@ rebuild_gdcdatamodel2:
     - echo "Branch is $CI_COMMIT_REF_NAME"
     - git describe --tags || echo "No tags found"
     - export VERSION=$(python -m setuptools_scm)
-    - echo "Calculated Version: $VERSION"
+    - echo $VERSION
     - >
       curl --fail --request POST
       --form token=$CI_JOB_TOKEN
