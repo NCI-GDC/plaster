@@ -41,8 +41,8 @@ rebuild_gdcdatamodel2:
     - pip install setuptools_scm==8.1.0 versionista
     - git fetch --tags
     - echo $CI_TRIGGERED_BRANCH
-    - echo "Branch is $CI_COMMIT_REF_NAME"
-    - git describe --tags || echo "No tags found"
+    - echo $CI_COMMIT_REF_NAME
+    - git describe --tags
     - export VERSION=$(python -m setuptools_scm)
     - echo $VERSION
     - >
