@@ -52,7 +52,7 @@ def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> N
 @pytest.fixture
 def graph_driver(graph_classes: ModuleType) -> psqlgraph.PsqlGraphDriver:
     g = utils.get_graph_driver(graph_classes.namespace)
-    base = psqlgraph.base.ORMBase
+    base = ext.get_orm_base(None)
     if graph_classes.namespace is not None:
         base = ext.get_orm_base(graph_classes.namespace)
     psqlgraph.create_all(g.engine, base=base)
