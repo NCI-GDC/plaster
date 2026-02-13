@@ -1,7 +1,6 @@
 import logging
 from collections import OrderedDict
 from typing import (
-    AbstractSet,
     Any,
     Dict,
     Iterable,
@@ -71,7 +70,11 @@ class PropertyTypeMeta(NamedTuple):
             return TYPE_MAPPING["string"]
 
         json_schema_type = self.schema["type"]
-        _type = json_schema_type[0] if isinstance(json_schema_type, list) else json_schema_type
+        _type = (
+            json_schema_type[0]
+            if isinstance(json_schema_type, list)
+            else json_schema_type
+        )
         return TYPE_MAPPING[_type]
 
 
@@ -128,7 +131,7 @@ class NodeMetadata(NamedTuple):
 
     @property
     def table_name(self) -> str:
-        return f'node_{self.label.replace("_", "")}'
+        return f"node_{self.label.replace('_', '')}"
 
     @property
     def defaults(self) -> Dict[str, Union[bool, float, int, str]]:
@@ -193,7 +196,9 @@ class NodeMetadata(NamedTuple):
         links_metadata: Dict[str, LinkMetadata] = {}
         for name, link in utils.get_links(self.schema).items():
             edge_name = utils.parse_edge(self.schema, link)
-            links_metadata[name] = LinkMetadata(edge_name, link["target_type"], link["backref"])
+            links_metadata[name] = LinkMetadata(
+                edge_name, link["target_type"], link["backref"]
+            )
         return OrderedDict(sorted(links_metadata.items()))
 
     @property

@@ -37,7 +37,9 @@ def echo() -> None:
 
 @app.command(name="generate", help="Generate source code")
 @click.option("-p", "--profile", type=str, help="Name of the profile to generate")
-@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-o", "--output-dir", type=click.Path(), help="Output directory to generate source"
+)
 @click.option(
     "-s",
     "--schema-dir",
@@ -81,9 +83,15 @@ def generate(
 
 
 @app.command(name="generate-no-profile", help="Generate source code")
-@click.option("--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary")
-@click.option("--dict-version", help="dictionary version, used by psqlgml", required=True)
-@click.option("-n", "--namespace", help="dictionary namespace, used by plaster", default=None)
+@click.option(
+    "--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary"
+)
+@click.option(
+    "--dict-version", help="dictionary version, used by psqlgml", required=True
+)
+@click.option(
+    "-n", "--namespace", help="dictionary namespace, used by plaster", default=None
+)
 @click.option(
     "-i",
     "--input-dir",
@@ -91,7 +99,9 @@ def generate(
     type=click.Path(),
     default=os.getcwd(),
 )
-@click.option("-o", "--output-dir", type=click.Path(), help="Output directory to generate source")
+@click.option(
+    "-o", "--output-dir", type=click.Path(), help="Output directory to generate source"
+)
 @click.option(
     "-s",
     "--schema-dir",

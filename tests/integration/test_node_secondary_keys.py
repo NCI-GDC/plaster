@@ -7,7 +7,9 @@ from deepdiff import DeepDiff
 def test_pg_secondary_keys(graph_classes: ModuleType) -> None:
     Case = graph_classes.Case
     # python default mangled name we are not supposed to be using
-    assert DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
+    assert (
+        DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
+    )
     assert DeepDiff(Case.pg_secondary_keys(), [["project_id", "submitter_id"]]) == {}
 
 
@@ -70,7 +72,9 @@ def test_secondary_keys_comparator(
         secondary_keys = (("project_1", "submitter_1"),)
 
         case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .one_or_none()
         )
         assert case.node_id == "case_1"
 
@@ -102,7 +106,9 @@ def test_secondary_keys_comparator_wrong_values_return_none(
         secondary_keys = (("project_1", "wrong_id"),)
 
         case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .one_or_none()
         )
         assert case is None
 
@@ -134,7 +140,9 @@ def test_secondary_keys_comparator__match_when_first_value_match(
         secondary_keys = (("project_1",),)
 
         case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .one_or_none()
         )
         assert case.node_id == "case_1"
 
@@ -166,7 +174,9 @@ def test_secondary_keys_comparator__miss_when_second_value_match(
         secondary_keys = (("submitter_1",),)
 
         case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .one_or_none()
         )
         assert case is None
 
@@ -203,7 +213,11 @@ def test_secondary_keys_comparator__match_when_empty_search_value(
 
         secondary_keys = ((),)
 
-        cases = graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).all()
+        cases = (
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .all()
+        )
         assert len(cases) == 4
 
 
@@ -234,6 +248,8 @@ def test_secondary_keys_comparator__match_with_extra_value(
         secondary_keys = (("project_1", "submitter_1", "any_1"),)
 
         case = (
-            graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).one_or_none()
+            graph_driver.nodes(Case)
+            .filter(Case._secondary_keys == secondary_keys)
+            .one_or_none()
         )
         assert case.node_id == "case_1"

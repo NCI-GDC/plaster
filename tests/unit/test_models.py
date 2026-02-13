@@ -6,7 +6,9 @@ import psqlgml
 from plaster import generator
 
 
-def test_source_file_generation(test_dictionary: psqlgml.Dictionary, tmpdir: PathLike) -> None:
+def test_source_file_generation(
+    test_dictionary: psqlgml.Dictionary, tmpdir: PathLike
+) -> None:
     generator.generate(test_dictionary, str(tmpdir))
 
     assert Path(f"{tmpdir}/program.py").exists()

@@ -31,7 +31,15 @@ def graph_classes(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> N
     tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,
-        ["-c", app_settings, "generate", "-p", "dictionary", "-o", tmpdir / "test_module"],
+        [
+            "-c",
+            app_settings,
+            "generate",
+            "-p",
+            "dictionary",
+            "-o",
+            tmpdir / "test_module",
+        ],
     )
     assert result.exit_code == 0, {"stderr": result.stderr, "stdout": result.stdout}
 

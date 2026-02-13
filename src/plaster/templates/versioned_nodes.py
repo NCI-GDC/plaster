@@ -83,6 +83,7 @@ class VersionedNode(Base):
             system_annotations=copy(node.system_annotations),
             properties=copy(node.properties),
             neighbors=copy(
-                [edge.dst_id for edge in node.edges_out] + [edge.src_id for edge in node.edges_in]
+                [edge.dst_id for edge in node.edges_out]
+                + [edge.src_id for edge in node.edges_in]
             ),
         )

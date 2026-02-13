@@ -23,9 +23,7 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
     gets us a name like ``edge_721d393f_LaLeSeqDaFrLaLeSeBu``.  This
     is rather an undesirable workaround. - jsm
     """
-    table_name = (
-        f"edge_{src_label.replace('_', '')}{label.replace('_', '')}{dst_label.replace('_', '')}"
-    )
+    table_name = f"edge_{src_label.replace('_', '')}{label.replace('_', '')}{dst_label.replace('_', '')}"
 
     # If the name is too long, prepend it with the first 8 hex of it's hash
     # truncate the each part of the name
@@ -39,9 +37,7 @@ def generate_table_name(src_label: str, label: str, dst_label: str) -> str:
     shortened_dst_label = "".join([a[:2] for a in dst_label.split("_")])[:10]
     shortened_src_label = "".join([a[:2] for a in src_label.split("_")])[:10]
 
-    shortened_table_name = (
-        f"edge_{shortened_name}_{shortened_src_label}{shortened_label}{shortened_dst_label}"
-    )
+    shortened_table_name = f"edge_{shortened_name}_{shortened_src_label}{shortened_label}{shortened_dst_label}"
     logger.debug(f"Shortening {table_name} -> {shortened_table_name}")
 
     return shortened_table_name
