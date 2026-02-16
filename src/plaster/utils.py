@@ -3,7 +3,9 @@ from typing import Dict
 import psqlgml
 
 
-def get_links(schema: psqlgml.types.DictionarySchemaDict) -> Dict[str, psqlgml.types.Link]:
+def get_links(
+    schema: psqlgml.types.DictionarySchemaDict,
+) -> Dict[str, psqlgml.types.Link]:
     """Given a schema, pull out all the ``links`` that this type can have an edge to.
 
     :returns: a ``dict`` of format ``{<name>: <link>}``
