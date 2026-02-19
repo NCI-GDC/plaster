@@ -1,7 +1,9 @@
 import psqlgml
 
 
-def get_links(schema: psqlgml.types.DictionarySchemaDict) -> dict[str, psqlgml.types.Link]:
+def get_links(
+    schema: psqlgml.types.DictionarySchemaDict,
+) -> dict[str, psqlgml.types.Link]:
     """Given a schema, pull out all the ``links`` that this type can have an edge to.
 
     :returns: a ``dict`` of format ``{<name>: <link>}``
