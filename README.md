@@ -24,6 +24,8 @@ GDC internship project for generating data model source code.
 - [Known Issues](#Known-Issues)
 - [Associated Projects](#Associated-Projects)
 - [Repo Visualizer](#Repo-Visualizer)
+- [CI-CD](#CI-CD)
+  - [rebuild_gdcdatamodel2 Workflow](#rebuild_gdcdatamodel2-Workflow)
 
 <!-- tocstop -->
 
@@ -149,3 +151,17 @@ Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdicti
 # Repo Visualizer
 
 ![Visualization of this repo](images/diagram.svg)
+
+# CI-CD
+
+## rebuild_gdcdatamodel2 Workflow
+
+The `rebuild_gdcdatamodel2` pipeline is designed to verify that Plaster can successfully
+integrate with and build the GDC dictionary. This job requires a **manual trigger** to
+execute.
+
+It is safe to trigger this job manually. It does not affect production because it skips
+the `push_datamodels_tag_to_github` stage, ensuring no new version tags are created.
+
+Unlike standard releases which publish to `pypi-releases`, builds triggered from Plaster
+publish to the snapshot repository `pypi-snapshots`

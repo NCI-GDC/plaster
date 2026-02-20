@@ -22,10 +22,6 @@ dynamic = [
   "optional-dependencies"
 ]
 
-[tool.black]
-line-length = 98
-include = '\.pyi?$'
-
 [tool.coverage.html]
 title = "plaster coverage report"
 directory = "docs/htmlcov"
@@ -35,11 +31,6 @@ show_contexts = true
 branch = true
 context = "unit tests"
 source = ["plaster"]
-
-[tool.isort]
-profile = "black"
-line_length = 98
-known_first_party = ["plaster"]
 
 [tool.mypy]
 pretty = true
@@ -78,6 +69,29 @@ testpaths = [
   "tests/unit",
   "tests/integration"
 ]
+
+[tool.ruff]
+line-length = 95
+src = ["src", "tests"]
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = ["E501"]
+select = [
+  "E", # pydocstyle errors
+  "F", # pyflakes
+  "I", # isort
+  "N", # pep8 naming
+  "RUF", # ruff specific rules
+  "UP", # pyupgrade
+  "W" # pydocstyle warnings
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["plaster", "tests"]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
 
 [tool.setuptools_scm]
 local_scheme = "versionista-local-format"
