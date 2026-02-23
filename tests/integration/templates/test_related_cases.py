@@ -28,7 +28,7 @@ def test_get_related_case_edge_cls_name(graph_classes: ModuleType) -> None:
 def test_get_edge_src(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
-    """test get edge src.
+    """Test get edge src.
 
         Given an edge between 2 nodes
         When get_edge_src is called
@@ -60,7 +60,7 @@ def test_get_edge_src(
 def test_get_edge_dst(
     graph_driver: psqlgraph.PsqlGraphDriver, graph_classes: ModuleType
 ) -> None:
-    """test get edge dst.
+    """Test get edge dst.
 
         Given an edge between 2 nodes
         When get_edge_dst is called
@@ -126,7 +126,7 @@ def test_exist_related_cases_from_parents_property(graph_classes: ModuleType) ->
 def test_update_cac_edges(
     graph_classes: ModuleType, graph_driver: psqlgraph.PsqlGraphDriver
 ) -> None:
-    """test update cache edges.
+    """Test update cache edges.
 
         Given a sample node and a dictionary of correct_cases
         When update_cache_edges called

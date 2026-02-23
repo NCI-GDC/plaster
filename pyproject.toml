@@ -1,5 +1,6 @@
 [build-system]
-requires = ["setuptools>=66", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
+# Pin setuptools<81: psqlgml (0.2.4) requires pkg_resources, which was removed in setuptools 82.0.0+
+requires = ["setuptools<81", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -22,10 +23,6 @@ dynamic = [
   "optional-dependencies"
 ]
 
-[tool.black]
-line-length = 98
-include = '\.pyi?$'
-
 [tool.coverage.html]
 title = "plaster coverage report"
 directory = "docs/htmlcov"
@@ -35,11 +32,6 @@ show_contexts = true
 branch = true
 context = "unit tests"
 source = ["plaster"]
-
-[tool.isort]
-profile = "black"
-line_length = 98
-known_first_party = ["plaster"]
 
 [tool.mypy]
 pretty = true
@@ -78,6 +70,47 @@ testpaths = [
   "tests/unit",
   "tests/integration"
 ]
+
+[tool.ruff]
+line-length = 95
+src = ["src", "tests"]
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = [
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+  "D415",
+  "E501"
+]
+select = [
+  "E", # pydocstyle errors
+  "F", # pyflakes
+  "I", # isort
+  "N", # pep8 naming
+  "RUF", # ruff specific rules
+  "UP", # pyupgrade
+  "D", # pydocstyle
+  "W" # pydocstyle warnings
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["plaster", "tests"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools_scm]
 local_scheme = "versionista-local-format"

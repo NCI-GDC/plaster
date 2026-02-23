@@ -83,15 +83,9 @@ def generate(
 
 
 @app.command(name="generate-no-profile", help="Generate source code")
-@click.option(
-    "--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary"
-)
-@click.option(
-    "--dict-version", help="dictionary version, used by psqlgml", required=True
-)
-@click.option(
-    "-n", "--namespace", help="dictionary namespace, used by plaster", default=None
-)
+@click.option("--dict-name", help="dictionary name, used by psqlgml", default="gdcdictionary")
+@click.option("--dict-version", help="dictionary version, used by psqlgml", required=True)
+@click.option("-n", "--namespace", help="dictionary namespace, used by plaster", default=None)
 @click.option(
     "-i",
     "--input-dir",

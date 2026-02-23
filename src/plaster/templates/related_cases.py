@@ -1,7 +1,8 @@
 """This file only contains helper functions about related cases."""
 
 import itertools
-from typing import Collection, Dict, Generator, Iterator, Optional, Set, Union
+from collections.abc import Collection, Generator, Iterator
+from typing import Optional, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -38,9 +39,7 @@ def get_edge_src(edge: psqlgraph.Edge) -> Optional[psqlgraph.Node]:
     return src
 
 
-def get_edge_dst(
-    edge: psqlgraph.Edge, allow_query: bool = False
-) -> Optional[psqlgraph.Node]:
+def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[psqlgraph.Node]:
     """Look up edge destination node.
 
     Args:
@@ -115,13 +114,9 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     edges_out = [e for e in node.edges_out if e in node.get_session()]
 
     # Get the cached ids from parents
-    edges_out_filtered = (
-        e for e in edges_out if e.__class__.__name__ not in skip_edges_named
-    )
+    edges_out_filtered = (e for e in edges_out if e.__class__.__name__ not in skip_edges_named)
     dsts = (e.dst for e in edges_out_filtered if e.dst)
-    cases_chain = itertools.chain.from_iterable(
-        dst._related_cases_from_cache for dst in dsts
-    )
+    cases_chain = itertools.chain.from_iterable(dst._related_cases_from_cache for dst in dsts)
     cases = set(cases_chain)
 
     # Are any parents cases?
@@ -136,9 +131,7 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     return filter(None, cases)
 
 
-def update_cache_edges(
-    node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]
-) -> None:
+def update_cache_edges(node: psqlgraph.Node, correct_cases: dict[str, psqlgraph.Node]) -> None:
     """Create new edges or deletes old edges.
 
         Given node and a dictionary of correct_cases
@@ -168,7 +161,7 @@ def update_cache_edges(
 
 
 def cache_related_cases_recursive(
-    node: psqlgraph.Node, visited_nodes: Optional[Set[str]] = None
+    node: psqlgraph.Node, visited_nodes: Optional[set[str]] = None
 ) -> None:
     """Update the related case cache on source node and its children recursively.
 
