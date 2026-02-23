@@ -8,9 +8,7 @@ from plaster import cli
 
 
 @pytest.fixture(scope="session")
-def graph_classes_versioning(
-    cli_runner: CliRunner, app_settings: str, tmpdir_factory
-) -> None:
+def graph_classes_versioning(cli_runner: CliRunner, app_settings: str, tmpdir_factory) -> None:
     tmpdir = tmpdir_factory.mktemp("tmp")
     result = cli_runner.invoke(
         cli.app,

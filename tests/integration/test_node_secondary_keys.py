@@ -7,9 +7,7 @@ from deepdiff import DeepDiff
 def test_pg_secondary_keys(graph_classes: ModuleType) -> None:
     Case = graph_classes.Case
     # python default mangled name we are not supposed to be using
-    assert (
-        DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
-    )
+    assert DeepDiff(Case._Case__pg_secondary_keys, [["project_id", "submitter_id"]]) == {}
     assert DeepDiff(Case.pg_secondary_keys(), [["project_id", "submitter_id"]]) == {}
 
 
@@ -213,11 +211,7 @@ def test_secondary_keys_comparator__match_when_empty_search_value(
 
         secondary_keys = ((),)
 
-        cases = (
-            graph_driver.nodes(Case)
-            .filter(Case._secondary_keys == secondary_keys)
-            .all()
-        )
+        cases = graph_driver.nodes(Case).filter(Case._secondary_keys == secondary_keys).all()
         assert len(cases) == 4
 
 

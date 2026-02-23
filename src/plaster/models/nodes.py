@@ -1,9 +1,9 @@
 import logging
 from collections import OrderedDict
+from collections.abc import Iterable
 from typing import (
     Any,
     Dict,
-    Iterable,
     List,
     Literal,
     NamedTuple,
@@ -70,11 +70,7 @@ class PropertyTypeMeta(NamedTuple):
             return TYPE_MAPPING["string"]
 
         json_schema_type = self.schema["type"]
-        _type = (
-            json_schema_type[0]
-            if isinstance(json_schema_type, list)
-            else json_schema_type
-        )
+        _type = json_schema_type[0] if isinstance(json_schema_type, list) else json_schema_type
         return TYPE_MAPPING[_type]
 
 

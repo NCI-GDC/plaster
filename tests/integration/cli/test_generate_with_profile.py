@@ -19,9 +19,7 @@ def test_echo(cli_runner: CliRunner, app_settings: str) -> None:
     assert result.exit_code == 0
 
 
-def test_dict_bad_location(
-    cli_runner: CliRunner, app_settings: str, tmpdir: PathLike
-) -> None:
+def test_dict_bad_location(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) -> None:
     result = cli_runner.invoke(
         cli.app,
         ["-c", app_settings, "generate", "-p", "dictionary_bad_location", "-o", tmpdir],
@@ -29,9 +27,7 @@ def test_dict_bad_location(
     assert result.exit_code != 0
 
 
-def test_dict_bad_profile(
-    cli_runner: CliRunner, app_settings: str, tmpdir: PathLike
-) -> None:
+def test_dict_bad_profile(cli_runner: CliRunner, app_settings: str, tmpdir: PathLike) -> None:
     result = cli_runner.invoke(
         cli.app,
         ["-c", app_settings, "generate", "-p", "dictionary_bad_profile", "-o", tmpdir],

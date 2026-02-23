@@ -19,7 +19,9 @@ class VersionedNode(Base):
     )
 
     def __repr__(self) -> str:
-        return f"<VersionedNode(key={self.key}, label='{self.label}', node_id='{self.node_id}')>"
+        return (
+            f"<VersionedNode(key={self.key}, label='{self.label}', node_id='{self.node_id}')>"
+        )
 
     key = Column(BigInteger, primary_key=True, nullable=False)
 

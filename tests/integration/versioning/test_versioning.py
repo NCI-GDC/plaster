@@ -114,9 +114,7 @@ def test_is_taggable__with_path(graph_classes_versioning: ModuleType) -> None:
     AliquotLevelMaf = graph_classes_versioning.AliquotLevelMaf
     assert hasattr(AliquotLevelMaf, "tag_builder_config")
 
-    vcf_2_maf_workflow = graph_classes_versioning.Vcf2mafWorkflow(
-        "vcf_2_maf_workflow_1"
-    )
+    vcf_2_maf_workflow = graph_classes_versioning.Vcf2mafWorkflow("vcf_2_maf_workflow_1")
     vcf_2_maf_workflow.workflow_type = "SomaticSniper"
 
     aliquot_level_maf = AliquotLevelMaf("aliquot_level_maf_1")

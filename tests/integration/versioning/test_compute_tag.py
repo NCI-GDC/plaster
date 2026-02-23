@@ -20,9 +20,7 @@ def sample_data(
         with open(f) as fp:
             graph = yaml.safe_load(fp)
 
-    raw_schemas = {
-        key: value.raw for key, value in test_dictionary_versioning.schema.items()
-    }
+    raw_schemas = {key: value.raw for key, value in test_dictionary_versioning.schema.items()}
     RawDictionary = namedtuple("RawDictionary", "schema")
     raw_dictionary = RawDictionary(schema=raw_schemas)
     f = hydrator.GraphFactory(graph_classes_versioning, raw_dictionary)
@@ -67,9 +65,7 @@ def test_compute_tag(
     for node in sample_data:
         print(f"\n..........{node}...........")
         v_tag = graph_classes_versioning.versioning.compute_tag(node)
-        assert v_tag == EXPECTED_TAGS[node.node_id], (
-            f"invalid tag computed for {node.node_id}"
-        )
+        assert v_tag == EXPECTED_TAGS[node.node_id], f"invalid tag computed for {node.node_id}"
 
 
 @pytest.fixture(scope="module")
