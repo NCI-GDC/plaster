@@ -51,12 +51,6 @@ repos:
         additional_dependencies:
           - mdformat-gfm
         args: [--wrap, '88']
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.2.3
-    hooks:
-      - id: pydocstyle
-        args: [convention=google, --add-ignore, 'D100,D101,D102,D103,D104,D105,D106,D107']
-        exclude: ^(tests|unit_tests)/
   - repo: https://github.com/pappasam/toml-sort
     rev: v0.24.3
     hooks:

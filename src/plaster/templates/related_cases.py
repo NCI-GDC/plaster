@@ -2,7 +2,7 @@
 
 import itertools
 from collections.abc import Collection, Generator, Iterator
-from typing import Dict, Optional, Set, Union
+from typing import Optional, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -131,7 +131,7 @@ def get_related_cases_from_parents(node: psqlgraph.Node) -> Iterator[psqlgraph.N
     return filter(None, cases)
 
 
-def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.Node]) -> None:
+def update_cache_edges(node: psqlgraph.Node, correct_cases: dict[str, psqlgraph.Node]) -> None:
     """Create new edges or deletes old edges.
 
         Given node and a dictionary of correct_cases
@@ -161,7 +161,7 @@ def update_cache_edges(node: psqlgraph.Node, correct_cases: Dict[str, psqlgraph.
 
 
 def cache_related_cases_recursive(
-    node: psqlgraph.Node, visited_nodes: Optional[Set[str]] = None
+    node: psqlgraph.Node, visited_nodes: Optional[set[str]] = None
 ) -> None:
     """Update the related case cache on source node and its children recursively.
 

@@ -76,7 +76,18 @@ src = ["src", "tests"]
 target-version = "py39"
 
 [tool.ruff.lint]
-ignore = ["E501"]
+ignore = [
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+  "D415",
+  "E501"
+]
 select = [
   "E", # pydocstyle errors
   "F", # pyflakes
@@ -84,14 +95,21 @@ select = [
   "N", # pep8 naming
   "RUF", # ruff specific rules
   "UP", # pyupgrade
+  "D", # pydocstyle
   "W" # pydocstyle warnings
 ]
 
 [tool.ruff.lint.isort]
 known-first-party = ["plaster", "tests"]
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools_scm]
 local_scheme = "versionista-local-format"

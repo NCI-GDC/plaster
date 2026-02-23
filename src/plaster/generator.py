@@ -4,7 +4,7 @@ import os
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, NamedTuple, Optional, Set
+from typing import Any, NamedTuple, Optional
 
 import jinja2 as j
 import psqlgml
@@ -37,8 +37,8 @@ class ImportMeta(NamedTuple):
 
 
 def generate_edges(
-    associations: Set[psqlgml.Association],
-    node_metas: Dict[str, nodes.NodeMetadata],
+    associations: set[psqlgml.Association],
+    node_metas: dict[str, nodes.NodeMetadata],
 ) -> Iterable[edges.EdgeMetadata]:
     """Read dictionary associations and generate metadata for edges.
 
@@ -62,7 +62,7 @@ def generate_edges(
 
 
 def generate_relates_to_case_edges(
-    node_metas: Dict[str, nodes.NodeMetadata],
+    node_metas: dict[str, nodes.NodeMetadata],
 ) -> Iterable[edges.EdgeMetadata]:
     """Generate relates to case edge metadata.
 
@@ -100,7 +100,7 @@ def generate_relates_to_case_edges(
 
 def process_dictionary_for_backrefs(
     dic: psqlgml.Dictionary,
-) -> Dict[str, Dict[str, nodes.BackRefMetadata]]:
+) -> dict[str, dict[str, nodes.BackRefMetadata]]:
     """Preprocess dictionary links to populate node class _pg_backrefs later.
 
     Args:
@@ -109,7 +109,7 @@ def process_dictionary_for_backrefs(
     Returns:
         A dict containing node name and node backrefs.
     """
-    backrefs_dict: Dict[str, Dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
+    backrefs_dict: dict[str, dict[str, nodes.BackRefMetadata]] = defaultdict(dict)
 
     for assoc in dic.all_associations():
         if assoc.backref is None:
@@ -118,7 +118,7 @@ def process_dictionary_for_backrefs(
     return backrefs_dict
 
 
-def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetadata]:
+def generate_nodes(dictionary: psqlgml.Dictionary) -> dict[str, nodes.NodeMetadata]:
     """Read dictionary and generate metadata for nodes.
 
     Args:
@@ -130,7 +130,7 @@ def generate_nodes(dictionary: psqlgml.Dictionary) -> Dict[str, nodes.NodeMetada
     plaster_version = VERSION
     backrefs_dict = process_dictionary_for_backrefs(dictionary)
 
-    node_metas: Dict[str, nodes.NodeMetadata] = {}
+    node_metas: dict[str, nodes.NodeMetadata] = {}
 
     for label, schema in dictionary.schema.items():
         associations = {a.name for a in dictionary.associations(label)}
@@ -162,7 +162,7 @@ def generate(
         None
     """
     os.makedirs(output_dir, exist_ok=True)
-    import_metas: Set[ImportMeta] = set()
+    import_metas: set[ImportMeta] = set()
 
     node_metas = generate_nodes(dictionary)
     for node_meta in node_metas.values():
@@ -247,7 +247,7 @@ def render_template(meta: Any, template_base_name: str) -> str:
 
 def write_partial_schema(dictionary: psqlgml.Dictionary, schema_dir: str) -> None:
     logger.info("dump partial schema")
-    partial_dictionary: Dict[str, Dict] = {"schema": {}, "version": dictionary.version}
+    partial_dictionary: dict[str, dict] = {"schema": {}, "version": dictionary.version}
 
     for node_label, value in dictionary.schema.items():
         partial_dictionary["schema"][node_label] = {

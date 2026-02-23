@@ -17,7 +17,7 @@ import os
 import uuid
 from collections.abc import Iterator
 from functools import cache
-from typing import Any, Dict, List
+from typing import Any
 
 import psqlgraph
 import sqlalchemy
@@ -36,7 +36,7 @@ class TagKeys:
 class TaggingConstraint:
     """Computes whether a node instance supports tagging or not."""
 
-    def __init__(self, path: str, prop: str, values: List[str]) -> None:
+    def __init__(self, path: str, prop: str, values: list[str]) -> None:
         """Initialize TaggingConstraint.
 
         Args:
@@ -94,7 +94,7 @@ class TaggingConstraint:
 class TagBuilderConfig:
     """A wrapper around the tagBuilderConfig definition in the dictionary yaml."""
 
-    def __init__(self, cfg: Dict[str, Any]) -> None:
+    def __init__(self, cfg: dict[str, Any]) -> None:
         self.cfg = cfg
 
     def _constraints(self) -> Iterator[TaggingConstraint]:
@@ -119,7 +119,7 @@ class TagBuilderConfig:
         return not any(criteria.match(node) for criteria in self._constraints())
 
 
-def __generate_hash(seed: List[str], label: str) -> str:
+def __generate_hash(seed: list[str], label: str) -> str:
     namespace = UUID_NAMESPACE
     name = f"{seed}-{label}"
     return str(uuid.uuid5(namespace, name))
