@@ -161,7 +161,7 @@ deps = [
 allowlist_externals = ["bash"]
 commands = [
   ["pre-commit", "run", "--all-files", "--show-diff-on-failure", "{postargs:}"],
-  ["bash", "-c", "mypy src"]
+  ["bash", "mypy"]
 ]
 
 [tool.tox.env.publish]
