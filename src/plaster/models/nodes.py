@@ -5,8 +5,6 @@ from typing import (
     Any,
     Literal,
     NamedTuple,
-    Optional,
-    Union,
 )
 
 import psqlgml
@@ -57,7 +55,7 @@ class PropertyTypeMeta(NamedTuple):
     schema: dict[str, Any]
 
     @property
-    def enums(self) -> Optional[list[str]]:
+    def enums(self) -> list[str] | None:
         return self.schema.get("enum")
 
     @property
@@ -126,7 +124,7 @@ class NodeMetadata(NamedTuple):
         return f"node_{self.label.replace('_', '')}"
 
     @property
-    def defaults(self) -> dict[str, Union[bool, float, int, str]]:
+    def defaults(self) -> dict[str, bool | float | int | str]:
         return {
             key: values["default"]
             for key, values in self.schema["properties"].items()
@@ -194,7 +192,7 @@ class NodeMetadata(NamedTuple):
         return OrderedDict(sorted(links_metadata.items()))
 
     @property
-    def tag_props(self) -> Optional[list[str]]:
+    def tag_props(self) -> list[str] | None:
         """Keys specified in the dictionary, used for generation of tags.
 
         Returns:

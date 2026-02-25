@@ -7,7 +7,6 @@ import psqlgraph
 import pytest
 import yaml
 from psqlgraph import ext, hydrator
-
 from tests.integration import tear_down_graph, utils
 
 

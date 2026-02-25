@@ -4,7 +4,7 @@ import os
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 import jinja2 as j
 import psqlgml
@@ -149,7 +149,7 @@ def generate_nodes(dictionary: psqlgml.Dictionary) -> dict[str, nodes.NodeMetada
 def generate(
     dictionary: psqlgml.Dictionary,
     output_dir: str = OUTPUT_LOCATION,
-    namespace: Optional[str] = None,
+    namespace: str | None = None,
 ) -> None:
     """Generate the edges and nodes classes from dictionary.
 

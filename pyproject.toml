@@ -1,27 +1,64 @@
 [build-system]
-# Pin setuptools<81: psqlgml (0.2.4) requires pkg_resources, which was removed in setuptools 82.0.0+
-requires = ["setuptools<81", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
+requires = ["setuptools>=66", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "gdc-plaster"
-dynamic = [
-  "version",
-  "description",
-  "readme",
-  "requires-python",
-  "license",
-  "authors",
-  "maintainers",
-  "keywords",
-  "classifiers",
-  "urls",
-  "scripts",
-  "gui-scripts",
-  "entry-points",
-  "dependencies",
-  "optional-dependencies"
+description = "GDC data model generator."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache Software License 2.0"}
+authors = [{name = "GDC Feature Team", email = "gdc_dev_questions-aaaaae2lhsbell56tlvh3upgoq@cdis.slack.com"}]
+maintainers = [{name = "GDC Feature Team", email = "gdc_dev_questions-aaaaae2lhsbell56tlvh3upgoq@cdis.slack.com"}]
+keywords = ["GDC Data Commons", "Data Model", "gdcdictionary", "plaster"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: Apache Software License"
 ]
+dependencies = [
+  "click~=8.0",
+  "dulwich",
+  "Jinja2~=3.0",
+  "jsonschema",
+  "pyyaml>=6.0.1",
+  "toml~=0.10",
+  "psqlgml>=0.2.4",
+  "psqlgraph>=3",
+  "setuptools<82"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+  "coverage[toml]",
+  "deepdiff>=5.8.1",
+  "pyhamcrest",
+  "pytest>=6.2",
+  "pytest-cov"
+]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-httpdomain"
+]
+examples = [
+  "pytest>=6.2",
+  "pytest-psqlgraph>=0.1.1"
+]
+
+[project.scripts]
+plaster = "plaster.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/NCI-GDC/plaster"
 
 [tool.coverage.html]
 title = "plaster coverage report"
@@ -74,21 +111,13 @@ testpaths = [
 [tool.ruff]
 line-length = 95
 src = ["src", "tests"]
-target-version = "py39"
+target-version = "py310"
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.lint]
-ignore = [
-  "D100",
-  "D101",
-  "D102",
-  "D103",
-  "D104",
-  "D105",
-  "D106",
-  "D107",
-  "D415",
-  "E501"
-]
+# see https://docs.astral.sh/ruff/rules/
 select = [
   "E", # pydocstyle errors
   "F", # pyflakes
@@ -96,22 +125,72 @@ select = [
   "N", # pep8 naming
   "RUF", # ruff specific rules
   "UP", # pyupgrade
-  "D", # pydocstyle
   "W" # pydocstyle warnings
 ]
 
-[tool.ruff.lint.isort]
-known-first-party = ["plaster", "tests"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.ruff.lint.pyupgrade]
-keep-runtime-typing = true
+[tool.setuptools]
+zip-safe = true
+package-dir = {"" = "src"}
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
+namespaces = false
 
 [tool.setuptools_scm]
 local_scheme = "versionista-local-format"
 version_scheme = "versionista-format"
+
+[tool.tox]
+minversion = "4.5.0"
+env_list = ["py310", "py311", "py312", "py313", "py314"]
+skip_missing_interpreters = "true"
+isolated_build = "true"
+
+[tool.tox.env.docs]
+commands = [
+  ["sphinx-build", "docs/source", "docs/build", "-b", "html"]
+]
+
+[tool.tox.env.pre-commit]
+skip_install = true
+deps = [
+  "mypy",
+  "pre-commit"
+]
+allowlist_externals = ["bash"]
+commands = [
+  ["pre-commit", "run", "--all-files", "--show-diff-on-failure", "{postargs:}"],
+  ["bash", "-c", "mypy src"]
+]
+
+[tool.tox.env.publish]
+pass_env = [
+  "TWINE_*",
+  "CI_COMMIT_*"
+]
+skip_install = true
+deps = [
+  "setuptools_scm",
+  "setuptools_git_versioning",
+  "build",
+  "twine"
+]
+install_command = "python -m pip install {opts} {packages}"
+commands = [
+  ["python", "-m", "setuptools_git_versioning"],
+  ["python", "-m", "build"],
+  ["python", "-m", "twine", "check", "dist/*"],
+  ["python", "-m", "twine", "upload", "dist/*"]
+]
+
+[tool.tox.env_run_base]
+pass_env = [
+  "PG_*",
+  "PIP_*"
+]
+set_env = {NO_PROXY = "localhost,postgres", no_proxy = "localhost,postgres", PIP_INDEX_URL = "https://nexus.osdc.io/repository/pypi-all/simple"}
+deps = [".[dev]"]
+commands = [
+  ["python", "-m", "pytest", "--junitxml=report.xml", "--cov-report", "html", "--cov-report", "xml:coverage.xml", "{posargs}"]
+]

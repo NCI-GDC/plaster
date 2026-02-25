@@ -51,9 +51,9 @@ class TaggingConstraint:
     def _resolve_target_node_from_path(self, node: psqlgraph.Node) -> psqlgraph.Node:
         """Resolve to the final node instance that can be used to perform the matching.
 
-        e.g: if path = `aligned_reads.submitted_alinged_reads`, the final node used to perform the matching
-        is an instance of SubmittedAlignedReads, which can be reached by following the relationships defined in
-        the path
+        e.g: if path = `aligned_reads.submitted_alinged_reads`, the final node used to
+        perform the matching is an instance of SubmittedAlignedReads, which can be reached
+        by following the relationships defined in the path
             i.e: node["aligned_reads"][0]["submitted_aligned_reads"][0]
             this is equivalent to:
                 node.aligned_reads[0].submitted_aligned_reads[0]
@@ -146,7 +146,8 @@ def compute_tag(node: psqlgraph.Node) -> str:
 def __get_tagged_version(
     node_id: str, table: sqlalchemy.Table, tag: str, conn: sqlalchemy.engine.Connection
 ) -> int:
-    """Super private function to figure out the proper version number to use just after insertion.
+    """Super private function to figure out the proper version number to use just after
+    insertion.
 
     Args:
         node_id (str): current node_id
