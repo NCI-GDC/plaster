@@ -6,7 +6,8 @@ include:
       - templates/artifacts/python-library.yaml
 
 variables:
-  LANGUAGE_VERSION: python3.9
+  LANGUAGE_VERSION: python3.10
+  BASE_CONTAINER_VERSION: 3.5.0
 
 pre-commit:
   script:
