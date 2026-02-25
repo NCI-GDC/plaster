@@ -42,7 +42,8 @@ dev = [
   "deepdiff>=5.8.1",
   "pyhamcrest",
   "pytest>=6.2",
-  "pytest-cov"
+  "pytest-cov",
+  "tox"
 ]
 docs = [
   "sphinx",
