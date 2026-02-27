@@ -146,9 +146,7 @@ def compute_tag(node: psqlgraph.Node) -> str:
 def __get_tagged_version(
     node_id: str, table: sqlalchemy.Table, tag: str, conn: sqlalchemy.engine.Connection
 ) -> int:
-    """
-    Super private function to figure out the proper version number to use just after
-    insertion.
+    """Private function to determine the version number to use just after insertion.
 
     Args:
         node_id (str): current node_id
