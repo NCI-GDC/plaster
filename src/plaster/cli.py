@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-from typing import Optional
 
 import click
 import psqlgml
@@ -49,7 +48,7 @@ def echo() -> None:
 )
 @click.pass_obj
 def generate(
-    cfg: config.PlasterConfig, profile: str, output_dir: str, schema_dir: Optional[str]
+    cfg: config.PlasterConfig, profile: str, output_dir: str, schema_dir: str | None
 ) -> None:
     profile_cfg = cfg.get_profile(profile)
     if not profile_cfg:
@@ -106,10 +105,10 @@ def generate(
 def generate_without_profile(
     dict_name: str,
     dict_version: str,
-    input_dir: Optional[str],
+    input_dir: str | None,
     output_dir: str,
-    schema_dir: Optional[str],
-    namespace: Optional[str],
+    schema_dir: str | None,
+    namespace: str | None,
 ) -> None:
     dictionary = psqlgml.load_local(
         name=dict_name,
@@ -119,7 +118,9 @@ def generate_without_profile(
 
     if dictionary is None:
         logger.error(
-            f"Could not load dictionary for name={dict_name}, version={dict_version}, path={input_dir}"
+            f"Could not load dictionary for name={dict_name}, "
+            f"version={dict_version}, "
+            f"path={input_dir}"
         )
         sys.exit("Dictionary not loaded")
 

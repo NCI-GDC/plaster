@@ -1,12 +1,13 @@
 ---
 include:
   - project: nci-gdc/gitlab-templates
-    ref: master
+    ref: 0.8.0
     file:
       - templates/artifacts/python-library.yaml
 
 variables:
-  LANGUAGE_VERSION: python3.9
+  LANGUAGE_VERSION: python3.10
+  BASE_CONTAINER_VERSION: 3.5.0
 
 pre-commit:
   script:
@@ -17,8 +18,11 @@ tox:
   parallel:
     matrix:
       - BUILD_PY_VERSION:
-          - python3.9
           - python3.10
+          - python3.11
+          - python3.12
+          - python3.13
+          - python3.14
   services:
     - name: docker.osdc.io/ncigdc/ci-postgres-13:${BASE_CONTAINER_VERSION}
       alias: postgres

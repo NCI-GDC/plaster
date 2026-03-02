@@ -2,7 +2,6 @@
 
 import itertools
 from collections.abc import Collection, Generator, Iterator
-from typing import Optional, Union
 
 import psqlgraph
 from sqlalchemy import orm
@@ -13,7 +12,7 @@ from sqlalchemy.orm import unitofwork
 RELATED_CASES_LINK_NAME = "_related_cases"
 
 
-def get_edge_src(edge: psqlgraph.Edge) -> Optional[psqlgraph.Node]:
+def get_edge_src(edge: psqlgraph.Edge) -> psqlgraph.Node | None:
     """Look up edge source node by id if the association proxy is not set.
 
     Args:
@@ -39,7 +38,7 @@ def get_edge_src(edge: psqlgraph.Edge) -> Optional[psqlgraph.Node]:
     return src
 
 
-def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> Optional[psqlgraph.Node]:
+def get_edge_dst(edge: psqlgraph.Edge, allow_query: bool = False) -> psqlgraph.Node | None:
     """Look up edge destination node.
 
     Args:
@@ -161,7 +160,7 @@ def update_cache_edges(node: psqlgraph.Node, correct_cases: dict[str, psqlgraph.
 
 
 def cache_related_cases_recursive(
-    node: psqlgraph.Node, visited_nodes: Optional[set[str]] = None
+    node: psqlgraph.Node, visited_nodes: set[str] | None = None
 ) -> None:
     """Update the related case cache on source node and its children recursively.
 
@@ -211,7 +210,7 @@ def cache_related_cases_on_insert(
     target: psqlgraph.Edge,
     session: orm.Session,
     flush_context: unitofwork.UOWTransaction,
-    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+    instances: Collection[psqlgraph.Node | psqlgraph.Edge] | None,
 ) -> None:
     """Update the related case cache on source node and its children for edge insertion.
 
@@ -244,7 +243,7 @@ def cache_related_cases_on_update(
     target: psqlgraph.Edge,
     session: orm.Session,
     flush_context: unitofwork.UOWTransaction,
-    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+    instances: Collection[psqlgraph.Node | psqlgraph.Edge] | None,
 ) -> None:
     """Update the related case cache on source node and its children for edge update.
 
@@ -271,7 +270,7 @@ def cache_related_cases_on_delete(
     target: psqlgraph.Edge,
     session: orm.Session,
     flush_context: unitofwork.UOWTransaction,
-    instances: Optional[Collection[Union[psqlgraph.Node, psqlgraph.Edge]]],
+    instances: Collection[psqlgraph.Node | psqlgraph.Edge] | None,
 ) -> None:
     """Update the related case cache on source node and its children for edge deletion.
 
