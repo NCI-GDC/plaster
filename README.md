@@ -11,7 +11,6 @@ GDC internship project for generating data model source code.
 
 # Table of Contents
 
-- [Purpose](#Purpose)
 - [Goal](#Goal)
 - [Data Commons Models](#Data-Commons-Models)
   - [Problems:](#Problems:)
@@ -146,7 +145,7 @@ Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdicti
 # Associated Projects
 
 - biodictionary: https://github.com/NCI-GDC/biodictionary
-- gdcdatamodel: https://github.com/NCI-GDC/gdcdatamodel 
+- gdcdatamodel: https://github.com/NCI-GDC/gdcdatamodel
 - gdcdictionary: https://github.com/NCI-GDC/gdcdictionary
 - psqlgml: https://github.com/NCI-GDC/psqlgml
 - psqlgraph: https://github.com/NCI-GDC/psqlgraph
