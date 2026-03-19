@@ -1,6 +1,9 @@
-[![Build Status](https://app.travis-ci.com/NCI-GDC/plaster.svg?token=5s3bZRahNJnkspYEMwZC&branch=master)](https://app.travis-ci.com/NCI-GDC/plaster)
-
 # The Data Commons Model Source Generator Project (Plaster)
+
+> [!NOTE]
+> The code in this repository has been made public as-is for informational purposes. The repository may use private resources for the building and execution of the code. For example, private registries may be used for dependency resolution.
+>
+> The documentation may refer to restricted URLs.
 
 GDC internship project for generating data model source code.
 
@@ -8,7 +11,6 @@ GDC internship project for generating data model source code.
 
 # Table of Contents
 
-- [Purpose](#Purpose)
 - [Goal](#Goal)
 - [Data Commons Models](#Data-Commons-Models)
   - [Problems:](#Problems:)
@@ -143,7 +145,7 @@ Delete ~/.gml/ directory. It will force psqlgml to clone new version of gdcdicti
 # Associated Projects
 
 - biodictionary: https://github.com/NCI-GDC/biodictionary
-- gdcdatamodel: https://github.com/gdcdatamodel
+- gdcdatamodel: https://github.com/NCI-GDC/gdcdatamodel
 - gdcdictionary: https://github.com/NCI-GDC/gdcdictionary
 - psqlgml: https://github.com/NCI-GDC/psqlgml
 - psqlgraph: https://github.com/NCI-GDC/psqlgraph
