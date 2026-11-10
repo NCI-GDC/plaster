@@ -40,7 +40,7 @@ rebuild_gdcdatamodel2:
     ${BASE_CONTAINER_REGISTRY}/${LANGUAGE_VERSION}-builder:${BASE_CONTAINER_VERSION}
   script:
     - dnf install curl-minimal
-    - pip install setuptools_scm versionista
+    - pip install setuptools_scm
     - echo $CI_TRIGGERED_BRANCH
     - export VERSION=$(python -m setuptools_scm)
     - echo $VERSION
