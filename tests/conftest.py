@@ -24,9 +24,8 @@ def test_data_location() -> PathLike:
         yield p
 
 
-@pytest.fixture(scope="session")
-@pytest.mark.usefixtures("plaster_config")
-def test_dictionary(test_data_location) -> psqlgml.Dictionary:
+@pytest.fixture(scope="session", name="test_dictionary")
+def dictionary(plaster_config, test_data_location) -> psqlgml.Dictionary:
     return psqlgml.load_local(
         version="0.1.0", name="dictionary", dictionary_location=test_data_location
     )
