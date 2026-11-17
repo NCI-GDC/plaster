@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools>=84", "setuptools-scm"]
+requires = ["setuptools<82", "setuptools-scm"]
 
 [project]
 name = "gdc-plaster"
@@ -32,7 +32,7 @@ dependencies = [
   "toml~=0.10",
   "psqlgml>=0.2.4",
   "psqlgraph>=3",
-  "setuptools>=84"
+  "setuptools<82"
 ]
 dynamic = ["version"]
 
