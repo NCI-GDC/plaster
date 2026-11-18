@@ -31,7 +31,7 @@ dependencies = [
   "pyyaml>=6.0.1",
   "toml~=0.10",
   "psqlgml>=0.2.4",
-  "psqlgraph>=3",
+  "psqlgraph==7.0.0",
   "setuptools<82"
 ]
 dynamic = ["version"]
