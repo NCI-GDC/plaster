@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=66", "wheel", "setuptools_scm[toml]>=8.0.4", "versionista>=1.1.0"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools<82", "setuptools-scm"]
 
 [project]
 name = "gdc-plaster"
@@ -31,7 +31,7 @@ dependencies = [
   "pyyaml>=6.0.1",
   "toml~=0.10",
   "psqlgml>=0.2.4",
-  "psqlgraph>=3",
+  "psqlgraph==7.0.0",
   "setuptools<82"
 ]
 dynamic = ["version"]
@@ -139,8 +139,7 @@ where = ["src"]
 namespaces = false
 
 [tool.setuptools_scm]
-local_scheme = "versionista-local-format"
-version_scheme = "versionista-format"
+fallback_version = "0.0.0"
 
 [tool.tox]
 minversion = "4.5.0"
